@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Button from '@/components/ui/button'
 
+import TREE_IMAGE from '/tree-16px.png'
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -10,7 +12,7 @@ function App() {
         <div className="flex gap-4 p-4 align-middle">
           <h1>Family tree</h1>
           <a href="https://cristidraghici.github.com/family-tree" target="_blank">
-            <img src="/tree-16px.png" className="logo" alt="App logo" />
+            <img src={TREE_IMAGE} className="logo" alt="App logo" />
           </a>
         </div>
       </nav>
