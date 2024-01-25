@@ -21,6 +21,22 @@ Creating a genealogy tree involves researching, organizing, and presenting infor
 
 Remember, genealogy is a journey, and it often involves uncovering fascinating stories about your ancestors. Enjoy the process and consider joining genealogy communities for support and additional resources.
 
+## Visual Studio Code
+
+If you use this editor, you might want to create `./.vscode/settings.json` with the following content:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.probe": ["javascript", "javascriptreact", "vue"],
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
+
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore"
+}
+```
+
 ## Credits
 
 - [Tree icon in ./public/tree-16px.png](https://www.flaticon.com/free-icon/tree_642021?term=tree&page=1&position=28&origin=tag&related_id=642021)
