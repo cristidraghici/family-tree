@@ -6,7 +6,7 @@
   "tailwind": {
     "config": "tailwind.config.ts",
     "css": "src/index.scss",
-    "baseColor": "purple",
+    "baseColor": "stone",
     "cssVariables": true,
     "prefix": ""
   },
