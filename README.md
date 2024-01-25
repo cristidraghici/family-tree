@@ -1,30 +1,26 @@
-# React + TypeScript + Vite
+# Family tree
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Another genealogy / family tree application
 
-Currently, two official plugins are available:
+## Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[https://cristidraghici.github.io/family-tree](https://cristidraghici.github.io/family-tree)
 
-## Expanding the ESLint configuration
+## Intro to genealogy trees
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Creating a genealogy tree involves researching, organizing, and presenting information about your family's history. Here are some best practices to consider when creating a genealogy tree:
 
-- Configure the top-level `parserOptions` property like this:
+- Start with Yourself: begin with your own information and work backward;
+- Collect information from family members, old documents, photos, and any existing family records;
+- Keep track of your sources. Document where you found each piece of information, whether it's an official document, family Bible, or oral history;
+- Strive for accuracy in all details. Cross-check information from different sources to ensure its reliability;
+- Collaborate with other family members interested in genealogy;
+- Be mindful of privacy concerns, especially for living individuals. Avoid sharing sensitive or private information without consent;
+- Genealogy is an ongoing process. Regularly update your family tree as new information becomes available, and continue your research;
+- Familiarize yourself with genealogical research methods, historical context, and record-keeping practices.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+Remember, genealogy is a journey, and it often involves uncovering fascinating stories about your ancestors. Enjoy the process and consider joining genealogy communities for support and additional resources.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Credits
+
+- [Tree icon in ./public/tree-16px.png](https://www.flaticon.com/free-icon/tree_642021?term=tree&page=1&position=28&origin=tag&related_id=642021)

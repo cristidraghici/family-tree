@@ -1,34 +1,26 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+    <div className="max-w-[800px] p-10">
+      <div className="flex items-center gap-2 p-4 align-middle">
+        <h1>Family tree</h1>
+        <a href="https://cristidraghici.github.com/family-tree" target="_blank">
+          <img src="/tree-16px.png" className="logo" alt="App logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+
+      <p className="bg-gray-50 p-4 text-black">
+        Genealogy is a journey, and it often involves uncovering fascinating stories about your
+        ancestors. This application tries to help you enjoy the process! :)
       </p>
-    </>
+
+      <button className="p-4" onClick={() => setCount((count) => count + 1)}>
+        Click count is {count}
+      </button>
+    </div>
   )
 }
 
