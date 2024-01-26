@@ -1,0 +1,49 @@
+@import './assets/theme.scss';
+
+.Logo {
+  display: flex;
+  gap: 1rem;
+}
+
+.Nav {
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.Spacer {
+  height: 2rem;
+}
+
+.Controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media screen and (min-width: 768px) {
+    &_ToggleView {
+      max-width: 18rem;
+    }
+    &_AddButton {
+      max-width: 6rem;
+    }
+
+    &--horizontal {
+      & > * {
+        margin-left: 1rem;
+        margin-right: 1rem;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
+
+      flex-direction: row;
+    }
+  }
+}

@@ -2,10 +2,10 @@ import TreePNG from '/tree.png'
 
 const Logo = () => {
   return (
-    <div className="flex gap-4">
+    <div className="Logo">
       <h1>Family tree</h1>
-      <a href="https://cristidraghici.github.io/family-tree/" target="_blank">
-        <img src={TreePNG} className="logo" alt="Family tree" width={44} />
+      <a href="https://cristidraghici.github.io/family-tree/">
+        <img src={TreePNG} alt="Family tree" width={44} />
       </a>
     </div>
   )

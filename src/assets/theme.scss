@@ -1,0 +1,52 @@
+[data-theme='light'],
+:root:not([data-theme='dark']) {
+  --pico-text-selection-color: rgba(129, 145, 181, 0.25);
+  --pico-primary: #5d6b89;
+  --pico-primary-background: #525f7a;
+  --pico-primary-underline: rgba(93, 107, 137, 0.5);
+  --pico-primary-hover: #48536b;
+  --pico-primary-hover-background: #48536b;
+  --pico-primary-focus: rgba(129, 145, 181, 0.5);
+  --pico-primary-inverse: #fff;
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --pico-text-selection-color: rgba(144, 158, 190, 0.1875);
+    --pico-primary: #909ebe;
+    --pico-primary-background: #525f7a;
+    --pico-primary-underline: rgba(144, 158, 190, 0.5);
+    --pico-primary-hover: #b0b9d0;
+    --pico-primary-hover-background: #5d6b89;
+    --pico-primary-focus: rgba(144, 158, 190, 0.375);
+    --pico-primary-inverse: #fff;
+  }
+}
+
+[data-theme='dark'] {
+  --pico-text-selection-color: rgba(144, 158, 190, 0.1875);
+  --pico-primary: #909ebe;
+  --pico-primary-background: #525f7a;
+  --pico-primary-underline: rgba(144, 158, 190, 0.5);
+  --pico-primary-hover: #b0b9d0;
+  --pico-primary-hover-background: #5d6b89;
+  --pico-primary-focus: rgba(144, 158, 190, 0.375);
+  --pico-primary-inverse: #fff;
+}
+
+:root {
+  --pico-border-radius: 2rem;
+  --pico-typography-spacing-vertical: 1.5rem;
+  --pico-form-element-spacing-vertical: 1rem;
+  --pico-form-element-spacing-horizontal: 1.25rem;
+  --pico-font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  --pico-font-weight: 400;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+button {
+  --pico-font-weight: 700;
+}
