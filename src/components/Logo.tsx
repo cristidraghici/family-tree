@@ -1,11 +1,11 @@
-import TREE_IMAGE from '/tree-16px.png'
+import TreePNG from '/tree.png'
 
 const Logo = () => {
   return (
-    <div className="flex gap-4 align-middle">
+    <div className="flex gap-4">
       <h1>Family tree</h1>
       <a href="https://cristidraghici.github.io/family-tree/" target="_blank">
-        <img src={TREE_IMAGE} className="logo" alt="App logo" />
+        <img src={TreePNG} className="logo" alt="Family tree" width={44} />
       </a>
     </div>
   )
