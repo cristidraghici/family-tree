@@ -2,12 +2,12 @@ import z from 'zod'
 
 export const relationSchema = z.object({
   relationType: z.enum(['parent', 'child', 'sibling', 'spouse']),
-  personId: z.string().uuid(),
-  personRelatedToId: z.string().uuid(),
+  personId: z.string(),
+  personRelatedToId: z.string(),
 })
 
 export const personSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
 
   firstName: z.string().min(2).max(30),
   middleName: z.string().min(2).max(30).optional(),

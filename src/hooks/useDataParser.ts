@@ -1,27 +1,41 @@
-import { PersonType } from '@/types'
+import { personSchema, relationSchema } from '@/schemas'
 
-const PERSONS: PersonType[] = [
-  {
-    id: '1',
-    firstName: 'Cristian',
-    middleName: 'Andres',
-    lastName: 'Gonzalez',
-    biologicalGender: 'male',
-    biography: 'I am a student at the University of Texas at Austin',
-  },
-  {
-    id: '2',
-    firstName: 'Maria',
-    middleName: 'Andres',
-    lastName: 'Rodriguez',
-    biologicalGender: 'female',
-    biography: 'I am an artist at the University of Texas at Austin',
-  },
-]
+const useDataParser = ({
+  persons,
+  relations,
+  search,
+}: {
+  persons: string
+  relations: string
+  search: string
+}) => {
+  const personsResult = personSchema.array().safeParse(persons)
+  const relationsResult = relationSchema.array().safeParse(relations)
 
-const useDataParser = () => {
+  if (personsResult.success === false || relationsResult.success === false) {
+    return {
+      error: 'Invalid persons data.',
+      data: [],
+    }
+  }
+
+  const data = personsResult.data.map((person) => {
+    const relations = relationsResult.data
+      .filter((relation) => relation.personId === person.id)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      .map(({ personId, ...rest }) => rest)
+
+    return {
+      ...person,
+      relations,
+    }
+  })
+
   return {
-    persons: PERSONS,
+    error: null,
+    data: data.filter((person) =>
+      JSON.stringify(person).toLowerCase().includes(search.toLowerCase()),
+    ),
   }
 }
 

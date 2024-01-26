@@ -15,13 +15,24 @@
 }
 
 .Spacer {
-  height: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  overflow: hidden;
+
+  &::content {
+    display: block;
+    content: '';
+  }
 }
 
 .Controls {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  form {
+    width: 100%;
+  }
 
   @media screen and (min-width: 768px) {
     &_ToggleView {

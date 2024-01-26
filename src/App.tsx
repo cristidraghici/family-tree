@@ -1,63 +1,84 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Logo from '@/components/atoms/Logo'
 
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 
+import ToggleView from '@/components/molecules/ToggleView'
 import PersonsTable from '@/components/molecules/PersonsTable'
 import FamilyTree from '@/components/molecules/FamilyTree'
 import CardList from '@/components/molecules/CardList'
 
 import useDataParser from '@/hooks/useDataParser'
 
+import personsJSON from '@/assets/mockedPersons.json'
+import relationsJSON from '@/assets/mockedRelations.json'
+
 function App() {
-  const { persons } = useDataParser()
   const [view, setView] = useState<string>('table')
+
+  const searchRef = useRef<HTMLInputElement>(null)
+  const [search, setSearch] = useState<string>('')
+
+  const { data, error } = useDataParser({
+    persons: JSON.parse(JSON.stringify(personsJSON)),
+    relations: JSON.parse(JSON.stringify(relationsJSON)),
+    search,
+  })
+
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current.focus()
+    }
+  }, [])
 
   return (
     <>
-      <nav className="Nav">
-        <Logo />
-      </nav>
+      <header>
+        <nav className="Nav">
+          <Logo />
+        </nav>
+      </header>
 
       <div className="Spacer" />
 
-      <main className="Main container-fluid">
-        <div className="Controls Controls--horizontal">
-          <fieldset className="Controls_ToggleView" role="group">
-            <button
-              className={view === 'table' ? 'outline' : ''}
-              onClick={() => {
-                setView('table')
-              }}
-              type="button"
-            >
-              Table
-            </button>
-            <button
-              className={view === 'tree' ? 'outline' : ''}
-              onClick={() => {
-                setView('tree')
-              }}
-              type="button"
-            >
-              Tree
-            </button>
-            <button
-              className={view === 'cards' ? 'outline' : ''}
-              onClick={() => {
-                setView('cards')
-              }}
-              type="button"
-              role="primary"
-            >
-              Cards
-            </button>
-          </fieldset>
+      <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
+        {error}
+      </ConditionalElement>
 
-          <fieldset role="group">
-            <input className="Search" type="text" />
-            <input type="submit" value="Search" />
-          </fieldset>
+      <ConditionalElement as="main" condition={!error} className="Main container-fluid">
+        <div className="Controls Controls--horizontal">
+          <ToggleView
+            className="Controls_ToggleView"
+            role="group"
+            options={[
+              {
+                id: 'table',
+                label: 'Table',
+              },
+              {
+                id: 'tree',
+                label: 'Tree',
+              },
+              {
+                id: 'cards',
+                label: 'Cards',
+              },
+            ]}
+            view={view}
+            setView={setView}
+          />
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              setSearch(searchRef.current?.value || '')
+            }}
+          >
+            <fieldset role="group">
+              <input className="Search" type="text" ref={searchRef} />
+              <input type="submit" value="Search" />
+            </fieldset>
+          </form>
 
           <fieldset className="Controls_AddButton" role="group">
             <button type="button">Add</button>
@@ -66,12 +87,10 @@ function App() {
 
         <div className="Spacer" />
 
-        <ConditionalElement condition={view === 'table'} as={PersonsTable} persons={persons} />
+        <ConditionalElement condition={view === 'table'} as={PersonsTable} persons={data} />
         <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
         <ConditionalElement condition={view === 'cards'} as={CardList} />
-
-        <div className="Spacer" />
-      </main>
+      </ConditionalElement>
     </>
   )
 }

@@ -1,6 +1,8 @@
-import { PersonType } from '@/types'
+import { Fragment } from 'react'
+import ConditionalElement from '../atoms/ConditionalElement'
+import { PersonWithRelationsType } from '@/types'
 
-export default function PersonsTable({ persons }: { persons: PersonType[] }) {
+export default function PersonsTable({ persons }: { persons: PersonWithRelationsType[] }) {
   return (
     <figure>
       <table>
@@ -12,15 +14,23 @@ export default function PersonsTable({ persons }: { persons: PersonType[] }) {
           </tr>
         </thead>
         <tbody>
-          {persons.map((person: PersonType) => (
-            <tr key={person.id}>
-              <td className="font-medium">
-                {person.firstName} {person.lastName}
-              </td>
-              <td>{person.biologicalGender}</td>
-              <td>{person.biography}</td>
+          <ConditionalElement as={Fragment} condition={persons.length > 0}>
+            {persons.map((person: PersonWithRelationsType) => (
+              <tr key={person.id}>
+                <td className="font-medium">
+                  {person.firstName} {person.lastName}
+                </td>
+                <td>{person.biologicalGender}</td>
+                <td>{person.biography}</td>
+              </tr>
+            ))}
+          </ConditionalElement>
+
+          <ConditionalElement as={Fragment} condition={persons.length === 0}>
+            <tr>
+              <td colSpan={3}>No persons found.</td>
             </tr>
-          ))}
+          </ConditionalElement>
         </tbody>
       </table>
     </figure>

@@ -1,0 +1,37 @@
+[
+  {
+    "relationType": "child",
+    "personId": "1",
+    "personRelatedToId": "3"
+  },
+  {
+    "relationType": "child",
+    "personId": "1",
+    "personRelatedToId": "4"
+  },
+  {
+    "relationType": "parent",
+    "personId": "3",
+    "personRelatedToId": "1"
+  },
+  {
+    "relationType": "parent",
+    "personId": "4",
+    "personRelatedToId": "1"
+  },
+  {
+    "relationType": "child",
+    "personId": "2",
+    "personRelatedToId": "4"
+  },
+  {
+    "relationType": "parent",
+    "personId": "4",
+    "personRelatedToId": "2"
+  },
+  {
+    "relationType": "sibling",
+    "personId": "1",
+    "personRelatedToId": "2"
+  }
+]
