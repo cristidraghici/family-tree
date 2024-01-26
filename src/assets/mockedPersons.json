@@ -1,22 +1,25 @@
 [
   {
-    "id": "1",
+    "id": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
     "firstName": "Cristian",
     "middleName": "Andres",
     "lastName": "Gonzalez",
     "biologicalGender": "male",
-    "biography": "I am a student at the University of Texas at Austin"
+    "biography": "I am a student at the University of Texas at Austin",
+    "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
   },
   {
-    "id": "2",
+    "id": "09256fab-15c0-4c8e-baaf-8be631de6897",
     "firstName": "Maria",
     "middleName": "Andres",
     "lastName": "Rodriguez",
     "biologicalGender": "female",
-    "biography": "I am an artist at the University of Texas at Austin"
+    "biography": "I am an artist at the University of Texas at Austin",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
   },
   {
-    "id": "3",
+    "id": "9e4b2100-152e-4151-adf0-3802b574c5af",
     "firstName": "John",
     "middleName": "Andres",
     "lastName": "Gonzalez",
@@ -24,7 +27,7 @@
     "biography": "I am the father of Cristian Gonzalez"
   },
   {
-    "id": "4",
+    "id": "70300a1f-024d-4c89-be01-32ca4ed81a07",
     "firstName": "Penelope",
     "middleName": "Andres",
     "lastName": "Gonzalez",

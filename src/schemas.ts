@@ -1,13 +1,9 @@
 import z from 'zod'
 
-export const relationSchema = z.object({
-  relationType: z.enum(['parent', 'child', 'sibling', 'spouse']),
-  personId: z.string(),
-  personRelatedToId: z.string(),
-})
+export const personIdSchema = z.string().uuid()
 
 export const personSchema = z.object({
-  id: z.string(),
+  id: personIdSchema,
 
   firstName: z.string().min(2).max(30),
   middleName: z.string().min(2).max(30).optional(),
@@ -16,6 +12,9 @@ export const personSchema = z.object({
   biologicalGender: z.enum(['male', 'female']),
 
   biography: z.string().min(2).max(1000).optional(),
+
+  fatherId: z.string().uuid().optional(),
+  motherId: z.string().uuid().optional(),
 
   details: z
     .object({

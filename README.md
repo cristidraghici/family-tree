@@ -110,3 +110,4 @@ If you use this editor, you might want to create `./.vscode/settings.json` with 
 
 - [Tree icon in ./public/tree-16px.png](https://www.flaticon.com/free-icon/tree_642021?term=tree&page=1&position=28&origin=tag&related_id=642021)
 - [A Friendly Guide to the Atomic File Structure in React](https://medium.com/@simo-dlamini/a-friendly-guide-to-the-atomic-file-structure-in-react-8bd33e55361c)
+- [How to generate uuid()](https://stackoverflow.com/questions/49807952/how-to-generate-uuids-in-js-or-react)

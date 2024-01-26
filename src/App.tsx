@@ -11,7 +11,6 @@ import CardList from '@/components/molecules/CardList'
 import useDataParser from '@/hooks/useDataParser'
 
 import personsJSON from '@/assets/mockedPersons.json'
-import relationsJSON from '@/assets/mockedRelations.json'
 
 function App() {
   const [view, setView] = useState<string>('table')
@@ -21,7 +20,6 @@ function App() {
 
   const { data, error } = useDataParser({
     persons: JSON.parse(JSON.stringify(personsJSON)),
-    relations: JSON.parse(JSON.stringify(relationsJSON)),
     search,
   })
 

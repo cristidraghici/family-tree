@@ -1,42 +1,29 @@
-import { personSchema, relationSchema } from '@/schemas'
+import { useMemo } from 'react'
+import PersonUtil from '@/utils/PersonUtil'
+import { personSchema } from '@/schemas'
 
-const useDataParser = ({
-  persons,
-  relations,
-  search,
-}: {
-  persons: string
-  relations: string
-  search: string
-}) => {
-  const personsResult = personSchema.array().safeParse(persons)
-  const relationsResult = relationSchema.array().safeParse(relations)
+const useDataParser = ({ persons, search }: { persons: string; search: string }) => {
+  const result = personSchema.array().safeParse(persons)
 
-  if (personsResult.success === false || relationsResult.success === false) {
-    return {
-      error: 'Invalid persons data.',
-      data: [],
+  const everybody = useMemo(() => {
+    if (result.success === false) {
+      return []
     }
-  }
 
-  const data = personsResult.data.map((person) => {
-    const relations = relationsResult.data
-      .filter((relation) => relation.personId === person.id)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      .map(({ personId, ...rest }) => rest)
+    return result.data.map((person) => new PersonUtil(person, result.data))
+  }, [result])
 
-    return {
-      ...person,
-      relations,
-    }
-  })
-
-  return {
-    error: null,
-    data: data.filter((person) =>
-      JSON.stringify(person).toLowerCase().includes(search.toLowerCase()),
-    ),
-  }
+  return result.success === true
+    ? {
+        error: null,
+        data: everybody.filter((person) =>
+          person.fullName().toLowerCase().includes(search.toLowerCase()),
+        ),
+      }
+    : {
+        error: 'Invalid persons data.',
+        data: [],
+      }
 }
 
 export default useDataParser

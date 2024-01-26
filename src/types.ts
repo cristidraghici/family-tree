@@ -1,9 +1,9 @@
 import { z } from 'zod'
-import { personSchema, relationSchema } from './schemas'
 
+import { personSchema, personIdSchema } from './schemas'
+import PersonUtil from './utils/PersonUtil'
+
+export type PersonIdType = z.infer<typeof personIdSchema>
 export type PersonType = z.infer<typeof personSchema>
-export type RelationSchema = z.infer<typeof relationSchema>
 
-export type PersonWithRelationsType = PersonType & {
-  relations: Omit<RelationSchema, 'personId'>[]
-}
+export type PersonUtilType = InstanceType<typeof PersonUtil>
