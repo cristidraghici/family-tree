@@ -68,17 +68,15 @@ function App() {
             setView={setView}
           />
 
-          <form
-            onSubmit={(e) => {
+          <input
+            className="Search"
+            type="search"
+            ref={searchRef}
+            onChange={(e) => {
               e.preventDefault()
-              setSearch(searchRef.current?.value || '')
+              setSearch(e.target.value)
             }}
-          >
-            <fieldset role="group">
-              <input className="Search" type="text" ref={searchRef} />
-              <input type="submit" value="Search" />
-            </fieldset>
-          </form>
+          />
 
           <fieldset className="Controls_AddButton" role="group">
             <button type="button">Add</button>

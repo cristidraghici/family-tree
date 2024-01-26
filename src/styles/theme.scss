@@ -35,13 +35,17 @@
 }
 
 :root {
-  --pico-border-radius: 0.2rem;
   --pico-typography-spacing-vertical: 1.5rem;
   --pico-form-element-spacing-vertical: 1rem;
   --pico-form-element-spacing-horizontal: 1.25rem;
   --pico-font-family: Arial, Helvetica, sans-serif;
 
   --pico-font-size: 100%;
+}
+
+:root,
+input[type='search'] {
+  --pico-border-radius: 0.2rem;
 }
 
 h1 {

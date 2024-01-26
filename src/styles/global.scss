@@ -30,10 +30,6 @@
   flex-direction: column;
   justify-content: space-between;
 
-  form {
-    width: 100%;
-  }
-
   @media screen and (min-width: 768px) {
     &_ToggleView {
       max-width: 18rem;
@@ -47,10 +43,10 @@
         margin-left: 1rem;
         margin-right: 1rem;
 
-        &:first-of-type {
+        &:first-child {
           margin-left: 0;
         }
-        &:last-of-type {
+        &:last-child {
           margin-right: 0;
         }
       }
