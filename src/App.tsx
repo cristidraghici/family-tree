@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import Logo from '@/components/Logo'
+import Logo from '@/components/atoms/Logo'
 
-import ConditionalElement from '@/components/ConditionalElement'
+import ConditionalElement from '@/components/atoms/ConditionalElement'
 
-import PersonsTable from '@/components/PersonsTable'
-import FamilyTree from '@/components/FamilyTree'
-import CardList from '@/components/CardList'
+import PersonsTable from '@/components/molecules/PersonsTable'
+import FamilyTree from '@/components/molecules/FamilyTree'
+import CardList from '@/components/molecules/CardList'
 
 import useDataParser from '@/hooks/useDataParser'
 
@@ -58,6 +58,10 @@ function App() {
             <input className="Search" type="text" />
             <input type="submit" value="Search" />
           </fieldset>
+
+          <fieldset className="Controls_AddButton" role="group">
+            <button type="button">Add</button>
+          </fieldset>
         </div>
 
         <div className="Spacer" />
@@ -67,12 +71,6 @@ function App() {
         <ConditionalElement condition={view === 'cards'} as={CardList} />
 
         <div className="Spacer" />
-
-        <fieldset className="Controls_AddButton" role="group">
-          <button type="button" disabled>
-            Add
-          </button>
-        </fieldset>
       </main>
     </>
   )

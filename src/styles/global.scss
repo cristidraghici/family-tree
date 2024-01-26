@@ -1,4 +1,5 @@
-@import './assets/theme.scss';
+@import '@picocss/pico';
+@import './theme.scss';
 
 .Logo {
   display: flex;
