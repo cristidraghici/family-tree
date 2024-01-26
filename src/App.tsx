@@ -56,12 +56,12 @@ function App() {
                 label: 'Table',
               },
               {
-                id: 'tree',
-                label: 'Tree',
-              },
-              {
                 id: 'cards',
                 label: 'Cards',
+              },
+              {
+                id: 'tree',
+                label: 'Tree',
               },
             ]}
             view={view}
@@ -86,8 +86,8 @@ function App() {
         <div className="Spacer" />
 
         <ConditionalElement condition={view === 'table'} as={PersonsTable} persons={data} />
+        <ConditionalElement condition={view === 'cards'} as={CardList} persons={data} />
         <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
-        <ConditionalElement condition={view === 'cards'} as={CardList} />
       </ConditionalElement>
     </>
   )
