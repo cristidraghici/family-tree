@@ -1,35 +1,26 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-
 import { PersonType } from '@/types'
 
 export default function PersonsTable({ persons }: { persons: PersonType[] }) {
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Gender</TableHead>
-          <TableHead>Biography</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Biography</th>
+        </tr>
+      </thead>
+      <tbody>
         {persons.map((person: PersonType) => (
-          <TableRow key={person.id}>
-            <TableCell className="font-medium">
+          <tr key={person.id}>
+            <td className="font-medium">
               {person.firstName} {person.lastName}
-            </TableCell>
-            <TableCell>{person.biologicalGender}</TableCell>
-            <TableCell>{person.biography}</TableCell>
-          </TableRow>
+            </td>
+            <td>{person.biologicalGender}</td>
+            <td>{person.biography}</td>
+          </tr>
         ))}
-      </TableBody>
-    </Table>
+      </tbody>
+    </table>
   )
 }

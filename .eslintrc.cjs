@@ -15,13 +15,5 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-  },
-  overrides: [
-    {
-      "files": ["src/components/ui/*.{js,jsx,ts,tsx}"],
-      "rules": {
-        'react-refresh/only-export-components': 'off',
-      }
-    }
-  ]
+  }
 }

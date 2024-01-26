@@ -14,12 +14,6 @@ module.exports = {
 
   "overrides": [
     {
-      "files": "*.{js,jsx,ts,tsx}",
-      "options": {
-        "plugins": ["./node_modules/prettier-plugin-tailwindcss/dist/index.mjs"]
-      }
-    },
-    {
       "files": "*.svg",
       "options": {
         "parser": "html",
