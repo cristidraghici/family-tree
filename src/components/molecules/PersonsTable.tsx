@@ -10,8 +10,8 @@ export default function PersonsTable({ persons }: { persons: ExtendedPersonType[
           <tr>
             <th>Name</th>
             <th>Gender</th>
+            <th>Parents</th>
             <th>Biography</th>
-            <th>Relatives</th>
           </tr>
         </thead>
         <tbody>
@@ -20,8 +20,8 @@ export default function PersonsTable({ persons }: { persons: ExtendedPersonType[
               <tr key={person.id}>
                 <td>{person.fullName}</td>
                 <td>{person.biologicalGender}</td>
+                <td>{person.parentsNames}</td>
                 <td>{person.biography}</td>
-                <td>{person.relativesNames}</td>
               </tr>
             ))}
           </ConditionalElement>

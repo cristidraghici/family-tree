@@ -22,7 +22,7 @@ const useDataParser = ({ persons, search }: { persons: string; search: string })
         ),
       }
     : {
-        error: 'Invalid persons data.',
+        error: `Invalid persons data. [e.g. ${result.error.issues[0].message}]`,
         data: [],
       }
 }

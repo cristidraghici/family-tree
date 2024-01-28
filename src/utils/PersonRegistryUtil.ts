@@ -7,6 +7,7 @@ export type PersonType = z.infer<typeof personSchema>
 
 export type ExtendedPersonType = PersonType & {
   fullName: string
+  parentsNames: string
   relativesNames: string
 }
 
@@ -34,9 +35,12 @@ class PersonRegistryUtil {
       ...person,
 
       fullName: this.fullName(personId),
+      parentsNames: this.parents(personId)
+        .map((personId) => this.fullName(personId))
+        .filter(Boolean)
+        .join(', '),
       relativesNames: [
         ...new Set([
-          ...this.parents(personId),
           ...this.siblings(personId),
           ...this.spouses(personId),
           ...this.children(personId),

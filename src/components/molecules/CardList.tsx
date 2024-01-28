@@ -10,6 +10,14 @@ const CardList: FunctionComponent<{ persons: ExtendedPersonType[] }> = ({ person
           <article key={person.id}>
             <header>{person.fullName}</header>
             {person.biography}
+            <footer>
+              <ConditionalElement as="p" condition={!!person.parentsNames}>
+                <strong>Parents</strong>: {person.parentsNames}
+              </ConditionalElement>
+              <ConditionalElement as="p" condition={!!person.relativesNames}>
+                <strong>Relatives</strong>: {person.relativesNames}
+              </ConditionalElement>
+            </footer>
           </article>
         ))}
       </ConditionalElement>

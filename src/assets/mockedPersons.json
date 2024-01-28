@@ -1,46 +1,131 @@
 [
   {
     "id": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-    "firstName": "Cristian",
-    "middleName": "Andres",
-    "lastName": "Gonzalez",
+    "firstName": "Carol Anton",
+    "lastName": "Hohenzollern Sigmaringen",
     "biologicalGender": "male",
-    "biography": "I am a student at the University of Texas at Austin",
-    "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
-    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
+    "biography": "Member of the House of Hohenzollern"
   },
   {
     "id": "09256fab-15c0-4c8e-baaf-8be631de6897",
-    "firstName": "Maria",
-    "middleName": "Andres",
-    "lastName": "Rodriguez",
+    "firstName": "Josephine",
+    "lastName": "Baden",
     "biologicalGender": "female",
-    "biography": "I am an artist at the University of Texas at Austin",
-    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
+    "biography": "Member of the House of Zähringen"
   },
   {
     "id": "9e4b2100-152e-4151-adf0-3802b574c5af",
-    "firstName": "John",
-    "middleName": "Andres",
-    "lastName": "Gonzalez",
+    "firstName": "Leopold",
+    "lastName": "Hohenzollern Sigmaringen",
     "biologicalGender": "male",
-    "biography": "I am the father of Cristian Gonzalez"
+    "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+    "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+    "biography": "Member of the House of Hohenzollern"
   },
   {
-    "id": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-    "firstName": "Penelope",
-    "middleName": "Andres",
-    "lastName": "Gonzalez",
+    "id": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
+    "firstName": "Carol I",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "biography": "The first king of Romania",
+    "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+    "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897"
+  },
+  {
+    "id": "ea0983cc-72d2-4f4d-9425-a7203c35d150",
+    "firstName": "Anton",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+    "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "0a621c91-2150-44b5-bd8f-2799be424c56",
+    "firstName": "Friedrich",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+    "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "e8310ec6-129b-49f6-bae9-e847b587bde5",
+    "firstName": "Antonia",
+    "lastName": "Braganza",
     "biologicalGender": "female",
-    "biography": "I am the mother of Cristian Gonzalez",
-    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab"
+    "biography": "Member of the Royal House of Romania"
   },
   {
     "id": "c24ec368-836f-4323-8e97-9a74cd434dab",
-    "firstName": "Pepe",
-    "middleName": "Rico",
-    "lastName": "Munoz",
+    "firstName": "Ferinand I",
+    "lastName": "Hohenzollern Sigmaringen",
     "biologicalGender": "male",
-    "biography": "I am the grandfather of Cristian Gonzalez"
+    "biography": "Second king of Romania",
+    "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
+    "motherId": "e8310ec6-129b-49f6-bae9-e847b587bde5"
+  },
+  {
+    "id": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "firstName": "Marie",
+    "middleName": "Alexandra Victoria",
+    "lastName": "Edinburgh",
+    "biologicalGender": "female",
+    "biography": "The last queen of Romania as the wife of King Ferdinand I"
+  },
+
+  {
+    "id": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a",
+    "firstName": "Carol II",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "biography": "The second king of Romania",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
+  },
+  {
+    "id": "d05a1ba6-52c3-4510-bce3-e7f22d51c788",
+    "firstName": "Elisabeta",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "female",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "58fc754d-380f-4da2-b4f2-964e33ba7ef4",
+    "firstName": "Maria",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "female",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "0ea5ca94-05a2-4070-8cf7-633cf9c2efd9",
+    "firstName": "Nicolae",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "b526252a-9799-4ef4-adbc-eb6d5a2fe633",
+    "firstName": "Ileana",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "female",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "biography": "Member of the Royal House of Romania"
+  },
+  {
+    "id": "fd9e280d-aaf9-4340-a5f2-594263ffb299",
+    "firstName": "Mircea",
+    "lastName": "Hohenzollern Sigmaringen",
+    "biologicalGender": "male",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+    "biography": "Member of the Royal House of Romania"
   }
 ]
