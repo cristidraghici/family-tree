@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import PersonUtil from '@/utils/PersonUtil'
 import { personSchema } from '@/schemas'
+import PersonRegistryUtil from '@/utils/PersonRegistryUtil'
 
 const useDataParser = ({ persons, search }: { persons: string; search: string }) => {
   const result = personSchema.array().safeParse(persons)
@@ -10,14 +10,15 @@ const useDataParser = ({ persons, search }: { persons: string; search: string })
       return []
     }
 
-    return result.data.map((person) => new PersonUtil(person, result.data))
+    const registry = new PersonRegistryUtil(result.data)
+    return registry.getAll()
   }, [result])
 
   return result.success === true
     ? {
         error: null,
         data: everybody.filter((person) =>
-          person.fullName().toLowerCase().includes(search.toLowerCase()),
+          person.fullName.toLowerCase().includes(search.toLowerCase()),
         ),
       }
     : {

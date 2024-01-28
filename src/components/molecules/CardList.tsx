@@ -1,15 +1,15 @@
 import { FunctionComponent, Fragment } from 'react'
 import ConditionalElement from '../atoms/ConditionalElement'
-import { PersonUtilType } from '@/types'
+import { ExtendedPersonType } from '@/utils/PersonRegistryUtil'
 
-const CardList: FunctionComponent<{ persons: PersonUtilType[] }> = ({ persons }) => {
+const CardList: FunctionComponent<{ persons: ExtendedPersonType[] }> = ({ persons }) => {
   return (
     <>
       <ConditionalElement as="div" className="CardsGrid" condition={persons.length > 0}>
-        {persons.map((person: PersonUtilType) => (
-          <article key={person.get().id}>
-            <header>{person.fullName()}</header>
-            {person.get().biography}
+        {persons.map((person: ExtendedPersonType) => (
+          <article key={person.id}>
+            <header>{person.fullName}</header>
+            {person.biography}
           </article>
         ))}
       </ConditionalElement>

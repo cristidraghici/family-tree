@@ -32,6 +32,15 @@
     "middleName": "Andres",
     "lastName": "Gonzalez",
     "biologicalGender": "female",
-    "biography": "I am the mother of Cristian Gonzalez"
+    "biography": "I am the mother of Cristian Gonzalez",
+    "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab"
+  },
+  {
+    "id": "c24ec368-836f-4323-8e97-9a74cd434dab",
+    "firstName": "Pepe",
+    "middleName": "Rico",
+    "lastName": "Munoz",
+    "biologicalGender": "male",
+    "biography": "I am the grandfather of Cristian Gonzalez"
   }
 ]

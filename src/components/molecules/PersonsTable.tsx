@@ -1,25 +1,27 @@
 import { Fragment } from 'react'
 import ConditionalElement from '../atoms/ConditionalElement'
-import { PersonUtilType } from '@/types'
+import { ExtendedPersonType } from '@/utils/PersonRegistryUtil'
 
-export default function PersonsTable({ persons }: { persons: PersonUtilType[] }) {
+export default function PersonsTable({ persons }: { persons: ExtendedPersonType[] }) {
   return (
     <figure>
-      <table>
+      <table className="PersonsTable">
         <thead>
           <tr>
             <th>Name</th>
             <th>Gender</th>
             <th>Biography</th>
+            <th>Relatives</th>
           </tr>
         </thead>
         <tbody>
           <ConditionalElement as={Fragment} condition={persons.length > 0}>
-            {persons.map((person: PersonUtilType) => (
-              <tr key={person.get().id}>
-                <td className="font-medium">{person.fullName()}</td>
-                <td>{person.get().biologicalGender}</td>
-                <td>{person.get().biography}</td>
+            {persons.map((person: ExtendedPersonType) => (
+              <tr key={person.id}>
+                <td>{person.fullName}</td>
+                <td>{person.biologicalGender}</td>
+                <td>{person.biography}</td>
+                <td>{person.relativesNames}</td>
               </tr>
             ))}
           </ConditionalElement>
