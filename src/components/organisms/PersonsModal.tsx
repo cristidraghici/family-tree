@@ -69,6 +69,7 @@ const PersonsModal: FunctionComponent<
           </div>
         </footer>
       }
+      onEscape={onClose}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="rows">
