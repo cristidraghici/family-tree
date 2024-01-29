@@ -3,25 +3,24 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Modal from '@/components/molecules/Modal'
 
-import { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistryUtil'
-
-type PartialPersonType = Partial<PersonType>
+import { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistry'
 
 const PersonsModal: FunctionComponent<
   ComponentProps<'form'> & {
-    person: PartialPersonType | { id: PersonIdType }
+    person: PersonType | { id: PersonIdType }
 
     everybody: ExtendedPersonType[]
-    onSuccess: (data: PartialPersonType) => void
+    onSuccess: (data: PersonType) => void
+    onRemove: (id: PersonIdType) => void
     onCancel: () => void
   }
-> = ({ person, everybody, onSuccess, onCancel }) => {
+> = ({ person, everybody, onSuccess, onRemove, onCancel }) => {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<PartialPersonType>({
+  } = useForm<PersonType>({
     defaultValues: person,
   })
 
@@ -34,7 +33,12 @@ const PersonsModal: FunctionComponent<
     onCancel()
   }
 
-  const onSubmit: SubmitHandler<PartialPersonType> = (data) => {
+  const onDelete: (id: PersonIdType) => void = (id) => {
+    reset()
+    onRemove(id)
+  }
+
+  const onSubmit: SubmitHandler<PersonType> = (data) => {
     reset()
     onSuccess(data)
   }
@@ -50,12 +54,19 @@ const PersonsModal: FunctionComponent<
       }
       footer={
         <footer>
-          <button className="secondary" type="button" onClick={onClose}>
-            Cancel
-          </button>
-          <button type="button" onClick={handleSubmit(onSubmit)}>
-            Save
-          </button>
+          <div>
+            <button className="secondary" type="button" onClick={() => onDelete(person.id)}>
+              Delete
+            </button>
+            <div>
+              <button className="secondary" type="button" onClick={onClose}>
+                Cancel
+              </button>
+              <button type="button" onClick={handleSubmit(onSubmit)}>
+                Save
+              </button>
+            </div>
+          </div>
         </footer>
       }
     >
@@ -105,7 +116,9 @@ const PersonsModal: FunctionComponent<
             >
               <option></option>
               {everybody
-                .filter(({ biologicalGender }) => biologicalGender === 'male')
+                .filter(
+                  ({ id, biologicalGender }) => biologicalGender === 'male' && id !== person.id,
+                )
                 .map((person) => (
                   <option key={person.id} value={person.id}>
                     {person.fullName}
@@ -123,7 +136,9 @@ const PersonsModal: FunctionComponent<
             >
               <option></option>
               {everybody
-                .filter(({ biologicalGender }) => biologicalGender === 'female')
+                .filter(
+                  ({ id, biologicalGender }) => biologicalGender === 'female' && id !== person.id,
+                )
                 .map((person) => (
                   <option key={person.id} value={person.id}>
                     {person.fullName}
@@ -159,4 +174,5 @@ const PersonsModal: FunctionComponent<
     </Modal>
   )
 }
+
 export default PersonsModal

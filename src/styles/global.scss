@@ -97,5 +97,10 @@
   footer {
     padding-bottom: 0;
     margin-bottom: 0;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
   }
 }

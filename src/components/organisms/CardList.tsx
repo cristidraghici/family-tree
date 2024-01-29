@@ -3,7 +3,7 @@ import { FunctionComponent, Fragment } from 'react'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
-import { ExtendedPersonType } from '@/utils/PersonRegistryUtil'
+import { ExtendedPersonType } from '@/utils/PersonRegistry'
 
 const CardList: FunctionComponent<{
   persons: ExtendedPersonType[]

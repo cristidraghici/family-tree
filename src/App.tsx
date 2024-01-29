@@ -3,26 +3,23 @@ import { useState, useRef, useEffect } from 'react'
 import Logo from '@/components/atoms/Logo'
 
 import ConditionalElement from '@/components/atoms/ConditionalElement'
-import ToggleView from '@/components/molecules/ToggleView'
+import ToggleButtons from '@/components/molecules/ToggleButtons'
 import FamilyTree from '@/components/molecules/FamilyTree'
 import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
-import useDataParser from '@/hooks/useDataParser'
+import usePersonsRegistry from '@/hooks/usePersonsRegistry'
 
-import { PersonType } from '@/utils/PersonRegistryUtil'
-
-import personsJSON from '@/assets/mockedPersons.json'
+import { PersonType, NewPersonType } from '@/utils/PersonRegistry'
 
 const App = () => {
   const [view, setView] = useState<string>('cards')
-  const [selectedPerson, setSelectedPerson] = useState<Partial<PersonType> | null>(null)
+  const [selectedPerson, setSelectedPerson] = useState<PersonType | NewPersonType | null>(null)
 
   const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState<string>('')
 
-  const { filteredPersons, everybody, error } = useDataParser({
-    persons: JSON.parse(JSON.stringify(personsJSON)),
+  const { filteredPersons, everybody, addPerson, removePerson, error } = usePersonsRegistry({
     search,
   })
 
@@ -48,7 +45,7 @@ const App = () => {
 
       <ConditionalElement as="main" condition={!error} className="Main container-fluid">
         <div className="Controls Controls--horizontal">
-          <ToggleView
+          <ToggleButtons
             className="Controls_ToggleView"
             role="group"
             options={[
@@ -61,8 +58,8 @@ const App = () => {
                 label: 'Tree',
               },
             ]}
-            view={view}
-            setView={setView}
+            value={view}
+            setValue={setView}
           />
 
           <input
@@ -106,8 +103,12 @@ const App = () => {
             onCancel={() => {
               setSelectedPerson(null)
             }}
+            onRemove={(id) => {
+              setSelectedPerson(null)
+              removePerson(id)
+            }}
             onSuccess={(data) => {
-              console.log('success', { ...data, id: crypto.randomUUID() })
+              addPerson(data)
               setSelectedPerson(null)
             }}
           />

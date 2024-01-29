@@ -5,6 +5,10 @@ import { personSchema, personIdSchema } from '@/schemas'
 export type PersonIdType = z.infer<typeof personIdSchema>
 export type PersonType = z.infer<typeof personSchema>
 
+export type NewPersonType = {
+  id: PersonIdType
+}
+
 export type ExtendedPersonType = PersonType & {
   rawPerson: PersonType
 
@@ -15,12 +19,23 @@ export type ExtendedPersonType = PersonType & {
   siblingsNames: string
 }
 
-class PersonRegistryUtil {
+class PersonRegistry {
   private everybody: PersonType[]
 
   // Constructor takes a  list of all people
   constructor(everybody: PersonType[]) {
     this.everybody = everybody
+  }
+
+  // Public method to get the next ID
+  public getNextId(): PersonIdType {
+    let id: PersonIdType
+
+    do {
+      id = crypto.randomUUID()
+    } while (this.everybody.find((person) => person.id === id))
+
+    return id
   }
 
   // Public method to get a person by id
@@ -138,4 +153,4 @@ class PersonRegistryUtil {
   }
 }
 
-export default PersonRegistryUtil
+export default PersonRegistry
