@@ -10,7 +10,9 @@ export type ExtendedPersonType = PersonType & {
 
   fullName: string
   parentsNames: string
-  relativesNames: string
+  spousesNames: string
+  childrenNames: string
+  siblingsNames: string
 }
 
 class PersonRegistryUtil {
@@ -34,22 +36,23 @@ class PersonRegistryUtil {
     }
 
     return {
-      ...person,
-
       rawPerson: person,
+      ...person,
 
       fullName: this.fullName(personId),
       parentsNames: this.parents(personId)
         .map((personId) => this.fullName(personId))
         .filter(Boolean)
         .join(', '),
-      relativesNames: [
-        ...new Set([
-          ...this.siblings(personId),
-          ...this.spouses(personId),
-          ...this.children(personId),
-        ]),
-      ]
+      spousesNames: this.spouses(personId)
+        .map((personId) => this.fullName(personId))
+        .filter(Boolean)
+        .join(', '),
+      childrenNames: this.children(personId)
+        .map((personId) => this.fullName(personId))
+        .filter(Boolean)
+        .join(', '),
+      siblingsNames: this.siblings(personId)
         .map((personId) => this.fullName(personId))
         .filter(Boolean)
         .join(', '),

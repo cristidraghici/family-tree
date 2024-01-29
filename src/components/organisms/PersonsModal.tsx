@@ -3,13 +3,14 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Modal from '@/components/molecules/Modal'
 
-import { PersonType, ExtendedPersonType } from '@/utils/PersonRegistryUtil'
+import { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistryUtil'
 
 type PartialPersonType = Partial<PersonType>
 
 const PersonsModal: FunctionComponent<
   ComponentProps<'form'> & {
-    person: PartialPersonType | null
+    person: PartialPersonType | { id: PersonIdType }
+
     everybody: ExtendedPersonType[]
     onSuccess: (data: PartialPersonType) => void
     onCancel: () => void
@@ -21,12 +22,10 @@ const PersonsModal: FunctionComponent<
     reset,
     formState: { errors },
   } = useForm<PartialPersonType>({
-    defaultValues: person ? { ...person } : undefined,
+    defaultValues: person,
   })
 
   useEffect(() => {
-    if (!person) return
-
     reset(person)
   }, [person, reset])
 
@@ -36,7 +35,6 @@ const PersonsModal: FunctionComponent<
   }
 
   const onSubmit: SubmitHandler<PartialPersonType> = (data) => {
-    // Handle the form submission logic here, e.g., sending data to the server
     reset()
     onSuccess(data)
   }
@@ -44,7 +42,12 @@ const PersonsModal: FunctionComponent<
   return (
     <Modal
       isOpen={!!person}
-      header={<h1>Person Details</h1>}
+      header={
+        <>
+          <a href="#" aria-label="Close" rel="prev" onClick={onClose} />
+          <h1>Person Details</h1>
+        </>
+      }
       footer={
         <footer>
           <button className="secondary" type="button" onClick={onClose}>

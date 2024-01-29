@@ -4,10 +4,8 @@ import Logo from '@/components/atoms/Logo'
 
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import ToggleView from '@/components/molecules/ToggleView'
-import PersonsTable from '@/components/molecules/PersonsTable'
 import FamilyTree from '@/components/molecules/FamilyTree'
-import CardList from '@/components/molecules/CardList'
-
+import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
 import useDataParser from '@/hooks/useDataParser'
@@ -17,7 +15,7 @@ import { PersonType } from '@/utils/PersonRegistryUtil'
 import personsJSON from '@/assets/mockedPersons.json'
 
 const App = () => {
-  const [view, setView] = useState<string>('table')
+  const [view, setView] = useState<string>('cards')
   const [selectedPerson, setSelectedPerson] = useState<Partial<PersonType> | null>(null)
 
   const searchRef = useRef<HTMLInputElement>(null)
@@ -55,10 +53,6 @@ const App = () => {
             role="group"
             options={[
               {
-                id: 'table',
-                label: 'Table',
-              },
-              {
                 id: 'cards',
                 label: 'Cards',
               },
@@ -86,7 +80,7 @@ const App = () => {
               type="button"
               onClick={() =>
                 setSelectedPerson({
-                  id: crypto.randomUUID(),
+                  id: 'new',
                 })
               }
             >
@@ -98,24 +92,26 @@ const App = () => {
         <div className="Spacer" />
 
         <ConditionalElement
-          condition={view === 'table'}
-          as={PersonsTable}
+          condition={view === 'cards'}
+          as={CardList}
           persons={filteredPersons}
+          onEdit={setSelectedPerson}
         />
-        <ConditionalElement condition={view === 'cards'} as={CardList} persons={filteredPersons} />
-        <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
+        <ConditionalElement condition={view === 'tree'} as={FamilyTree} persons={filteredPersons} />
 
-        <PersonsModal
-          person={selectedPerson}
-          everybody={everybody}
-          onCancel={() => {
-            setSelectedPerson(null)
-          }}
-          onSuccess={(data) => {
-            console.log('success', { data })
-            setSelectedPerson(null)
-          }}
-        />
+        {selectedPerson && (
+          <PersonsModal
+            person={selectedPerson}
+            everybody={everybody}
+            onCancel={() => {
+              setSelectedPerson(null)
+            }}
+            onSuccess={(data) => {
+              console.log('success', { ...data, id: crypto.randomUUID() })
+              setSelectedPerson(null)
+            }}
+          />
+        )}
       </ConditionalElement>
     </>
   )
