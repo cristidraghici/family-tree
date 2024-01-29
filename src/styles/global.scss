@@ -67,3 +67,37 @@
     vertical-align: top;
   }
 }
+
+.Modal {
+  article {
+    padding-bottom: 0;
+
+    & > * {
+      padding: 1rem;
+    }
+  }
+
+  form {
+    summary {
+      padding: 1rem 0 0 0;
+      cursor: pointer;
+    }
+
+    @media screen and (min-width: 768px) {
+      .rows {
+        display: flex;
+        gap: 1rem;
+        flex-direction: row;
+
+        & > div {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  footer {
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}

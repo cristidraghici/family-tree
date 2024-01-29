@@ -6,6 +6,8 @@ export type PersonIdType = z.infer<typeof personIdSchema>
 export type PersonType = z.infer<typeof personSchema>
 
 export type ExtendedPersonType = PersonType & {
+  rawPerson: PersonType
+
   fullName: string
   parentsNames: string
   relativesNames: string
@@ -34,6 +36,8 @@ class PersonRegistryUtil {
     return {
       ...person,
 
+      rawPerson: person,
+
       fullName: this.fullName(personId),
       parentsNames: this.parents(personId)
         .map((personId) => this.fullName(personId))
@@ -55,9 +59,9 @@ class PersonRegistryUtil {
   // Public method to get all people
   public getAll(): ExtendedPersonType[] {
     const everybody = this.everybody || ([] as ExtendedPersonType[])
-    return everybody.map<ExtendedPersonType>(
-      (person) => this.getById(person.id) as ExtendedPersonType,
-    )
+    return everybody
+      .map<ExtendedPersonType>((person) => this.getById(person.id) as ExtendedPersonType)
+      .sort((a, b) => a.fullName.localeCompare(b.fullName))
   }
 
   // Private method to get a person by their ID
@@ -71,9 +75,9 @@ class PersonRegistryUtil {
 
   // Public method to get the full name
   private fullName(personId: PersonIdType): string {
-    const { firstName, middleName, lastName } = this.internalGetById(personId) || {}
+    const { firstName, lastName } = this.internalGetById(personId) || {}
 
-    return [firstName, middleName, lastName].filter(Boolean).join(' ').trim()
+    return [firstName, lastName].filter(Boolean).join(' ').trim()
   }
 
   // Public method to get the parents

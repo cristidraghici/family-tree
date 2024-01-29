@@ -17,13 +17,15 @@ const useDataParser = ({ persons, search }: { persons: string; search: string })
   return result.success === true
     ? {
         error: null,
-        data: everybody.filter((person) =>
+        filteredPersons: everybody.filter((person) =>
           person.fullName.toLowerCase().includes(search.toLowerCase()),
         ),
+        everybody: everybody,
       }
     : {
         error: `Invalid persons data. [e.g. ${result.error.issues[0].message}]`,
-        data: [],
+        filteredPersons: [],
+        everybody: [],
       }
 }
 
