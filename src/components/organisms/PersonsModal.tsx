@@ -1,7 +1,8 @@
-import { FunctionComponent, ComponentProps, useEffect } from 'react'
+import { FunctionComponent, ComponentProps, useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Modal from '@/components/molecules/Modal'
+import ConditionalElement from '@/components/atoms/ConditionalElement'
 
 import { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistry'
 
@@ -23,6 +24,9 @@ const PersonsModal: FunctionComponent<
   } = useForm<PersonType>({
     defaultValues: person,
   })
+
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false)
+  const isEditing = person.id !== 'new'
 
   useEffect(() => {
     reset(person)
@@ -55,9 +59,26 @@ const PersonsModal: FunctionComponent<
       footer={
         <footer>
           <div>
-            <button className="secondary" type="button" onClick={() => onDelete(person.id)}>
-              Delete
-            </button>
+            <ConditionalElement as="div" condition={isEditing} className="DeleteConfirmation">
+              <ConditionalElement condition={!isDeleteConfirmationOpen}>
+                <a href="#" onClick={() => setIsDeleteConfirmationOpen(true)}>
+                  Delete?
+                </a>
+              </ConditionalElement>
+              <ConditionalElement condition={isDeleteConfirmationOpen}>
+                Are you sure?
+                <div className="DeleteConfirmation_Actions">
+                  <a href="#" onClick={() => onDelete(person.id)}>
+                    Yes
+                  </a>
+                  <a href="#" onClick={() => setIsDeleteConfirmationOpen(false)}>
+                    No
+                  </a>
+                </div>
+              </ConditionalElement>
+            </ConditionalElement>
+            <div />
+
             <div>
               <button className="secondary" type="button" onClick={onClose}>
                 Cancel

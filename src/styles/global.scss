@@ -98,9 +98,28 @@
     padding-bottom: 0;
     margin-bottom: 0;
 
-    div {
-      display: flex;
-      justify-content: space-between;
+    & > div {
+      .DeleteConfirmation {
+        padding-bottom: 1rem;
+
+        &_Actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        display: flex;
+        justify-content: space-between;
+
+        .DeleteConfirmation {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+        }
+      }
     }
   }
 }
