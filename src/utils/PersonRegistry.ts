@@ -1,5 +1,5 @@
+import { v4 as uuid } from 'uuid'
 import { z } from 'zod'
-
 import { personSchema, personIdSchema } from '@/schemas'
 
 export type PersonIdType = z.infer<typeof personIdSchema>
@@ -10,8 +10,6 @@ export type NewPersonType = {
 }
 
 export type ExtendedPersonType = PersonType & {
-  rawPerson: PersonType
-
   fullName: string
   parentsNames: string
   spousesNames: string
@@ -32,58 +30,47 @@ class PersonRegistry {
     let id: PersonIdType
 
     do {
-      id = crypto.randomUUID()
+      id = uuid()
     } while (this.everybody.find((person) => person.id === id))
 
     return id
-  }
-
-  // Public method to get a person by id
-  public getById(personId: PersonIdType): ExtendedPersonType | undefined {
-    if (!this.everybody) {
-      return undefined
-    }
-
-    const person = this.everybody.find((person) => person.id === personId)
-
-    if (!person) {
-      return undefined
-    }
-
-    return {
-      rawPerson: person,
-      ...person,
-
-      fullName: this.fullName(personId),
-      parentsNames: this.parents(personId)
-        .map((personId) => this.fullName(personId))
-        .filter(Boolean)
-        .join(', '),
-      spousesNames: this.spouses(personId)
-        .map((personId) => this.fullName(personId))
-        .filter(Boolean)
-        .join(', '),
-      childrenNames: this.children(personId)
-        .map((personId) => this.fullName(personId))
-        .filter(Boolean)
-        .join(', '),
-      siblingsNames: this.siblings(personId)
-        .map((personId) => this.fullName(personId))
-        .filter(Boolean)
-        .join(', '),
-    }
   }
 
   // Public method to get all people
   public getAll(): ExtendedPersonType[] {
     const everybody = this.everybody || ([] as ExtendedPersonType[])
     return everybody
-      .map<ExtendedPersonType>((person) => this.getById(person.id) as ExtendedPersonType)
+      .map<ExtendedPersonType>((person) => ({
+        ...person,
+
+        fullName: this.fullName(person.id),
+        parentsNames: this.parents(person.id)
+          .map((personId) => this.fullName(personId))
+          .filter(Boolean)
+          .join(', '),
+        spousesNames: this.spouses(person.id)
+          .map((personId) => this.fullName(personId))
+          .filter(Boolean)
+          .join(', '),
+        childrenNames: this.children(person.id)
+          .map((personId) => this.fullName(personId))
+          .filter(Boolean)
+          .join(', '),
+        siblingsNames: this.siblings(person.id)
+          .map((personId) => this.fullName(personId))
+          .filter(Boolean)
+          .join(', '),
+      }))
       .sort((a, b) => a.fullName.localeCompare(b.fullName))
   }
 
+  // Get all the persons in the raw format
+  public getAllRaw(): PersonType[] {
+    return this.everybody
+  }
+
   // Private method to get a person by their ID
-  private internalGetById(personId?: PersonIdType): PersonType | undefined {
+  private getById(personId?: PersonIdType): PersonType | undefined {
     if (!personId || !this.everybody) {
       return undefined
     }
@@ -93,23 +80,23 @@ class PersonRegistry {
 
   // Public method to get the full name
   private fullName(personId: PersonIdType): string {
-    const { firstName, lastName } = this.internalGetById(personId) || {}
+    const { firstName, lastName } = this.getById(personId) || {}
 
     return [firstName, lastName].filter(Boolean).join(' ').trim()
   }
 
   // Public method to get the parents
   private parents(personId: PersonIdType): PersonIdType[] {
-    const { fatherId, motherId } = this.internalGetById(personId) || {}
+    const { fatherId, motherId } = this.getById(personId) || {}
 
-    return [this.internalGetById(fatherId), this.internalGetById(motherId)]
+    return [this.getById(fatherId), this.getById(motherId)]
       .filter((person): person is PersonType => person !== undefined)
       .map((person) => person.id) as PersonIdType[]
   }
 
   // Public method to get the siblings
   private siblings(personId: PersonIdType): PersonIdType[] {
-    const { fatherId, motherId } = this.internalGetById(personId) || {}
+    const { fatherId, motherId } = this.getById(personId) || {}
     const siblings = this.everybody
       .filter(
         (person) =>
