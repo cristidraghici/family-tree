@@ -4,7 +4,7 @@ import Logo from '@/components/atoms/Logo'
 
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import ToggleButtons from '@/components/molecules/ToggleButtons'
-import FamilyTree from '@/components/molecules/FamilyTree'
+import FamilyTree from '@/components/organisms/FamilyTree'
 import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
@@ -55,7 +55,7 @@ const App = () => {
               },
               {
                 id: 'tree',
-                label: 'Tree',
+                label: 'Graph',
               },
             ]}
             value={view}
@@ -94,7 +94,17 @@ const App = () => {
           persons={filteredPersons}
           onEdit={setSelectedPerson}
         />
-        <ConditionalElement condition={view === 'tree'} as={FamilyTree} persons={filteredPersons} />
+        <ConditionalElement
+          condition={view === 'tree'}
+          as={FamilyTree}
+          persons={filteredPersons}
+          onEdit={(personId) => {
+            const person = everybody.find(({ id }) => id === personId)
+            if (person) {
+              setSelectedPerson(person)
+            }
+          }}
+        />
 
         {selectedPerson && (
           <PersonsModal

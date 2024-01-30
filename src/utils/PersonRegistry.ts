@@ -15,6 +15,8 @@ export type ExtendedPersonType = PersonType & {
   spousesNames: string
   childrenNames: string
   siblingsNames: string
+
+  relations: PersonIdType[]
 }
 
 class PersonRegistry {
@@ -60,6 +62,10 @@ class PersonRegistry {
           .map((personId) => this.fullName(personId))
           .filter(Boolean)
           .join(', '),
+
+        relations: [...new Set([...this.parents(person.id), ...this.spouses(person.id)])].filter(
+          Boolean,
+        ),
       }))
       .sort((a, b) => a.fullName.localeCompare(b.fullName))
   }
