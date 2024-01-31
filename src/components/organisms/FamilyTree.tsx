@@ -47,11 +47,16 @@ const FamilyTree: FunctionComponent<{
     if (canvasUtil) {
       canvasUtil.reset()
 
-      for (const { id, fullName, relations } of persons) {
+      for (const { id, fullName, fatherId, motherId } of persons) {
         canvasUtil.addBox({ id, text: fullName })
 
-        for (const relation of relations) {
-          canvasUtil.addConnection(id, relation)
+        if (fatherId && motherId) {
+          const marriageId = [fatherId, motherId].sort().join('-') as PersonIdType
+          canvasUtil.addBox({ id: marriageId, text: '', isMiniBox: true })
+
+          canvasUtil.addConnection(id, marriageId)
+          canvasUtil.addConnection(fatherId, marriageId)
+          canvasUtil.addConnection(motherId, marriageId)
         }
       }
 

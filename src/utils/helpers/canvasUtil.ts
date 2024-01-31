@@ -264,7 +264,7 @@ class CanvasUtil {
     return box1.x < box2Right && box1Right > box2.x && box1.y < box2Bottom && box1Bottom > box2.y
   }
 
-  public addBox({ id, text }: { id: BoxId; text: string }) {
+  public addBox({ id, text, isMiniBox }: { id: BoxId; text: string; isMiniBox?: boolean }) {
     const generateRandomPosition = () => {
       return [Math.random() * (this.canvas.width - 100), Math.random() * (this.canvas.height - 50)]
     }
@@ -277,14 +277,20 @@ class CanvasUtil {
     // Calculate width and height based on text length
     const { width } = this.context.measureText(text)
 
+    const boxExists = this.boxes.some((box) => box.id === id)
+
+    if (boxExists) {
+      return
+    }
+
     this.boxes.push({
       id,
       text,
 
       x,
       y,
-      width: width + 25, // Add padding,
-      height: 40,
+      width: isMiniBox ? 10 : width + 25, // Add padding,
+      height: isMiniBox ? 10 : 40,
     })
   }
 
@@ -292,6 +298,7 @@ class CanvasUtil {
     if (!a || !b) {
       return
     }
+    const newConnection = [a, b].sort() as [BoxId, BoxId]
 
     const isAlreadyConnected = this.connections.some(
       (connection) => connection[0] === a && connection[1] === b,
@@ -301,7 +308,7 @@ class CanvasUtil {
       return
     }
 
-    this.connections.push([a, b].sort() as [BoxId, BoxId])
+    this.connections.push(newConnection)
   }
 
   public getBoxById(id: BoxId) {
