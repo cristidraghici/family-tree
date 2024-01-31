@@ -52,7 +52,15 @@ const PersonsModal: FunctionComponent<
       isOpen={!!person}
       header={
         <>
-          <a href="#" aria-label="Close" rel="prev" onClick={onClose} />
+          <a
+            href="#"
+            aria-label="Close"
+            rel="prev"
+            onClick={(e) => {
+              e.preventDefault()
+              onClose()
+            }}
+          />
           <h1>Person Details</h1>
         </>
       }
@@ -61,17 +69,35 @@ const PersonsModal: FunctionComponent<
           <div>
             <ConditionalElement as="div" condition={isEditing} className="DeleteConfirmation">
               <ConditionalElement condition={!isDeleteConfirmationOpen}>
-                <a href="#" onClick={() => setIsDeleteConfirmationOpen(true)}>
+                <a
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsDeleteConfirmationOpen(true)
+                  }}
+                >
                   Delete?
                 </a>
               </ConditionalElement>
               <ConditionalElement condition={isDeleteConfirmationOpen}>
                 Are you sure?
                 <div className="DeleteConfirmation_Actions">
-                  <a href="#" onClick={() => onDelete(person.id)}>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      onDelete(person.id)
+                    }}
+                  >
                     Yes
                   </a>
-                  <a href="#" onClick={() => setIsDeleteConfirmationOpen(false)}>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setIsDeleteConfirmationOpen(false)
+                    }}
+                  >
                     No
                   </a>
                 </div>

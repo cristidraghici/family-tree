@@ -241,6 +241,20 @@ class CanvasUtil {
     this.isCanvasDragging = false
     this.touchStartPos = null
   }
+
+  private handleWheel(e: WheelEvent) {
+    const { mouseX, mouseY } = this.getMousePosition(e)
+
+    const scaleFactorChange = e.deltaY > 0 ? 0.9 : 1.1 // Adjust the scale factor based on the wheel direction
+    this.scaleFactor *= scaleFactorChange
+
+    // Adjust the offsetX and offsetY based on the zoom center
+    this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactorChange
+    this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactorChange
+
+    this.draw()
+  }
+
   private isOverlap(box1: { x: number; y: number }, box2: Box): boolean {
     const box1Right = box1.x + 50
     const box1Bottom = box1.y + 50
@@ -314,6 +328,8 @@ class CanvasUtil {
     this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
     this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this))
 
+    this.canvas.addEventListener('wheel', this.handleWheel.bind(this))
+
     this.context.font = '14px Arial'
   }
 
@@ -326,6 +342,8 @@ class CanvasUtil {
     this.canvas.removeEventListener('touchstart', this.handleTouchStart.bind(this))
     this.canvas.removeEventListener('touchmove', this.handleTouchMove.bind(this))
     this.canvas.removeEventListener('touchend', this.handleTouchEnd.bind(this))
+
+    this.canvas.removeEventListener('wheel', this.handleWheel.bind(this))
   }
 
   public demo() {
