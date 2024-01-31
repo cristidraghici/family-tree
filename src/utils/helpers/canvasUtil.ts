@@ -2,9 +2,12 @@ import type { PersonIdType } from '../PersonRegistry'
 
 export type BoxId = PersonIdType
 
-export type Box = {
+export type BoxMeta = {
   id: BoxId
   text: string
+}
+
+export type Box = BoxMeta & {
   x: number
   y: number
   width: number
@@ -21,19 +24,14 @@ export type Line = {
 class CanvasUtil {
   private canvas: HTMLCanvasElement
   private context: CanvasRenderingContext2D
-
   private offsetX: number = 0
   private offsetY: number = 0
   private scaleFactor: number = 1.0
-
   private boxes: Box[] = []
   private connections: [BoxId, BoxId][] = []
-
   private selectedBox: Box | null = null
   private isCanvasDragging: boolean = false
-
   private dblClick: (id: BoxId) => void
-
   private touchStartPos: { x: number; y: number } | null = null
 
   constructor({ canvas, dblClick }: { canvas: HTMLCanvasElement; dblClick: (id: BoxId) => void }) {
@@ -42,11 +40,10 @@ class CanvasUtil {
     this.dblClick = dblClick
   }
 
+  // 1. Box Manipulation
   public optimizeBoxPositions() {
     this.boxes.forEach((box) => {
       const initialPosition = { x: box.x, y: box.y }
-
-      // Try different displacements and choose the one with the least overlap
       let minOverlap = this.calculateTotalOverlap()
       let bestPosition = initialPosition
 
@@ -64,28 +61,14 @@ class CanvasUtil {
         }
       }
 
-      // Set the box to the best position found
       box.x = bestPosition.x
       box.y = bestPosition.y
     })
 
-    this.draw() // Redraw the canvas with optimized positions
+    this.draw()
   }
 
-  private calculateTotalOverlap(): number {
-    let totalOverlap = 0
-
-    for (let i = 0; i < this.boxes.length; i++) {
-      for (let j = i + 1; j < this.boxes.length; j++) {
-        if (this.isOverlap(this.boxes[i], this.boxes[j])) {
-          totalOverlap++
-        }
-      }
-    }
-
-    return totalOverlap
-  }
-
+  // 2. Drawing
   private drawBox(box: Box) {
     const { context } = this
     context.globalAlpha = 0.9
@@ -121,15 +104,7 @@ class CanvasUtil {
     const endX = secondBox.x + secondBox.width / 2
     const endY = secondBox.y + secondBox.height / 2
 
-    const drawStraightLine = () => {
-      this.drawLine({
-        startX,
-        startY,
-        endX,
-        endY,
-      })
-    }
-
+    const drawStraightLine = () => this.drawLine({ startX, startY, endX, endY })
     const drawAngledLine = () => {
       if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
         this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY })
@@ -153,6 +128,7 @@ class CanvasUtil {
     this.boxes.forEach((box) => this.drawBox(box))
   }
 
+  // 3. Interaction Handling
   public findBox(x: number, y: number) {
     for (const box of this.boxes) {
       if (x >= box.x && x <= box.x + box.width && y >= box.y && y <= box.y + box.height) {
@@ -160,14 +136,6 @@ class CanvasUtil {
       }
     }
     return null
-  }
-
-  private getMousePosition(e: MouseEvent) {
-    const { left, top } = this.canvas.getBoundingClientRect()
-    return {
-      mouseX: e.clientX - left,
-      mouseY: e.clientY - top,
-    }
   }
 
   private handleMouseDown(e: MouseEvent) {
@@ -215,7 +183,6 @@ class CanvasUtil {
 
   private handleDoubleClick(e: MouseEvent) {
     const { mouseX, mouseY } = this.getMousePosition(e)
-
     const clickedBox = this.findBox(mouseX, mouseY)
 
     if (clickedBox) {
@@ -223,24 +190,34 @@ class CanvasUtil {
     }
   }
 
-  private getTouchPosition(touch: Touch) {
-    const { left, top } = this.canvas.getBoundingClientRect()
+  private handleWheel(e: WheelEvent) {
+    const { mouseX, mouseY } = this.getMousePosition(e)
 
-    const touchX = touch.clientX - left
-    const touchY = touch.clientY - top
+    const scaleFactorChange = e.deltaY > 0 ? 0.9 : 1.1
+    this.scaleFactor *= scaleFactorChange
 
-    return { touchX, touchY }
+    this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactorChange
+    this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactorChange
+
+    this.draw()
   }
-  private handleTouchStart(e: TouchEvent) {
-    e.preventDefault() // Prevent default touch behavior
 
+  private getMousePosition(e: MouseEvent) {
+    const { left, top } = this.canvas.getBoundingClientRect()
+    return {
+      mouseX: e.clientX - left,
+      mouseY: e.clientY - top,
+    }
+  }
+
+  private handleTouchStart(e: TouchEvent) {
+    e.preventDefault()
     const { touchX, touchY } = this.getTouchPosition(e.touches[0])
 
     this.selectedBox = this.findBox(touchX, touchY)
 
     if (!this.selectedBox) {
       this.isCanvasDragging = true
-
       this.touchStartPos = { x: touchX, y: touchY }
     } else {
       this.touchStartPos = null
@@ -250,7 +227,7 @@ class CanvasUtil {
   }
 
   private handleTouchMove(e: TouchEvent) {
-    e.preventDefault() // Prevent default touch behavior
+    e.preventDefault()
 
     if (this.isCanvasDragging && this.touchStartPos) {
       const { touchX, touchY } = this.getTouchPosition(e.touches[0])
@@ -264,7 +241,6 @@ class CanvasUtil {
       })
 
       this.touchStartPos = { x: touchX, y: touchY }
-
       this.draw()
     } else if (this.selectedBox) {
       const { touchX, touchY } = this.getTouchPosition(e.touches[0])
@@ -282,28 +258,15 @@ class CanvasUtil {
     this.touchStartPos = null
   }
 
-  private handleWheel(e: WheelEvent) {
-    const { mouseX, mouseY } = this.getMousePosition(e)
+  private getTouchPosition(touch: Touch) {
+    const { left, top } = this.canvas.getBoundingClientRect()
+    const touchX = touch.clientX - left
+    const touchY = touch.clientY - top
 
-    const scaleFactorChange = e.deltaY > 0 ? 0.9 : 1.1 // Adjust the scale factor based on the wheel direction
-    this.scaleFactor *= scaleFactorChange
-
-    // Adjust the offsetX and offsetY based on the zoom center
-    this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactorChange
-    this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactorChange
-
-    this.draw()
+    return { touchX, touchY }
   }
 
-  private isOverlap(box1: { x: number; y: number }, box2: Box): boolean {
-    const box1Right = box1.x + 50
-    const box1Bottom = box1.y + 50
-    const box2Right = box2.x + 50
-    const box2Bottom = box2.y + 50
-
-    return box1.x < box2Right && box1Right > box2.x && box1.y < box2Bottom && box1Bottom > box2.y
-  }
-
+  // 4. Box and Connection Management
   public addBox({ id, text, isMiniBox }: { id: BoxId; text: string; isMiniBox?: boolean }) {
     const boxExists = this.boxes.some((box) => box.id === id)
 
@@ -311,36 +274,15 @@ class CanvasUtil {
       return
     }
 
-    const generateRandomPosition = () => {
-      let x: number, y: number
-      let tries = 0
-
-      do {
-        ;[x, y] = [
-          Math.random() * (this.canvas.width - 100),
-          Math.random() * (this.canvas.height - 50),
-        ]
-
-        // ensure we don't get stuck in an infinite loop
-        tries++
-      } while (this.boxes.some((box) => this.isOverlap({ x, y }, box)) && tries < 10)
-
-      return [x, y]
-    }
-
-    // Generate random position
-    const [x, y] = generateRandomPosition()
-
-    // Calculate width and height based on text length
+    const [x, y] = this.generateRandomPosition()
     const { width } = this.context.measureText(text)
 
     this.boxes.push({
       id,
       text,
-
       x,
       y,
-      width: isMiniBox ? 10 : width + 25, // Add padding,
+      width: isMiniBox ? 10 : width + 25,
       height: isMiniBox ? 10 : 40,
     })
   }
@@ -349,17 +291,15 @@ class CanvasUtil {
     if (!a || !b) {
       return
     }
-    const newConnection = [a, b].sort() as [BoxId, BoxId]
 
+    const newConnection = [a, b].sort() as [BoxId, BoxId]
     const isAlreadyConnected = this.connections.some(
       (connection) => connection[0] === a && connection[1] === b,
     )
 
-    if (isAlreadyConnected) {
-      return
+    if (!isAlreadyConnected) {
+      this.connections.push(newConnection)
     }
-
-    this.connections.push(newConnection)
   }
 
   public getBoxById(id: BoxId) {
@@ -371,6 +311,7 @@ class CanvasUtil {
     this.connections = []
   }
 
+  // 5. Initialization and Cleanup
   public init() {
     const { canvas, context } = this
     const { width, height } = canvas.getBoundingClientRect()
@@ -382,11 +323,9 @@ class CanvasUtil {
     canvas.addEventListener('mousemove', this.handleMouseMove.bind(this))
     canvas.addEventListener('mouseup', this.handleMouseUp.bind(this))
     canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this))
-
     canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false })
     canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
     canvas.addEventListener('touchend', this.handleTouchEnd.bind(this))
-
     canvas.addEventListener('wheel', this.handleWheel.bind(this))
 
     context.font = '14px Arial'
@@ -402,6 +341,45 @@ class CanvasUtil {
     canvas.removeEventListener('touchmove', this.handleTouchMove.bind(this))
     canvas.removeEventListener('touchend', this.handleTouchEnd.bind(this))
     canvas.removeEventListener('wheel', this.handleWheel.bind(this))
+  }
+
+  // 6. Internal Methods
+  private calculateTotalOverlap(): number {
+    let totalOverlap = 0
+
+    for (let i = 0; i < this.boxes.length; i++) {
+      for (let j = i + 1; j < this.boxes.length; j++) {
+        if (this.isOverlap(this.boxes[i], this.boxes[j])) {
+          totalOverlap++
+        }
+      }
+    }
+
+    return totalOverlap
+  }
+
+  private isOverlap(box1: { x: number; y: number }, box2: Box): boolean {
+    const box1Right = box1.x + 50
+    const box1Bottom = box1.y + 50
+    const box2Right = box2.x + 50
+    const box2Bottom = box2.y + 50
+
+    return box1.x < box2Right && box1Right > box2.x && box1.y < box2Bottom && box1Bottom > box2.y
+  }
+
+  private generateRandomPosition(): [number, number] {
+    let x: number, y: number
+    let tries = 0
+
+    do {
+      ;[x, y] = [
+        Math.random() * (this.canvas.width - 100),
+        Math.random() * (this.canvas.height - 50),
+      ]
+      tries++
+    } while (this.boxes.some((box) => this.isOverlap({ x, y }, box)) && tries < 10)
+
+    return [x, y]
   }
 }
 
