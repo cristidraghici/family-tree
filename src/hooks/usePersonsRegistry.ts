@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { personSchema } from '@/schemas'
 import PersonRegistry, { PersonType, PersonIdType } from '@/utils/PersonRegistry'
 
-import { getTreeStorage } from '@/utils/helpers/treeStorageUtil'
+import { getTreeStorage, setTreeStorage } from '@/utils/helpers/treeStorageUtil'
 
 import personsJSON from '@/data/persons.json'
 
@@ -52,13 +52,26 @@ const usePersonsRegistry = ({ search }: { search: string }) => {
     addPerson: (person: PersonType) => {
       const id = person.id === 'new' ? registry.getNextId() : person.id
 
-      setPersons([...persons.filter((p) => p.id !== person.id), { ...person, id }])
+      const newPersons = [...persons.filter((p) => p.id !== person.id), { ...person, id }]
+
+      setPersons(newPersons)
+      setTreeStorage(newPersons)
     },
 
     // Remove the person from the registry
     removePerson: (personId: PersonIdType) => {
-      setPersons(persons.filter((person) => person.id !== personId))
+      const newPersons = persons.filter((person) => person.id !== personId)
+
+      setPersons(newPersons)
+      setTreeStorage(newPersons)
     },
+
+    clearAll: () => {
+      setPersons([])
+      setTreeStorage([])
+    },
+
+    isDemoData: JSON.stringify(persons.sort()) === JSON.stringify(personsJSON.sort()),
   }
 }
 

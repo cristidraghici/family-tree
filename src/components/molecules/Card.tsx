@@ -12,8 +12,8 @@ const Card: FunctionComponent<ComponentProps<'article'> & { person: ExtendedPers
       <header>{person.fullName}</header>
 
       <ConditionalElement condition={!!person.biography || !!person.notes}>
-        {person.biography}
-        {person.notes}
+        <div>{person.biography}</div>
+        <div>{person.notes}</div>
         <div className="Spacer" />
       </ConditionalElement>
 

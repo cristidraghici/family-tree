@@ -1,6 +1,13 @@
 @import '@picocss/pico';
 @import './theme.scss';
 
+.DataWarning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+
 .Logo {
   display: flex;
   align-items: center;

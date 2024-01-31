@@ -19,9 +19,10 @@ const App = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState<string>('')
 
-  const { filteredPersons, everybody, addPerson, removePerson, error } = usePersonsRegistry({
-    search,
-  })
+  const { filteredPersons, everybody, addPerson, removePerson, clearAll, isDemoData, error } =
+    usePersonsRegistry({
+      search,
+    })
 
   useEffect(() => {
     if (searchRef.current) {
@@ -32,6 +33,24 @@ const App = () => {
   return (
     <>
       <header>
+        <mark className="DataWarning">
+          <ConditionalElement condition={isDemoData} as="small">
+            You are viewing demo data.
+          </ConditionalElement>
+          <small>
+            Be aware that we currently use your browser's memory to store the data.{' '}
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                clearAll()
+              }}
+            >
+              Clear the data.
+            </a>
+          </small>
+        </mark>
+
         <nav className="Nav">
           <Logo />
         </nav>

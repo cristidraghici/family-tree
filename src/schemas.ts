@@ -10,9 +10,9 @@ export const personSchema = z.object({
 
   biologicalGender: z.enum(['male', 'female']),
 
-  fatherId: z.string().uuid().optional(),
-  motherId: z.string().uuid().optional(),
+  fatherId: z.string().optional(), //z.string().uuid().optional(),
+  motherId: z.string().optional(), //z.string().uuid().optional(),
 
-  biography: z.string().min(2).max(1000).optional(),
-  notes: z.string().min(2).max(1000).optional(),
+  biography: z.string().optional(), //z.string().min(2).max(1000).optional(),
+  notes: z.string().optional(), // z.string().min(2).max(1000).optional(),
 })
