@@ -4,8 +4,10 @@
 .DataWarning {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 0.3rem;
+
+  small {
+    text-align: center;
+  }
 }
 
 .Logo {

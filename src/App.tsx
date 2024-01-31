@@ -34,10 +34,10 @@ const App = () => {
     <>
       <header>
         <mark className="DataWarning">
-          <ConditionalElement condition={isDemoData} as="small">
-            You are viewing demo data.
-          </ConditionalElement>
           <small>
+            <ConditionalElement condition={isDemoData}>
+              You are viewing demo data.{' '}
+            </ConditionalElement>
             Be aware that we currently use your browser's memory to store the data.{' '}
             <a
               href="#"
