@@ -1,4 +1,4 @@
-import TreePNG from '/images/tree.png'
+import TreePNG from '@/assets/tree.svg'
 
 const Logo = () => {
   return (

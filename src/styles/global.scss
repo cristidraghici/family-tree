@@ -3,7 +3,12 @@
 
 .Logo {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+
+  h1 {
+    margin: 0;
+  }
 }
 
 .Nav {
