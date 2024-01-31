@@ -120,12 +120,22 @@ class CanvasUtil {
 
   public draw() {
     const { canvas, context } = this
+
     context.canvas.width = canvas.width
     context.canvas.height = canvas.height
     context.clearRect(0, 0, canvas.width, canvas.height)
-    context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0)
+
+    context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0) //
+
+    // context.save() // Save the current transformation matrix
+
+    // context.translate(this.offsetX, this.offsetY)
+    // context.scale(this.scaleFactor, this.scaleFactor)
+
     this.connections.forEach(([a, b]) => this.connectBoxes(a, b))
     this.boxes.forEach((box) => this.drawBox(box))
+
+    // context.restore() // Restore the original transformation matrix
   }
 
   // 3. Interaction Handling
@@ -136,6 +146,17 @@ class CanvasUtil {
       }
     }
     return null
+  }
+
+  // Handle resize event
+  private handleResize() {
+    const { canvas } = this
+    const { width, height } = canvas.getBoundingClientRect()
+
+    canvas.width = width
+    canvas.height = height
+
+    this.draw() // Redraw the canvas content after resizing
   }
 
   private handleMouseDown(e: MouseEvent) {
@@ -196,6 +217,7 @@ class CanvasUtil {
     const scaleFactorChange = e.deltaY > 0 ? 0.9 : 1.1
     this.scaleFactor *= scaleFactorChange
 
+    // Adjust the offset based on the new scale factor
     this.offsetX = mouseX - (mouseX - this.offsetX) * scaleFactorChange
     this.offsetY = mouseY - (mouseY - this.offsetY) * scaleFactorChange
 
@@ -319,6 +341,7 @@ class CanvasUtil {
     canvas.width = width
     canvas.height = height
 
+    window.addEventListener('resize', this.handleResize.bind(this))
     canvas.addEventListener('mousedown', this.handleMouseDown.bind(this))
     canvas.addEventListener('mousemove', this.handleMouseMove.bind(this))
     canvas.addEventListener('mouseup', this.handleMouseUp.bind(this))
@@ -333,6 +356,7 @@ class CanvasUtil {
 
   public destroy() {
     const { canvas } = this
+    window.removeEventListener('resize', this.handleResize.bind(this))
     canvas.removeEventListener('mousedown', this.handleMouseDown.bind(this))
     canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this))
     canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this))

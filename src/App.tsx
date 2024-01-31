@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 
 import Logo from '@/components/atoms/Logo'
 
@@ -29,6 +29,16 @@ const App = () => {
       searchRef.current.focus()
     }
   }, [])
+
+  const handleSelectPerson = useCallback(
+    (personId: string) => {
+      const person = everybody.find(({ id }) => id === personId)
+      if (person) {
+        setSelectedPerson(person)
+      }
+    },
+    [everybody, setSelectedPerson],
+  )
 
   return (
     <>
@@ -111,18 +121,13 @@ const App = () => {
           condition={view === 'cards'}
           as={CardList}
           persons={filteredPersons}
-          onEdit={setSelectedPerson}
+          onClick={handleSelectPerson}
         />
         <ConditionalElement
           condition={view === 'tree'}
           as={FamilyTree}
           persons={filteredPersons}
-          onEdit={(personId) => {
-            const person = everybody.find(({ id }) => id === personId)
-            if (person) {
-              setSelectedPerson(person)
-            }
-          }}
+          onClick={handleSelectPerson}
         />
 
         {selectedPerson && (

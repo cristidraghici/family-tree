@@ -3,17 +3,19 @@ import { FunctionComponent, Fragment } from 'react'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
-import { ExtendedPersonType } from '@/utils/PersonRegistry'
+import type { ExtendedPersonType, SelectPersonFunction } from '@/utils/PersonRegistry'
 
-const CardList: FunctionComponent<{
+interface CardListProps {
   persons: ExtendedPersonType[]
-  onEdit: (person: ExtendedPersonType) => void
-}> = ({ persons, onEdit }) => {
+  onClick: SelectPersonFunction
+}
+
+const CardList: FunctionComponent<CardListProps> = ({ persons, onClick }) => {
   return (
     <>
       <ConditionalElement as="div" className="CardsGrid" condition={persons.length > 0}>
         {persons.map((person: ExtendedPersonType) => (
-          <Card key={person.id} person={person} onClick={() => onEdit(person)} />
+          <Card key={person.id} person={person} onClick={() => onClick(person.id)} />
         ))}
       </ConditionalElement>
 

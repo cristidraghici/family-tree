@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import Modal from '@/components/molecules/Modal'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 
-import { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistry'
+import type { PersonType, ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistry'
 
 const PersonsModal: FunctionComponent<
   ComponentProps<'form'> & {

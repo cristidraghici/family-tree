@@ -1,52 +1,26 @@
 import { FunctionComponent, useEffect, useRef } from 'react'
-import { ExtendedPersonType, PersonIdType } from '@/utils/PersonRegistry'
 import CanvasUtil from '@/utils/helpers/canvasUtil'
+import type { ExtendedPersonType, PersonIdType, SelectPersonFunction } from '@/utils/PersonRegistry'
 
-const FamilyTree: FunctionComponent<{
+interface FamilyTreeProps {
   persons: ExtendedPersonType[]
-  onEdit: (person: PersonIdType) => void
-}> = ({ persons, onEdit }) => {
+  onClick: SelectPersonFunction
+}
+
+const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
 
   useEffect(() => {
-    const handleResize = () => {
-      const canvas = canvasRef.current
-
-      if (canvas) {
-        const { x, y } = canvas.getBoundingClientRect()
-        canvas.style.height = `${window.innerHeight - y - 10}px`
-        canvas.style.width = `${window.innerWidth - x - 10}px`
-      }
-    }
-
-    handleResize() // Initial resize
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  useEffect(() => {
     const canvas = canvasRef.current
+    const canvasUtil = canvasUtilRef.current
 
-    if (canvas && !canvasUtilRef.current) {
-      canvasUtilRef.current = new CanvasUtil({ canvas, dblClick: onEdit })
+    if (canvas && !canvasUtil) {
+      canvasUtilRef.current = new CanvasUtil({ canvas, dblClick: onClick })
       canvasUtilRef.current.init()
     }
 
-    return () => {
-      canvasUtilRef.current?.destroy()
-    }
-  }, [onEdit])
-
-  useEffect(() => {
-    const canvasUtil = canvasUtilRef.current
-
     if (canvasUtil) {
-      canvasUtil.reset()
-
       for (const { id, fullName, fatherId, motherId } of persons) {
         canvasUtil.addBox({ id, text: fullName })
 
@@ -60,13 +34,18 @@ const FamilyTree: FunctionComponent<{
         }
       }
 
+      canvasUtil.optimizeBoxPositions()
+
       // Initial draw with a slight delay to fix the bug
       setTimeout(() => {
         canvasUtil.draw()
-        canvasUtil.optimizeBoxPositions()
       }, 100)
     }
-  }, [persons])
+
+    return () => {
+      canvasUtilRef.current?.destroy()
+    }
+  }, [onClick, persons])
 
   return <canvas className="Canvas" ref={canvasRef} />
 }

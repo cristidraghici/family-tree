@@ -19,6 +19,8 @@ export type ExtendedPersonType = PersonType & {
   spouses: PersonIdType[]
 }
 
+export type SelectPersonFunction = (person: PersonIdType) => void
+
 class PersonRegistry {
   private everybody: PersonType[]
 
