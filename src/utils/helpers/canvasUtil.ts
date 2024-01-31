@@ -5,7 +5,6 @@ export type BoxId = PersonIdType
 export type Box = {
   id: BoxId
   text: string
-
   x: number
   y: number
   width: number
@@ -40,72 +39,116 @@ class CanvasUtil {
   constructor({ canvas, dblClick }: { canvas: HTMLCanvasElement; dblClick: (id: BoxId) => void }) {
     this.canvas = canvas
     this.context = canvas.getContext('2d') as CanvasRenderingContext2D
-
     this.dblClick = dblClick
   }
 
+  public optimizeBoxPositions() {
+    this.boxes.forEach((box) => {
+      const initialPosition = { x: box.x, y: box.y }
+
+      // Try different displacements and choose the one with the least overlap
+      let minOverlap = this.calculateTotalOverlap()
+      let bestPosition = initialPosition
+
+      for (let dx = -10; dx <= 10; dx += 5) {
+        for (let dy = -10; dy <= 10; dy += 5) {
+          box.x = initialPosition.x + dx
+          box.y = initialPosition.y + dy
+
+          const currentOverlap = this.calculateTotalOverlap()
+
+          if (currentOverlap < minOverlap) {
+            minOverlap = currentOverlap
+            bestPosition = { x: box.x, y: box.y }
+          }
+        }
+      }
+
+      // Set the box to the best position found
+      box.x = bestPosition.x
+      box.y = bestPosition.y
+    })
+
+    this.draw() // Redraw the canvas with optimized positions
+  }
+
+  private calculateTotalOverlap(): number {
+    let totalOverlap = 0
+
+    for (let i = 0; i < this.boxes.length; i++) {
+      for (let j = i + 1; j < this.boxes.length; j++) {
+        if (this.isOverlap(this.boxes[i], this.boxes[j])) {
+          totalOverlap++
+        }
+      }
+    }
+
+    return totalOverlap
+  }
+
   private drawBox(box: Box) {
-    this.context.globalAlpha = 0.9 // Set slight transparency
-    this.context.fillStyle = '#aaf'
-    this.context.fillRect(box.x, box.y, box.width, box.height)
-    this.context.strokeStyle = '#000'
-    this.context.lineWidth = 2
-    this.context.strokeRect(box.x, box.y, box.width, box.height)
-    this.context.font = '14px Arial'
-    this.context.fillStyle = '#000'
-    this.context.fillText(box.text, box.x + 10, box.y + 25)
-    this.context.globalAlpha = 1 // Reset transparency
+    const { context } = this
+    context.globalAlpha = 0.9
+    context.fillStyle = '#aaf'
+    context.fillRect(box.x, box.y, box.width, box.height)
+    context.strokeStyle = '#000'
+    context.lineWidth = 2
+    context.strokeRect(box.x, box.y, box.width, box.height)
+    context.font = '14px Arial'
+    context.fillStyle = '#000'
+    context.fillText(box.text, box.x + 10, box.y + 25)
+    context.globalAlpha = 1
   }
 
   private drawLine({ startX, startY, endX, endY }: Line) {
-    this.context.beginPath()
-    this.context.moveTo(startX, startY)
-    this.context.lineTo(endX, endY)
-    this.context.stroke()
+    const { context } = this
+    context.beginPath()
+    context.moveTo(startX, startY)
+    context.lineTo(endX, endY)
+    context.stroke()
   }
 
   public connectBoxes(a: BoxId, b: BoxId, { straight = false }: { straight?: boolean } = {}) {
-    const box1 = this.getBoxById(a)
-    const box2 = this.getBoxById(b)
+    const firstBox = this.getBoxById(a)
+    const secondBox = this.getBoxById(b)
 
-    if (!box1 || !box2) {
+    if (!firstBox || !secondBox) {
       return
     }
 
-    if (!straight) {
+    const startX = firstBox.x + firstBox.width / 2
+    const startY = firstBox.y + firstBox.height / 2
+    const endX = secondBox.x + secondBox.width / 2
+    const endY = secondBox.y + secondBox.height / 2
+
+    const drawStraightLine = () => {
       this.drawLine({
-        startX: box1.x + box1.width / 2,
-        startY: box1.y + box1.height / 2,
-        endX: box2.x + box2.width / 2,
-        endY: box2.y + box2.height / 2,
+        startX,
+        startY,
+        endX,
+        endY,
       })
-
-      return
     }
 
-    const midX1 = box1.x + box1.width / 2
-    const midY1 = box1.y + box1.height / 2
-    const midX2 = box2.x + box2.width / 2
-    const midY2 = box2.y + box2.height / 2
-
-    // Adjust the line's path for 90-degree angles
-    if (Math.abs(midX1 - midX2) > Math.abs(midY1 - midY2)) {
-      this.drawLine({ startX: midX1, startY: midY1, endX: midX2, endY: midY1 })
-      this.drawLine({ startX: midX2, startY: midY1, endX: midX2, endY: midY2 })
-    } else {
-      this.drawLine({ startX: midX1, startY: midY1, endX: midX1, endY: midY2 })
-      this.drawLine({ startX: midX1, startY: midY2, endX: midX2, endY: midY2 })
+    const drawAngledLine = () => {
+      if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
+        this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY })
+        this.drawLine({ startX: endX, startY: startY, endX: endX, endY: endY })
+      } else {
+        this.drawLine({ startX: startX, startY: startY, endX: startX, endY: endY })
+        this.drawLine({ startX: startX, startY: endY, endX: endX, endY: endY })
+      }
     }
+
+    return straight ? drawStraightLine() : drawAngledLine()
   }
 
   public draw() {
-    // Update the canvas context size to match the canvas element size
-    this.context.canvas.width = this.canvas.width
-    this.context.canvas.height = this.canvas.height
-
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0)
-
+    const { canvas, context } = this
+    context.canvas.width = canvas.width
+    context.canvas.height = canvas.height
+    context.clearRect(0, 0, canvas.width, canvas.height)
+    context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0)
     this.connections.forEach(([a, b]) => this.connectBoxes(a, b))
     this.boxes.forEach((box) => this.drawBox(box))
   }
@@ -116,7 +159,6 @@ class CanvasUtil {
         return box
       }
     }
-
     return null
   }
 
@@ -130,12 +172,10 @@ class CanvasUtil {
 
   private handleMouseDown(e: MouseEvent) {
     const { mouseX, mouseY } = this.getMousePosition(e)
-
     this.selectedBox = this.findBox(mouseX, mouseY)
 
     if (!this.selectedBox) {
       this.isCanvasDragging = true
-
       this.offsetX = mouseX
       this.offsetY = mouseY
     } else {
@@ -265,23 +305,34 @@ class CanvasUtil {
   }
 
   public addBox({ id, text, isMiniBox }: { id: BoxId; text: string; isMiniBox?: boolean }) {
-    const generateRandomPosition = () => {
-      return [Math.random() * (this.canvas.width - 100), Math.random() * (this.canvas.height - 50)]
-    }
-
-    let x: number, y: number
-    do {
-      ;[x, y] = generateRandomPosition()
-    } while (this.boxes.some((box) => this.isOverlap({ x, y }, box)))
-
-    // Calculate width and height based on text length
-    const { width } = this.context.measureText(text)
-
     const boxExists = this.boxes.some((box) => box.id === id)
 
     if (boxExists) {
       return
     }
+
+    const generateRandomPosition = () => {
+      let x: number, y: number
+      let tries = 0
+
+      do {
+        ;[x, y] = [
+          Math.random() * (this.canvas.width - 100),
+          Math.random() * (this.canvas.height - 50),
+        ]
+
+        // ensure we don't get stuck in an infinite loop
+        tries++
+      } while (this.boxes.some((box) => this.isOverlap({ x, y }, box)) && tries < 10)
+
+      return [x, y]
+    }
+
+    // Generate random position
+    const [x, y] = generateRandomPosition()
+
+    // Calculate width and height based on text length
+    const { width } = this.context.measureText(text)
 
     this.boxes.push({
       id,
@@ -321,46 +372,36 @@ class CanvasUtil {
   }
 
   public init() {
-    const { width, height } = this.canvas.getBoundingClientRect()
+    const { canvas, context } = this
+    const { width, height } = canvas.getBoundingClientRect()
 
-    this.canvas.width = width
-    this.canvas.height = height
+    canvas.width = width
+    canvas.height = height
 
-    this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this))
-    this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this))
-    this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this))
-    this.canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this))
+    canvas.addEventListener('mousedown', this.handleMouseDown.bind(this))
+    canvas.addEventListener('mousemove', this.handleMouseMove.bind(this))
+    canvas.addEventListener('mouseup', this.handleMouseUp.bind(this))
+    canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this))
 
-    this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false })
-    this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
-    this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this))
+    canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false })
+    canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
+    canvas.addEventListener('touchend', this.handleTouchEnd.bind(this))
 
-    this.canvas.addEventListener('wheel', this.handleWheel.bind(this))
+    canvas.addEventListener('wheel', this.handleWheel.bind(this))
 
-    this.context.font = '14px Arial'
+    context.font = '14px Arial'
   }
 
   public destroy() {
-    this.canvas.removeEventListener('mousedown', this.handleMouseDown.bind(this))
-    this.canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this))
-    this.canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this))
-    this.canvas.removeEventListener('dblclick', this.handleDoubleClick.bind(this))
-
-    this.canvas.removeEventListener('touchstart', this.handleTouchStart.bind(this))
-    this.canvas.removeEventListener('touchmove', this.handleTouchMove.bind(this))
-    this.canvas.removeEventListener('touchend', this.handleTouchEnd.bind(this))
-
-    this.canvas.removeEventListener('wheel', this.handleWheel.bind(this))
-  }
-
-  public demo() {
-    // Add 10 initial boxes with random positions
-    for (let i = 0; i < 5; i++) {
-      this.addBox({ id: 'id', text: 'Box ' + (i + 1) })
-    }
-
-    // Initial draw
-    this.draw()
+    const { canvas } = this
+    canvas.removeEventListener('mousedown', this.handleMouseDown.bind(this))
+    canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this))
+    canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this))
+    canvas.removeEventListener('dblclick', this.handleDoubleClick.bind(this))
+    canvas.removeEventListener('touchstart', this.handleTouchStart.bind(this))
+    canvas.removeEventListener('touchmove', this.handleTouchMove.bind(this))
+    canvas.removeEventListener('touchend', this.handleTouchEnd.bind(this))
+    canvas.removeEventListener('wheel', this.handleWheel.bind(this))
   }
 }
 

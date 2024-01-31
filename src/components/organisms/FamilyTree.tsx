@@ -63,6 +63,7 @@ const FamilyTree: FunctionComponent<{
       // Initial draw with a slight delay to fix the bug
       setTimeout(() => {
         canvasUtil.draw()
+        canvasUtil.optimizeBoxPositions()
       }, 100)
     }
   }, [persons])
