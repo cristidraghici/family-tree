@@ -35,6 +35,8 @@ class CanvasUtil {
 
   private dblClick: (id: BoxId) => void
 
+  private touchStartPos: { x: number; y: number } | null = null
+
   constructor({ canvas, dblClick }: { canvas: HTMLCanvasElement; dblClick: (id: BoxId) => void }) {
     this.canvas = canvas
     this.context = canvas.getContext('2d') as CanvasRenderingContext2D
@@ -172,8 +174,7 @@ class CanvasUtil {
   }
 
   private handleDoubleClick(e: MouseEvent) {
-    const mouseX = e.clientX - this.canvas.getBoundingClientRect().left
-    const mouseY = e.clientY - this.canvas.getBoundingClientRect().top
+    const { mouseX, mouseY } = this.getMousePosition(e)
 
     const clickedBox = this.findBox(mouseX, mouseY)
 
@@ -182,6 +183,64 @@ class CanvasUtil {
     }
   }
 
+  private getTouchPosition(touch: Touch) {
+    const { left, top } = this.canvas.getBoundingClientRect()
+
+    const touchX = touch.clientX - left
+    const touchY = touch.clientY - top
+
+    return { touchX, touchY }
+  }
+  private handleTouchStart(e: TouchEvent) {
+    e.preventDefault() // Prevent default touch behavior
+
+    const { touchX, touchY } = this.getTouchPosition(e.touches[0])
+
+    this.selectedBox = this.findBox(touchX, touchY)
+
+    if (!this.selectedBox) {
+      this.isCanvasDragging = true
+
+      this.touchStartPos = { x: touchX, y: touchY }
+    } else {
+      this.touchStartPos = null
+      this.offsetX = touchX - this.selectedBox.x
+      this.offsetY = touchY - this.selectedBox.y
+    }
+  }
+
+  private handleTouchMove(e: TouchEvent) {
+    e.preventDefault() // Prevent default touch behavior
+
+    if (this.isCanvasDragging && this.touchStartPos) {
+      const { touchX, touchY } = this.getTouchPosition(e.touches[0])
+
+      const dx = touchX - this.touchStartPos.x
+      const dy = touchY - this.touchStartPos.y
+
+      this.boxes.forEach((box) => {
+        box.x += dx
+        box.y += dy
+      })
+
+      this.touchStartPos = { x: touchX, y: touchY }
+
+      this.draw()
+    } else if (this.selectedBox) {
+      const { touchX, touchY } = this.getTouchPosition(e.touches[0])
+
+      this.selectedBox.x = touchX - this.offsetX
+      this.selectedBox.y = touchY - this.offsetY
+
+      this.draw()
+    }
+  }
+
+  private handleTouchEnd() {
+    this.selectedBox = null
+    this.isCanvasDragging = false
+    this.touchStartPos = null
+  }
   private isOverlap(box1: { x: number; y: number }, box2: Box): boolean {
     const box1Right = box1.x + 50
     const box1Bottom = box1.y + 50
@@ -251,6 +310,10 @@ class CanvasUtil {
     this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this))
     this.canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this))
 
+    this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false })
+    this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false })
+    this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this))
+
     this.context.font = '14px Arial'
   }
 
@@ -259,6 +322,10 @@ class CanvasUtil {
     this.canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this))
     this.canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this))
     this.canvas.removeEventListener('dblclick', this.handleDoubleClick.bind(this))
+
+    this.canvas.removeEventListener('touchstart', this.handleTouchStart.bind(this))
+    this.canvas.removeEventListener('touchmove', this.handleTouchMove.bind(this))
+    this.canvas.removeEventListener('touchend', this.handleTouchEnd.bind(this))
   }
 
   public demo() {
