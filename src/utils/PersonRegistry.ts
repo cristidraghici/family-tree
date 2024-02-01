@@ -112,7 +112,7 @@ class PersonRegistry {
       )
       .map((person) => person.id) as PersonIdType[]
 
-    return siblings || []
+    return [...new Set(siblings)] || []
   }
 
   // Public method to get the spouses
@@ -133,7 +133,7 @@ class PersonRegistry {
       .filter((person): person is PersonType => person !== undefined)
       .map((person) => person.id) as PersonIdType[]
 
-    return spouses || []
+    return [...new Set(spouses)] || []
   }
 
   // Public method to get the children

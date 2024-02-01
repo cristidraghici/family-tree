@@ -125,15 +125,20 @@ class CanvasUtil {
     context.canvas.height = canvas.height
     context.clearRect(0, 0, canvas.width, canvas.height)
 
-    context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0) //
+    context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0) // Scale the canvas
 
     // context.save() // Save the current transformation matrix
-
     // context.translate(this.offsetX, this.offsetY)
     // context.scale(this.scaleFactor, this.scaleFactor)
 
+    // Sort the boxes based on their y-axis position
+    this.boxes.sort((a, b) => a.y - b.y)
+
     this.connections.forEach(([a, b]) => this.connectBoxes(a, b))
     this.boxes.forEach((box) => this.drawBox(box))
+
+    // Restore the original transformation matrix
+    context.setTransform(1, 0, 0, 1, 0, 0)
 
     // context.restore() // Restore the original transformation matrix
   }
