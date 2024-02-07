@@ -1,10 +1,27 @@
-import type { BoxId, BoxCoordinates, X, Y } from '../types'
+import CanvasManager from '../managers/CanvasManager'
+import BoxManager from '../managers/BoxManager'
+
+import type { BoxId, Box, BoxCoordinates, X, Y } from '../types'
 
 const DEFAULT_SCREEN_WIDTH = 960
 const DEFAULT_SCREEN_HEIGHT = 480
 
 class DrawUtils {
+  private canvasManager: CanvasManager
+  private boxManager: BoxManager
+
   private boxCoordinates: Record<BoxId, BoxCoordinates> = {}
+
+  constructor({
+    canvasManager,
+    boxManager,
+  }: {
+    canvasManager: CanvasManager
+    boxManager: BoxManager
+  }) {
+    this.canvasManager = canvasManager
+    this.boxManager = boxManager
+  }
 
   private isOverlap(
     { x: firstBoxX, y: firstBoxY }: BoxCoordinates,
@@ -142,6 +159,51 @@ class DrawUtils {
     }
 
     return totalOverlap
+  }
+
+  public draw() {
+    this.canvasManager.initDraw()
+
+    // Assign box coordinates
+    const boxes: Box[] = this.boxManager.getBoxes().map((box) => {
+      const [width, height] = box.text
+        ? [this.canvasManager.textWidth(box.text) + 20, 40]
+        : [10, 10]
+
+      const coordinates = this.getBoxCoordinates(
+        box.id,
+        width,
+        height,
+        this.canvasManager.getWidth(), // canvas width
+        this.canvasManager.getHeight(), // canvas height
+      )
+
+      return {
+        ...box,
+        ...coordinates,
+      }
+    })
+
+    // Draw connections
+    this.boxManager.getConnections().forEach((connection) => {
+      const [firstBox, secondBox] = boxes.filter(({ id }) =>
+        [connection.firstBoxId, connection.secondBoxId].includes(id),
+      )
+
+      if (!firstBox || !secondBox) {
+        return
+      }
+
+      this.canvasManager.drawAngledLine({
+        startX: firstBox.x + firstBox.width / 2,
+        startY: firstBox.y + firstBox.height / 2,
+        endX: secondBox.x + secondBox.width / 2,
+        endY: secondBox.y + secondBox.height / 2,
+      })
+    })
+
+    // Draw boxes
+    boxes.forEach((box) => this.canvasManager.drawBox(box))
   }
 }
 
