@@ -116,7 +116,7 @@ class DrawUtils {
     }
   }
 
-  private optimizeBoxPositions() {
+  public optimizeBoxPositions() {
     const boxIds = Object.keys(this.boxCoordinates)
 
     for (const id of boxIds) {
@@ -152,9 +152,21 @@ class DrawUtils {
 
     for (let i = 0; i < boxCoordinates.length; i++) {
       for (let j = i + 1; j < boxCoordinates.length; j++) {
-        if (this.isOverlap(boxCoordinates[i], boxCoordinates[j])) {
-          totalOverlap++
-        }
+        const box1 = boxCoordinates[i]
+        const box2 = boxCoordinates[j]
+
+        // Calculate the overlapping area
+        const overlapX = Math.max(
+          0,
+          Math.min(box1.x + box1.width, box2.x + box2.width) - Math.max(box1.x, box2.x),
+        )
+        const overlapY = Math.max(
+          0,
+          Math.min(box1.y + box1.height, box2.y + box2.height) - Math.max(box1.y, box2.y),
+        )
+
+        // Calculate the total overlap area (overlapX * overlapY)
+        totalOverlap += overlapX * overlapY
       }
     }
 
@@ -163,6 +175,23 @@ class DrawUtils {
 
   public draw() {
     this.canvasManager.initDraw()
+
+    // Ensure all the boxes have coordinates (this helps with the optimization of the box positions)
+    this.boxManager.getBoxes().forEach((box) => {
+      const [width, height] = box.text
+        ? [this.canvasManager.textWidth(box.text) + 20, 40]
+        : [10, 10]
+
+      if (!this.boxCoordinates[box.id]) {
+        this.getBoxCoordinates(
+          box.id,
+          width,
+          height,
+          this.canvasManager.getWidth(),
+          this.canvasManager.getHeight(),
+        )
+      }
+    })
 
     // Assign box coordinates
     const boxes: Box[] = this.boxManager.getBoxes().map((box) => {
