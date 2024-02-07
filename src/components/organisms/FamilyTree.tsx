@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useRef } from 'react'
-import CanvasUtil from '@/utils/helpers/canvasUtil'
+import CanvasUtil from '@/utils/canvas/CanvasUtil'
+
 import type { ExtendedPersonType, PersonIdType, SelectPersonFunction } from '@/utils/PersonRegistry'
 
 interface FamilyTreeProps {
@@ -16,44 +17,43 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) =>
     const canvasUtil = canvasUtilRef.current
 
     if (canvas && !canvasUtil) {
-      canvasUtilRef.current = new CanvasUtil({ canvas, dblClick: onClick })
-      canvasUtilRef.current.init()
+      canvasUtilRef.current = new CanvasUtil({ canvas, onDblClick: onClick })
+    }
+
+    canvasUtilRef.current?.init({
+      onDblClick: onClick,
+    })
+
+    return () => {
+      canvasUtilRef.current?.destroy()
     }
   }, [onClick])
 
   useEffect(() => {
-    const canvasUtil = canvasUtilRef.current
-
     const drawFamilyTree = () => {
+      const canvasUtil = canvasUtilRef.current
+
       if (canvasUtil) {
         persons.forEach(({ id, fullName, fatherId, motherId }) => {
           canvasUtil.addBox({ id, text: fullName })
 
           if (fatherId && motherId) {
             const marriageId = [fatherId, motherId].sort().join('-') as PersonIdType
-            canvasUtil.addBox({ id: marriageId, text: '', isMiniBox: true })
 
-            canvasUtil.addConnection(id, marriageId)
-            canvasUtil.addConnection(fatherId, marriageId)
-            canvasUtil.addConnection(motherId, marriageId)
+            canvasUtil.addBox({ id: marriageId, text: '' })
+
+            canvasUtil.addConnection(id, marriageId, 'blood')
+            canvasUtil.addConnection(fatherId, marriageId, 'spouse')
+            canvasUtil.addConnection(motherId, marriageId, 'spouse')
           }
         })
 
-        canvasUtil.optimizeBoxPositions()
-
-        // Initial draw with a slight delay to fix the bug
-        setTimeout(() => {
-          canvasUtil.draw()
-        }, 100)
+        canvasUtil.draw()
       }
     }
 
     drawFamilyTree()
-
-    return () => {
-      canvasUtilRef.current?.destroy()
-    }
-  }, [onClick, persons])
+  }, [persons])
 
   return <canvas className="Canvas" ref={canvasRef} />
 }
