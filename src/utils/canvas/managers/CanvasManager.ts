@@ -48,21 +48,33 @@ class CanvasManager {
     this.context.globalAlpha = 1
   }
 
-  public drawLine({ startX, startY, endX, endY }: Line) {
-    this.context.lineWidth = LINE_WIDTH
+  public drawLine({
+    startX,
+    startY,
+    endX,
+    endY,
+    lineWidth = LINE_WIDTH,
+  }: Line & { lineWidth?: number }) {
+    this.context.lineWidth = lineWidth
     this.context.beginPath()
     this.context.moveTo(startX, startY)
     this.context.lineTo(endX, endY)
     this.context.stroke()
   }
 
-  public drawAngledLine({ startX, startY, endX, endY }: Line) {
+  public drawAngledLine({
+    startX,
+    startY,
+    endX,
+    endY,
+    lineWidth = LINE_WIDTH,
+  }: Line & { lineWidth?: number }) {
     if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
-      this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY })
-      this.drawLine({ startX: endX, startY: startY, endX: endX, endY: endY })
+      this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY, lineWidth })
+      this.drawLine({ startX: endX, startY: startY, endX: endX, endY: endY, lineWidth })
     } else {
-      this.drawLine({ startX: startX, startY: startY, endX: startX, endY: endY })
-      this.drawLine({ startX: startX, startY: endY, endX: endX, endY: endY })
+      this.drawLine({ startX: startX, startY: startY, endX: startX, endY: endY, lineWidth })
+      this.drawLine({ startX: startX, startY: endY, endX: endX, endY: endY, lineWidth })
     }
   }
 
