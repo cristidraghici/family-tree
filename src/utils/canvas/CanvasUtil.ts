@@ -4,7 +4,7 @@ import DrawUtils from './utils/DrawUtils'
 
 import debounce from '../helpers/debounce'
 
-import type { BoxMeta, BoxId, ConnectionType, Box, BoxClickHandler } from './types'
+import type { BoxMeta, BoxId, ConnectionType, Box, BoxClickHandler, X, Y } from './types'
 
 class CanvasUtil {
   private canvasManager: CanvasManager
@@ -26,10 +26,9 @@ class CanvasUtil {
     this.handleDoubleClick = debounce(this.handleDoubleClick.bind(this), 5)
     this.handleMouseDown = debounce(this.handleMouseDown.bind(this), 5)
     this.handleMouseMove = debounce(this.handleMouseMove.bind(this), 3)
-    this.handleMouseUp = debounce(this.handleMouseUp.bind(this), 5)
-    this.touchStart = debounce(this.touchStart.bind(this), 5)
-    this.touchMove = debounce(this.touchMove.bind(this), 3)
-    this.touchEnd = debounce(this.touchEnd.bind(this), 5)
+    this.handleTouchStart = debounce(this.handleTouchStart.bind(this), 5)
+    this.handleTouchMove = debounce(this.handleTouchMove.bind(this), 3)
+    this.dragEnd = debounce(this.dragEnd.bind(this), 5)
   }
 
   public addBox(box: BoxMeta) {
@@ -99,11 +98,11 @@ class CanvasUtil {
 
     canvas.addEventListener('mousedown', this.handleMouseDown)
     canvas.addEventListener('mousemove', this.handleMouseMove)
-    canvas.addEventListener('mouseup', this.handleMouseUp)
+    canvas.addEventListener('mouseup', this.dragEnd)
 
-    canvas.addEventListener('touchstart', this.touchStart, { passive: false })
-    canvas.addEventListener('touchmove', this.touchMove, { passive: false })
-    canvas.addEventListener('touchend', this.touchEnd)
+    canvas.addEventListener('touchstart', this.handleTouchStart, { passive: false })
+    canvas.addEventListener('touchmove', this.handleTouchMove, { passive: false })
+    canvas.addEventListener('touchend', this.dragEnd)
   }
 
   public destroy() {
@@ -116,11 +115,11 @@ class CanvasUtil {
 
     canvas.removeEventListener('mousedown', this.handleMouseDown)
     canvas.removeEventListener('mousemove', this.handleMouseMove)
-    canvas.removeEventListener('mouseup', this.handleMouseUp)
+    canvas.removeEventListener('mouseup', this.dragEnd)
 
-    canvas.removeEventListener('touchstart', this.touchStart)
-    canvas.removeEventListener('touchmove', this.touchMove)
-    canvas.removeEventListener('touchend', this.touchEnd)
+    canvas.removeEventListener('touchstart', this.handleTouchStart)
+    canvas.removeEventListener('touchmove', this.handleTouchMove)
+    canvas.removeEventListener('touchend', this.dragEnd)
   }
 
   private handleResize() {
@@ -148,9 +147,8 @@ class CanvasUtil {
     }
   }
 
-  private handleMouseDown(event: MouseEvent) {
-    const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
-    const selectedBoxId = this.drawUtils.findBoxByPosition(mouseX, mouseY)
+  private dragStart(x: X, y: Y) {
+    const selectedBoxId = this.drawUtils.findBoxByPosition(x, y)
 
     // box is selected
     if (selectedBoxId) {
@@ -158,84 +156,57 @@ class CanvasUtil {
       const coords = this.drawUtils.getBoxCoordinates(selectedBoxId)
 
       this.canvasManager.setOffset({
-        x: mouseX - coords.x,
-        y: mouseY - coords.y,
+        x: x - coords.x,
+        y: y - coords.y,
       })
     } else {
       // canvas is dragged
       this.canvasManager.setDragging(true)
-      this.canvasManager.setOffset({ x: mouseX, y: mouseY })
+      this.canvasManager.setOffset({ x, y })
     }
+  }
+
+  private handleMouseDown(event: MouseEvent) {
+    const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
+    this.dragStart(mouseX, mouseY)
+  }
+
+  private handleTouchStart(event: TouchEvent) {
+    const { x: touchX, y: touchY } = this.canvasManager.getTouchPosition(event)
+    this.dragStart(touchX, touchY)
+  }
+
+  private dragMove(x: X, y: Y) {
+    const selectedBox = this.boxManager.getSelectedBox()
+    const isDragging = this.canvasManager.isDragging()
+
+    if (!selectedBox && !isDragging) {
+      return
+    }
+
+    const { x: dx, y: dy } = this.canvasManager.getMoveTo(x, y)
+
+    if (selectedBox) {
+      this.drawUtils.moveBoxes(dx, dy, selectedBox.id)
+    } else if (isDragging) {
+      this.drawUtils.moveBoxes(dx, dy)
+      this.canvasManager.setOffset({ x, y })
+    }
+
+    this.draw()
   }
 
   private handleMouseMove(event: MouseEvent) {
-    const selectedBox = this.boxManager.getSelectedBox()
-    const isDragging = this.canvasManager.isDragging()
-
-    if (!selectedBox && !isDragging) {
-      return
-    }
-
     const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
-    const { x: dx, y: dy } = this.canvasManager.getMoveTo(mouseX, mouseY)
-
-    if (selectedBox) {
-      this.drawUtils.moveBoxes(dx, dy, selectedBox.id)
-    } else if (isDragging) {
-      this.drawUtils.moveBoxes(dx, dy)
-      this.canvasManager.setOffset({ x: mouseX, y: mouseY })
-    }
-
-    this.draw()
+    this.dragMove(mouseX, mouseY)
   }
 
-  private handleMouseUp() {
-    this.boxManager.setSelectedBoxId(null)
-    this.canvasManager.setDragging(false)
-  }
-
-  private touchStart(event: TouchEvent) {
+  private handleTouchMove(event: TouchEvent) {
     const { x: touchX, y: touchY } = this.canvasManager.getTouchPosition(event)
-    const selectedBoxId = this.drawUtils.findBoxByPosition(touchX, touchY)
-
-    // box is selected
-    if (selectedBoxId) {
-      this.boxManager.setSelectedBoxId(selectedBoxId)
-      const coords = this.drawUtils.getBoxCoordinates(selectedBoxId)
-
-      this.canvasManager.setOffset({
-        x: touchX - coords.x,
-        y: touchY - coords.y,
-      })
-    } else {
-      // canvas is dragged
-      this.canvasManager.setDragging(true)
-      this.canvasManager.setOffset({ x: touchX, y: touchY })
-    }
+    this.dragMove(touchX, touchY)
   }
 
-  private touchMove(event: TouchEvent) {
-    const selectedBox = this.boxManager.getSelectedBox()
-    const isDragging = this.canvasManager.isDragging()
-
-    if (!selectedBox && !isDragging) {
-      return
-    }
-
-    const { x: touchX, y: touchY } = this.canvasManager.getTouchPosition(event)
-    const { x: dx, y: dy } = this.canvasManager.getMoveTo(touchX, touchY)
-
-    if (selectedBox) {
-      this.drawUtils.moveBoxes(dx, dy, selectedBox.id)
-    } else if (isDragging) {
-      this.drawUtils.moveBoxes(dx, dy)
-      this.canvasManager.setOffset({ x: touchX, y: touchY })
-    }
-
-    this.draw()
-  }
-
-  private touchEnd() {
+  private dragEnd() {
     this.boxManager.setSelectedBoxId(null)
     this.canvasManager.setDragging(false)
   }
