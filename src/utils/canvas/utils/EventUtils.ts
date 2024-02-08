@@ -4,30 +4,34 @@ import DrawUtils from './DrawUtils'
 
 import debounce from '../../helpers/debounce'
 
-import type { BoxClickHandler, X, Y } from '../types'
+import type { BoxClickHandler, CanvasChangePositionEndHandler, X, Y } from '../types'
 
 class EventUtils {
   private canvasManager: CanvasManager
   private boxManager: BoxManager
   private drawUtils: DrawUtils
   private onDblClick?: BoxClickHandler
+  private onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
 
   constructor({
     canvasManager,
     boxManager,
     drawUtils,
     onDblClick,
+    onCanvasChangePositionEnd,
   }: {
     canvasManager: CanvasManager
     boxManager: BoxManager
     drawUtils: DrawUtils
     onDblClick?: BoxClickHandler
+    onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
   }) {
     this.canvasManager = canvasManager
     this.boxManager = boxManager
     this.drawUtils = drawUtils
 
     this.onDblClick = onDblClick
+    this.onCanvasChangePositionEnd = onCanvasChangePositionEnd
 
     // Bind methods
     this.handleResize = debounce(this.handleResize.bind(this), 5)
@@ -38,6 +42,11 @@ class EventUtils {
     this.handleTouchStart = debounce(this.handleTouchStart.bind(this), 5)
     this.handleTouchMove = debounce(this.handleTouchMove.bind(this), 3)
     this.dragEnd = debounce(this.dragEnd.bind(this), 5)
+
+    // Run the handler at render, to apply the action on the initial state
+    if (this.onCanvasChangePositionEnd) {
+      this.onCanvasChangePositionEnd(this.drawUtils.getAllCoordinates())
+    }
   }
 
   public init({ onDblClick }: { onDblClick?: BoxClickHandler }) {
@@ -148,6 +157,10 @@ class EventUtils {
     }
 
     this.drawUtils.draw()
+
+    if (this.onCanvasChangePositionEnd) {
+      this.onCanvasChangePositionEnd(this.drawUtils.getAllCoordinates())
+    }
   }
 
   private handleMouseMove(event: MouseEvent) {

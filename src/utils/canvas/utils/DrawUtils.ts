@@ -61,6 +61,10 @@ class DrawUtils {
     return [x, y]
   }
 
+  public getAllCoordinates(): BoxCoordinates[] {
+    return Object.values(this.boxCoordinates)
+  }
+
   public getBoxCoordinates(
     id: BoxId,
     width: number = 1,

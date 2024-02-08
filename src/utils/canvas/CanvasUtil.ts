@@ -3,7 +3,13 @@ import BoxManager from './managers/BoxManager'
 import DrawUtils from './utils/DrawUtils'
 import EventUtils from './utils/EventUtils'
 
-import type { BoxMeta, BoxId, ConnectionType, BoxClickHandler } from './types'
+import type {
+  BoxMeta,
+  BoxId,
+  ConnectionType,
+  BoxClickHandler,
+  CanvasChangePositionEndHandler,
+} from './types'
 
 class CanvasUtil {
   private canvasManager: CanvasManager
@@ -11,7 +17,15 @@ class CanvasUtil {
   private drawUtils: DrawUtils
   private eventUtils: EventUtils
 
-  constructor({ canvas, onDblClick }: { canvas: HTMLCanvasElement; onDblClick?: BoxClickHandler }) {
+  constructor({
+    canvas,
+    onDblClick,
+    onCanvasChangePositionEnd,
+  }: {
+    canvas: HTMLCanvasElement
+    onDblClick?: BoxClickHandler
+    onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
+  }) {
     this.canvasManager = new CanvasManager({ canvas })
     this.boxManager = new BoxManager()
 
@@ -26,6 +40,7 @@ class CanvasUtil {
       drawUtils: this.drawUtils,
 
       onDblClick,
+      onCanvasChangePositionEnd,
     })
   }
 

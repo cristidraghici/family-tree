@@ -40,3 +40,4 @@ export type Line = {
 
 // Events
 export type BoxClickHandler = (id: BoxId) => void
+export type CanvasChangePositionEndHandler = <T>(data: T) => void
