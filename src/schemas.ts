@@ -16,3 +16,16 @@ export const personSchema = z.object({
   biography: z.string().optional(), //z.string().min(2).max(1000).optional(),
   notes: z.string().optional(), // z.string().min(2).max(1000).optional(),
 })
+
+export const relationshipIdSchema = z.string().uuid()
+
+export const relationshipSchema = z.object({
+  id: relationshipIdSchema,
+  persons: z.array(personIdSchema).min(2).max(2),
+  relationshipType: z.enum(['spouse', 'blood']),
+})
+
+export const registrySchema = z.object({
+  persons: z.array(personSchema),
+  relationships: z.array(relationshipSchema),
+})

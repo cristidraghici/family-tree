@@ -69,7 +69,16 @@ const App = () => {
       <div className="Spacer" />
 
       <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
-        {error}
+        {error}{' '}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            clearAll()
+          }}
+        >
+          Clear the data.
+        </a>
       </ConditionalElement>
 
       <ConditionalElement as="main" condition={!error} className="Main container-fluid">
