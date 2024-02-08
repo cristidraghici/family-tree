@@ -19,14 +19,17 @@ export type NewPersonType = {
 }
 
 export type ExtendedPersonType = PersonType & {
+  generation?: number
+  spouses: PersonIdType[]
+
   fullName: string
   parentsNames: string
   spousesNames: string
   childrenNames: string
   siblingsNames: string
-
-  spouses: PersonIdType[]
 }
+
+export type GenerationsType = Record<number, ExtendedPersonType[]>
 
 export type SelectPersonFunction = (person: PersonIdType) => void
 
@@ -34,6 +37,7 @@ class PersonRegistry {
   private everybodyRaw: PersonType[] = []
   private everybody: Record<PersonIdType, PersonType> = {}
   private relationships: RelationshipType[]
+  private generations: Record<PersonIdType, number> = {}
 
   private parents: Record<PersonIdType, PersonIdType[]> = {}
   private spouses: Record<PersonIdType, PersonIdType[]> = {}
@@ -47,6 +51,7 @@ class PersonRegistry {
 
     this.initPeople()
     this.initRelationships()
+    this.initGenerations()
   }
 
   private initPeople(): void {
@@ -103,6 +108,62 @@ class PersonRegistry {
     }
   }
 
+  // Assign generation to persons
+  private initGenerations() {
+    const persons = this.getAll()
+    const relationships = this.getRelationships()
+    type PersonWithGeneration = PersonType & { generation: number }
+
+    const personsWithGeneration: PersonWithGeneration[] = persons.map((person) => ({
+      ...person,
+      generation: 0,
+    }))
+
+    const calculatePersonGeneration = (person: PersonWithGeneration): number => {
+      if (!person.fatherId && !person.motherId) {
+        return 1
+      }
+
+      const fatherGeneration = person.fatherId
+        ? calculatePersonGeneration(
+            personsWithGeneration.find((p) => p.id === person.fatherId) as PersonWithGeneration,
+          )
+        : 0
+
+      const motherGeneration = person.motherId
+        ? calculatePersonGeneration(
+            personsWithGeneration.find((p) => p.id === person.motherId) as PersonWithGeneration,
+          )
+        : 0
+
+      return Math.max(fatherGeneration, motherGeneration) + 1
+    }
+
+    personsWithGeneration.forEach((person) => {
+      person.generation = calculatePersonGeneration(person)
+    })
+
+    // if there is a spouse relationship, the spouse should have the same generation as the person
+    relationships.forEach((relationship) => {
+      const firstPerson = personsWithGeneration.find((p) => p.id === relationship.persons[0])
+      const secondPerson = personsWithGeneration.find((p) => p.id === relationship.persons[1])
+
+      if (!firstPerson || !secondPerson) {
+        return
+      }
+
+      if (firstPerson.generation > secondPerson.generation) {
+        secondPerson.generation = firstPerson.generation
+      } else {
+        firstPerson.generation = secondPerson.generation
+      }
+    })
+
+    personsWithGeneration.forEach((person) => {
+      this.generations[person.id] = person.generation
+    })
+  }
+
   // Private method to get a person by their ID
   private getById(personId?: PersonIdType): PersonType | undefined {
     return personId ? this.everybody[personId] : undefined
@@ -144,20 +205,54 @@ class PersonRegistry {
       .map<ExtendedPersonType>((person) => ({
         ...person,
 
+        generation: this.generations[person.id],
+        spouses: this.spouses[person.id],
+
         fullName: this.fullName(person.id),
         parentsNames: this.getPeopleNames(this.parents[person.id], person.id),
         spousesNames: this.getPeopleNames(this.spouses[person.id], person.id),
         childrenNames: this.getPeopleNames(this.children[person.id], person.id),
         siblingsNames: this.getPeopleNames(this.siblings[person.id], person.id),
-
-        spouses: this.spouses[person.id],
       }))
-      .sort((a, b) => a.fullName.localeCompare(b.fullName))
+      .sort(
+        (a, b) =>
+          (a.generation && b.generation && a.generation - b.generation) ||
+          a.fullName.localeCompare(b.fullName),
+      )
   }
 
   // Get the list of relationships between persons
   public getRelationships(): RelationshipType[] {
-    return this.relationships.sort()
+    const spouses = Object.entries(this.spouses).reduce<RelationshipType[]>(
+      (acc, [personId, spouseIds]) => {
+        const person = this.getById(personId)
+
+        if (!person) {
+          return acc
+        }
+
+        return [
+          ...acc,
+          ...spouseIds.map<RelationshipType>((spouseId) => ({
+            id: `${personId}-${spouseId}` as RelationshipIdType,
+            relationshipType: 'spouse',
+            persons: [personId, spouseId],
+          })),
+        ]
+      },
+      [],
+    )
+
+    return [...spouses, ...this.relationships].sort()
+  }
+
+  // Get the persons grouped by generation
+  public personsGroupedByGeneration(): GenerationsType {
+    return Object.entries(this.generations).reduce((acc, [personId, generation]) => {
+      acc[generation] = acc[generation] || []
+      acc[generation].push(this.getById(personId) as ExtendedPersonType)
+      return acc
+    }, {} as GenerationsType)
   }
 }
 

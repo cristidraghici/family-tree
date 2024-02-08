@@ -19,10 +19,19 @@ const App = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState<string>('')
 
-  const { filteredPersons, everybody, addPerson, removePerson, clearAll, isDemoData, error } =
-    usePersonsRegistry({
-      search,
-    })
+  const {
+    filteredPersons,
+    everybody,
+    relationships,
+    generations,
+    addPerson,
+    removePerson,
+    clearAll,
+    isDemoData,
+    error,
+  } = usePersonsRegistry({
+    search,
+  })
 
   useEffect(() => {
     if (searchRef.current) {
@@ -136,6 +145,8 @@ const App = () => {
           condition={view === 'tree'}
           as={FamilyTree}
           persons={filteredPersons}
+          relationships={relationships}
+          generations={generations}
           onClick={handleSelectPerson}
         />
 

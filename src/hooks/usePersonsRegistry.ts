@@ -8,6 +8,7 @@ import PersonRegistry, {
 } from '@/utils/PersonRegistry'
 import { getTreeStorage, setTreeStorage } from '@/utils/helpers/treeStorageUtil'
 import registryJSON from '@/data/registry.json'
+import devLog from '@/utils/helpers/devLog'
 
 const usePersonsRegistry = ({ search }: { search: string }) => {
   const [persons, setPersons] = useState<PersonType[]>([])
@@ -34,9 +35,7 @@ const usePersonsRegistry = ({ search }: { search: string }) => {
           setRelationships(result.data?.relationships || [])
           setError(null)
         } else {
-          if (import.meta.env.DEV) {
-            console.error(result.error)
-          }
+          devLog(result.error, 'error')
           setPersons([])
           setRelationships([])
           setError('Invalid data.')
@@ -82,6 +81,7 @@ const usePersonsRegistry = ({ search }: { search: string }) => {
 
   return {
     everybody: registry.getAll(),
+    generations: registry.personsGroupedByGeneration(),
     filteredPersons: registry
       .getAll()
       .filter((person) => person.fullName.toLowerCase().includes(search.toLowerCase())),
