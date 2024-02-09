@@ -1,14 +1,14 @@
 import { FunctionComponent, useEffect, useRef } from 'react'
 import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
-import type { ExtendedPersonType, PersonIdType, SelectPersonFunction } from '@/types'
+import type { ExtendedPersonType, PersonIdType } from '@/types'
+import { CanvasUtilInitProps } from '@/utils/canvas/CanvasUtil'
 
-interface FamilyTreeProps {
+interface FamilyTreeProps extends CanvasUtilInitProps {
   persons: ExtendedPersonType[]
-  onClick: SelectPersonFunction
 }
 
-const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) => {
+const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtilInitProps }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
 
@@ -17,17 +17,20 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) =>
     const canvasUtil = canvasUtilRef.current
 
     if (canvas && !canvasUtil) {
-      canvasUtilRef.current = new CanvasUtil({ canvas, onDblClick: onClick })
+      canvasUtilRef.current = new CanvasUtil({
+        canvas,
+        ...canvasUtilInitProps,
+      })
     }
 
     canvasUtilRef.current?.init({
-      onDblClick: onClick,
+      ...canvasUtilInitProps,
     })
 
     return () => {
       canvasUtilRef.current?.destroy()
     }
-  }, [onClick])
+  }, [canvasUtilInitProps])
 
   useEffect(() => {
     const drawFamilyTree = () => {

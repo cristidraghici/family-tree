@@ -1,11 +1,7 @@
-import type { PersonIdType } from '@/types'
-
-// Coordinates
-export type X = number
-export type Y = number
+import type { PositionIdType, X, Y } from '@/types'
 
 // Boxes
-export type BoxId = PersonIdType
+export type BoxId = PositionIdType
 export type BoxMeta = {
   id: BoxId
   text: string

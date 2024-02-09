@@ -25,7 +25,18 @@ export const relationshipSchema = z.object({
   relationshipType: z.enum(['spouse', 'blood']),
 })
 
+export const positionIdSchema = z.string().uuid()
+export const xSchema = z.number()
+export const ySchema = z.number()
+
+export const positionsSchema = z.object({
+  id: positionIdSchema,
+  x: xSchema,
+  y: ySchema,
+})
+
 export const registrySchema = z.object({
   persons: z.array(personSchema),
-  relationships: z.array(relationshipSchema),
+  relationships: z.array(relationshipSchema).optional(),
+  positions: z.array(positionsSchema).optional(),
 })

@@ -28,6 +28,7 @@ const useGetRegistryData = () => {
         setRegistryData({
           persons: [],
           relationships: [],
+          positions: [],
         })
 
         return

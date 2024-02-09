@@ -119,7 +119,7 @@ const App = () => {
           condition={view === 'tree'}
           as={FamilyTree}
           persons={filteredPersons}
-          onClick={handleSelectPerson}
+          onDblClick={handleSelectPerson}
         />
 
         {selectedPerson && (

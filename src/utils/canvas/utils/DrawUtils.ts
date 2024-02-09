@@ -1,10 +1,16 @@
 import CanvasManager from '../managers/CanvasManager'
 import BoxManager from '../managers/BoxManager'
 
-import type { BoxId, Box, BoxCoordinates, X, Y } from '../types'
+import type { X, Y } from '@/types'
+import type { BoxId, Box, BoxCoordinates } from '../types'
 
 const DEFAULT_SCREEN_WIDTH = 960
 const DEFAULT_SCREEN_HEIGHT = 480
+
+export interface DrawUtilsProps {
+  canvasManager: CanvasManager
+  boxManager: BoxManager
+}
 
 class DrawUtils {
   private canvasManager: CanvasManager
@@ -12,13 +18,7 @@ class DrawUtils {
 
   private boxCoordinates: Record<BoxId, BoxCoordinates> = {}
 
-  constructor({
-    canvasManager,
-    boxManager,
-  }: {
-    canvasManager: CanvasManager
-    boxManager: BoxManager
-  }) {
+  constructor({ canvasManager, boxManager }: DrawUtilsProps) {
     this.canvasManager = canvasManager
     this.boxManager = boxManager
   }
@@ -61,8 +61,8 @@ class DrawUtils {
     return [x, y]
   }
 
-  public getAllCoordinates(): BoxCoordinates[] {
-    return Object.values(this.boxCoordinates)
+  public getAllCoordinates() {
+    return this.boxCoordinates
   }
 
   public getBoxCoordinates(

@@ -4,7 +4,19 @@ import DrawUtils from './DrawUtils'
 
 import debounce from '../../helpers/debounce'
 
-import type { BoxClickHandler, CanvasChangePositionEndHandler, X, Y } from '../types'
+import type { X, Y } from '@/types'
+import type { BoxClickHandler, CanvasChangePositionEndHandler } from '../types'
+
+export interface EventUtilsInitProps {
+  onDblClick?: BoxClickHandler
+  onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
+}
+
+export interface EventUtilsProps extends EventUtilsInitProps {
+  canvasManager: CanvasManager
+  boxManager: BoxManager
+  drawUtils: DrawUtils
+}
 
 class EventUtils {
   private canvasManager: CanvasManager
@@ -19,13 +31,7 @@ class EventUtils {
     drawUtils,
     onDblClick,
     onCanvasChangePositionEnd,
-  }: {
-    canvasManager: CanvasManager
-    boxManager: BoxManager
-    drawUtils: DrawUtils
-    onDblClick?: BoxClickHandler
-    onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
-  }) {
+  }: EventUtilsProps) {
     this.canvasManager = canvasManager
     this.boxManager = boxManager
     this.drawUtils = drawUtils
@@ -49,8 +55,9 @@ class EventUtils {
     }
   }
 
-  public init({ onDblClick }: { onDblClick?: BoxClickHandler }) {
+  public init({ onDblClick, onCanvasChangePositionEnd }: EventUtilsInitProps) {
     this.onDblClick = onDblClick
+    this.onCanvasChangePositionEnd = onCanvasChangePositionEnd
 
     window.addEventListener('resize', this.handleResize)
 
