@@ -25,7 +25,9 @@ export const relationshipSchema = z.object({
   relationshipType: z.enum(['spouse', 'blood']),
 })
 
-export const positionIdSchema = z.string().uuid()
+// TODO: we can't use an unique ID here, because of the implementation of
+// the connections boxes which take two IDs as key
+export const positionIdSchema = z.string() // .uuid()
 export const xSchema = z.number()
 export const ySchema = z.number()
 

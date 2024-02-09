@@ -11,7 +11,9 @@ import PersonsModal from '@/components/organisms/PersonsModal'
 import useGetRegistryData from '@/hooks/useGetRegistryData'
 import usePersonsRegistry from '@/hooks/usePersonsRegistry'
 
-import { PersonType, NewPersonType } from '@/types'
+import debounce from '@/utils/helpers/debounce'
+
+import { PersonType, PositionsType, NewPersonType } from '@/types'
 
 const App = () => {
   const [view, setView] = useState<string>('cards')
@@ -22,12 +24,21 @@ const App = () => {
 
   const { registryData, error } = useGetRegistryData()
 
-  const { persons, filteredPersons, addPerson, removePerson, clearAll, isDemoData } =
-    usePersonsRegistry({
-      persons: registryData?.persons || [],
-      relationships: registryData?.relationships || [],
-      search,
-    })
+  const {
+    persons,
+    filteredPersons,
+    addPerson,
+    removePerson,
+    positions,
+    updatePositions,
+    clearAll,
+    isDemoData,
+  } = usePersonsRegistry({
+    persons: registryData?.persons || [],
+    relationships: registryData?.relationships || [],
+    positions: registryData?.positions || [],
+    search,
+  })
 
   useEffect(() => {
     if (searchRef.current) {
@@ -43,6 +54,11 @@ const App = () => {
       }
     },
     [persons, setSelectedPerson],
+  )
+
+  const handleUpdatePositions = debounce(
+    (data) => updatePositions(data as unknown as PositionsType[]),
+    100,
   )
 
   return (
@@ -120,6 +136,8 @@ const App = () => {
           as={FamilyTree}
           persons={filteredPersons}
           onDblClick={handleSelectPerson}
+          initialPositions={positions}
+          onCanvasChangePositionEnd={handleUpdatePositions}
         />
 
         {selectedPerson && (

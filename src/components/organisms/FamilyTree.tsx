@@ -3,8 +3,9 @@ import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
 import type { ExtendedPersonType, PersonIdType } from '@/types'
 import { CanvasUtilInitProps } from '@/utils/canvas/CanvasUtil'
+import { DrawUtilsInitProps } from '@/utils/canvas/utils/DrawUtils'
 
-interface FamilyTreeProps extends CanvasUtilInitProps {
+interface FamilyTreeProps extends CanvasUtilInitProps, DrawUtilsInitProps {
   persons: ExtendedPersonType[]
 }
 

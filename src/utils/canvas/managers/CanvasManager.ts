@@ -1,4 +1,5 @@
-import { Box, Line, X, Y } from '../types'
+import { X, Y } from '@/types'
+import { Box, Line } from '../types'
 
 const FONT = '14px Arial'
 const FILL_STYLE = '#aaf'

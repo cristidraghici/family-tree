@@ -1,13 +1,17 @@
 import CanvasManager from '../managers/CanvasManager'
 import BoxManager from '../managers/BoxManager'
 
-import type { X, Y } from '@/types'
+import type { PositionsType, X, Y } from '@/types'
 import type { BoxId, Box, BoxCoordinates } from '../types'
 
 const DEFAULT_SCREEN_WIDTH = 960
 const DEFAULT_SCREEN_HEIGHT = 480
 
-export interface DrawUtilsProps {
+export type DrawUtilsInitProps = {
+  initialPositions?: PositionsType[]
+}
+
+export interface DrawUtilsProps extends DrawUtilsInitProps {
   canvasManager: CanvasManager
   boxManager: BoxManager
 }
@@ -17,10 +21,17 @@ class DrawUtils {
   private boxManager: BoxManager
 
   private boxCoordinates: Record<BoxId, BoxCoordinates> = {}
+  private initialPositions: PositionsType[] = []
 
-  constructor({ canvasManager, boxManager }: DrawUtilsProps) {
+  constructor({ canvasManager, boxManager, initialPositions }: DrawUtilsProps) {
     this.canvasManager = canvasManager
     this.boxManager = boxManager
+
+    this.initialPositions = initialPositions || []
+  }
+
+  init({ initialPositions }: DrawUtilsInitProps) {
+    this.initialPositions = initialPositions || []
   }
 
   private isOverlap(
@@ -61,8 +72,12 @@ class DrawUtils {
     return [x, y]
   }
 
-  public getAllCoordinates() {
-    return this.boxCoordinates
+  public getAllPositions(): PositionsType[] {
+    return Object.entries(this.boxCoordinates).map(([id, position]) => ({
+      id,
+      x: position.x,
+      y: position.y,
+    }))
   }
 
   public getBoxCoordinates(
@@ -73,7 +88,11 @@ class DrawUtils {
     canvasHeight: number = DEFAULT_SCREEN_HEIGHT,
   ): BoxCoordinates {
     if (!this.boxCoordinates[id]) {
-      const [x, y] = this.generateRandomPosition(canvasWidth, canvasHeight)
+      const initialPosition = this.initialPositions.find((position) => position.id === id)
+
+      const [x, y] = initialPosition
+        ? [initialPosition.x, initialPosition.y]
+        : this.generateRandomPosition(canvasWidth, canvasHeight)
 
       this.boxCoordinates[id] = {
         x,

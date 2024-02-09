@@ -18,7 +18,19 @@ const useGetRegistryData = () => {
     try {
       const isLocalStorageEmpty = !hasTreeStorage()
       if (isLocalStorageEmpty) {
-        setRegistryData(registryJSON as RegistryType)
+        const result = registrySchema.safeParse(registryJSON)
+
+        if (result.success === false) {
+          devLog(result.error, 'error')
+          setError('Invalid data in the repository. Please, contact the owner of the project.')
+          return
+        }
+
+        setRegistryData({
+          persons: result.data.persons || [],
+          relationships: result.data.relationships || [],
+          positions: result.data.positions || [],
+        } as RegistryType)
         return
       }
 

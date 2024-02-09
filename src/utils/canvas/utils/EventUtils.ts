@@ -48,11 +48,6 @@ class EventUtils {
     this.handleTouchStart = debounce(this.handleTouchStart.bind(this), 5)
     this.handleTouchMove = debounce(this.handleTouchMove.bind(this), 3)
     this.dragEnd = debounce(this.dragEnd.bind(this), 5)
-
-    // Run the handler at render, to apply the action on the initial state
-    if (this.onCanvasChangePositionEnd) {
-      this.onCanvasChangePositionEnd(this.drawUtils.getAllCoordinates())
-    }
   }
 
   public init({ onDblClick, onCanvasChangePositionEnd }: EventUtilsInitProps) {
@@ -166,7 +161,7 @@ class EventUtils {
     this.drawUtils.draw()
 
     if (this.onCanvasChangePositionEnd) {
-      this.onCanvasChangePositionEnd(this.drawUtils.getAllCoordinates())
+      this.onCanvasChangePositionEnd(this.drawUtils.getAllPositions())
     }
   }
 

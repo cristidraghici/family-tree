@@ -6,8 +6,9 @@ import EventUtils from './utils/EventUtils'
 import type { BoxMeta, BoxId, ConnectionType } from './types'
 
 import { EventUtilsInitProps } from './utils/EventUtils'
+import { DrawUtilsInitProps } from './utils/DrawUtils'
 
-export interface CanvasUtilInitProps extends EventUtilsInitProps {}
+export interface CanvasUtilInitProps extends EventUtilsInitProps, DrawUtilsInitProps {}
 
 interface CanvasUtilProps extends CanvasUtilInitProps {
   canvas: HTMLCanvasElement
@@ -19,13 +20,19 @@ class CanvasUtil {
   private drawUtils: DrawUtils
   private eventUtils: EventUtils
 
-  constructor({ canvas, onDblClick, onCanvasChangePositionEnd }: CanvasUtilProps) {
+  constructor({
+    canvas,
+    onDblClick,
+    onCanvasChangePositionEnd,
+    initialPositions,
+  }: CanvasUtilProps) {
     this.canvasManager = new CanvasManager({ canvas })
     this.boxManager = new BoxManager()
 
     this.drawUtils = new DrawUtils({
       canvasManager: this.canvasManager,
       boxManager: this.boxManager,
+      initialPositions,
     })
 
     this.eventUtils = new EventUtils({
@@ -38,8 +45,9 @@ class CanvasUtil {
     })
   }
 
-  public init({ onDblClick, onCanvasChangePositionEnd }: CanvasUtilInitProps) {
+  public init({ onDblClick, onCanvasChangePositionEnd, initialPositions }: CanvasUtilInitProps) {
     this.eventUtils.init({ onDblClick, onCanvasChangePositionEnd })
+    this.drawUtils.init({ initialPositions })
   }
 
   public destroy() {

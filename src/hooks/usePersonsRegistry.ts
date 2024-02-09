@@ -13,26 +13,33 @@ import {
   RelationshipType,
   RelationshipIdType,
   ExtendedPersonType,
+  PositionsType,
 } from '@/types'
 
 interface PersonsRegistryProps {
   persons: PersonType[]
   relationships?: RelationshipType[]
+  positions?: PositionsType[]
   search?: string
 }
 
 const usePersonRegistry = ({
   persons: rawPersons,
   relationships: rawRelationships = [],
+  positions: rawPositions = [],
+
   search = '',
 }: PersonsRegistryProps) => {
   const [persons, setPersons] = useState<PersonType[]>([])
   const [relationships, setRelationships] = useState<RelationshipType[]>([])
+  const [positions, setPositions] = useState<PositionsType[]>([])
 
   useEffect(() => {
     setPersons(rawPersons || [])
     setRelationships(rawRelationships || [])
-  }, [rawPersons, rawRelationships])
+
+    setPositions(rawPositions || [])
+  }, [rawPersons, rawRelationships, rawPositions])
 
   const getNextId = (): PersonIdType => {
     let id: PersonIdType
@@ -129,7 +136,7 @@ const usePersonRegistry = ({
     const newPersons = [...persons.filter((p) => p.id !== person.id), { ...person, id }]
 
     setPersons(newPersons)
-    setTreeStorage({ persons: newPersons, relationships })
+    setTreeStorage({ persons: newPersons, relationships, positions })
   }
 
   const removePerson = (personId: PersonIdType) => {
@@ -140,13 +147,20 @@ const usePersonRegistry = ({
 
     setPersons(newPersons)
     setRelationships(newRelationships)
-    setTreeStorage({ persons: newPersons, relationships: newRelationships })
+    setTreeStorage({ persons: newPersons, relationships: newRelationships, positions })
+  }
+
+  const updatePositions = (newPositions: PositionsType[]) => {
+    setPositions(newPositions)
+    setTreeStorage({ persons, relationships, positions: newPositions })
   }
 
   const clearAll = () => {
     setPersons([])
     setRelationships([])
-    setTreeStorage({ persons: [], relationships: [] })
+    setPositions([])
+
+    setTreeStorage({ persons: [], relationships: [], positions: [] })
   }
 
   return {
@@ -154,12 +168,15 @@ const usePersonRegistry = ({
     filteredPersons: extendedPersons.filter((person) =>
       person.fullName.toLowerCase().includes(search.toLowerCase()),
     ),
+    positions,
 
     addPerson,
     removePerson,
     clearAll,
 
     getNextId,
+
+    updatePositions,
 
     isDemoData: isDemoData(persons, relationships),
   }
