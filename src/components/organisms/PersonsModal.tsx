@@ -164,9 +164,13 @@ const PersonsModal: FunctionComponent<
             >
               <option></option>
               {everybody
-                .filter(
-                  ({ id, biologicalGender }) => biologicalGender === 'male' && id !== person.id,
-                )
+                .filter(({ id, biologicalGender, ancestors }) => {
+                  return (
+                    biologicalGender === 'male' &&
+                    id !== person.id &&
+                    !ancestors.includes(person.id)
+                  )
+                })
                 .map((person) => (
                   <option key={person.id} value={person.id}>
                     {person.fullName}
@@ -185,7 +189,10 @@ const PersonsModal: FunctionComponent<
               <option></option>
               {everybody
                 .filter(
-                  ({ id, biologicalGender }) => biologicalGender === 'female' && id !== person.id,
+                  ({ id, biologicalGender, ancestors }) =>
+                    biologicalGender === 'female' &&
+                    id !== person.id &&
+                    !ancestors.includes(person.id),
                 )
                 .map((person) => (
                   <option key={person.id} value={person.id}>

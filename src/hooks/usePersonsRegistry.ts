@@ -108,6 +108,8 @@ const usePersonRegistry = ({
 
         generation: generations[person.id],
         spouses: connections.spouses[person.id],
+        descendants: connections.descendants[person.id],
+        ancestors: connections.ancestors[person.id],
 
         fullName: fullName(person.id),
         parentsNames: getPeopleNames(connections.parents[person.id], person.id),

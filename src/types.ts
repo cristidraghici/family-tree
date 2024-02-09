@@ -28,6 +28,8 @@ export type NewPersonType = {
 export type ExtendedPersonType = PersonType & {
   generation?: number
   spouses: PersonIdType[]
+  descendants: PersonIdType[]
+  ancestors: PersonIdType[]
 
   fullName: string
   parentsNames: string
