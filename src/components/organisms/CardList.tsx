@@ -3,7 +3,7 @@ import { FunctionComponent, Fragment } from 'react'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
-import type { ExtendedPersonType, SelectPersonFunction } from '@/utils/PersonRegistry'
+import type { ExtendedPersonType, SelectPersonFunction } from '@/types'
 
 interface CardListProps {
   persons: ExtendedPersonType[]
@@ -18,7 +18,6 @@ const CardList: FunctionComponent<CardListProps> = ({ persons, onClick }) => {
           <Card key={person.id} person={person} onClick={() => onClick(person.id)} />
         ))}
       </ConditionalElement>
-
       <ConditionalElement as={Fragment} condition={persons.length === 0}>
         <article>No persons found.</article>
       </ConditionalElement>

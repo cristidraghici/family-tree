@@ -8,9 +8,10 @@ import FamilyTree from '@/components/organisms/FamilyTree'
 import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
+import useGetRegistryData from '@/hooks/useGetRegistryData'
 import usePersonsRegistry from '@/hooks/usePersonsRegistry'
 
-import { PersonType, NewPersonType } from '@/utils/PersonRegistry'
+import { PersonType, NewPersonType } from '@/types'
 
 const App = () => {
   const [view, setView] = useState<string>('cards')
@@ -19,17 +20,11 @@ const App = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState<string>('')
 
-  const {
-    filteredPersons,
-    everybody,
-    relationships,
-    generations,
-    addPerson,
-    removePerson,
-    clearAll,
-    isDemoData,
-    error,
-  } = usePersonsRegistry({
+  const { registryData, isDemoData, error } = useGetRegistryData()
+
+  const { persons, filteredPersons, addPerson, removePerson, clearAll } = usePersonsRegistry({
+    persons: registryData?.persons || [],
+    relationships: registryData?.relationships || [],
     search,
   })
 
@@ -41,12 +36,12 @@ const App = () => {
 
   const handleSelectPerson = useCallback(
     (personId: string) => {
-      const person = everybody.find(({ id }) => id === personId)
+      const person = persons.find((person) => person.id === personId)
       if (person) {
         setSelectedPerson(person)
       }
     },
-    [everybody, setSelectedPerson],
+    [persons, setSelectedPerson],
   )
 
   return (
@@ -145,15 +140,13 @@ const App = () => {
           condition={view === 'tree'}
           as={FamilyTree}
           persons={filteredPersons}
-          relationships={relationships}
-          generations={generations}
           onClick={handleSelectPerson}
         />
 
         {selectedPerson && (
           <PersonsModal
             person={selectedPerson}
-            everybody={everybody}
+            everybody={persons}
             onCancel={() => {
               setSelectedPerson(null)
             }}

@@ -1,6 +1,7 @@
 import { FunctionComponent, ComponentProps } from 'react'
 import ConditionalElement from '../atoms/ConditionalElement'
-import { ExtendedPersonType } from '@/utils/PersonRegistry'
+
+import { ExtendedPersonType } from '@/types'
 
 const Card: FunctionComponent<ComponentProps<'article'> & { person: ExtendedPersonType }> = ({
   className = '',

@@ -1,22 +1,14 @@
 import { FunctionComponent, useEffect, useRef } from 'react'
 import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
-import type {
-  ExtendedPersonType,
-  PersonIdType,
-  RelationshipType,
-  GenerationsType,
-  SelectPersonFunction,
-} from '@/utils/PersonRegistry'
+import type { ExtendedPersonType, PersonIdType, SelectPersonFunction } from '@/types'
 
 interface FamilyTreeProps {
   persons: ExtendedPersonType[]
-  relationships: RelationshipType[]
-  generations: GenerationsType
   onClick: SelectPersonFunction
 }
 
-const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, relationships, onClick }) => {
+const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
 
@@ -61,7 +53,7 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, relationships
     }
 
     drawFamilyTree()
-  }, [persons, relationships])
+  }, [persons])
 
   return <canvas className="Canvas" ref={canvasRef} />
 }

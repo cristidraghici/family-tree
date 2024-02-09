@@ -1,4 +1,4 @@
-import type { PersonIdType } from '../PersonRegistry'
+import type { PersonIdType } from '@/types'
 
 // Coordinates
 export type X = number
