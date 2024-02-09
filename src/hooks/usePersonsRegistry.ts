@@ -5,6 +5,8 @@ import { setTreeStorage } from '@/utils/helpers/treeStorageUtil'
 import getConnections from '@/utils/persons/getConnections'
 import getGenerations from '@/utils/persons/getGenerations'
 
+import isDemoData from '@/utils/isDemoData'
+
 import {
   PersonType,
   PersonIdType,
@@ -156,6 +158,8 @@ const usePersonRegistry = ({
     clearAll,
 
     getNextId,
+
+    isDemoData: isDemoData(persons, relationships),
   }
 }
 

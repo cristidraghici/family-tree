@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
-import Logo from '@/components/atoms/Logo'
+import Header from '@/components/molecules/Header'
 
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import ToggleButtons from '@/components/molecules/ToggleButtons'
@@ -20,13 +20,14 @@ const App = () => {
   const searchRef = useRef<HTMLInputElement>(null)
   const [search, setSearch] = useState<string>('')
 
-  const { registryData, isDemoData, error } = useGetRegistryData()
+  const { registryData, error } = useGetRegistryData()
 
-  const { persons, filteredPersons, addPerson, removePerson, clearAll } = usePersonsRegistry({
-    persons: registryData?.persons || [],
-    relationships: registryData?.relationships || [],
-    search,
-  })
+  const { persons, filteredPersons, addPerson, removePerson, clearAll, isDemoData } =
+    usePersonsRegistry({
+      persons: registryData?.persons || [],
+      relationships: registryData?.relationships || [],
+      search,
+    })
 
   useEffect(() => {
     if (searchRef.current) {
@@ -46,29 +47,7 @@ const App = () => {
 
   return (
     <>
-      <header>
-        <mark className="DataWarning">
-          <small>
-            <ConditionalElement condition={isDemoData}>
-              You are viewing demo data.{' '}
-            </ConditionalElement>
-            Be aware that we currently use your browser's memory to store the data.{' '}
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault()
-                clearAll()
-              }}
-            >
-              Clear the data.
-            </a>
-          </small>
-        </mark>
-
-        <nav className="Nav">
-          <Logo />
-        </nav>
-      </header>
+      <Header onClearAll={clearAll} isDemoData={isDemoData} />
 
       <div className="Spacer" />
 

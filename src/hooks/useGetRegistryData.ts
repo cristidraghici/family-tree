@@ -48,16 +48,9 @@ const useGetRegistryData = () => {
     }
   }, [])
 
-  const { persons, relationships } = registryData || {}
-
-  const isDemoData =
-    JSON.stringify(persons?.sort()) === JSON.stringify(registryJSON.persons.sort()) &&
-    JSON.stringify(relationships?.sort()) === JSON.stringify(registryJSON.relationships.sort())
-
   return {
     registryData,
     error,
-    isDemoData,
   }
 }
 
