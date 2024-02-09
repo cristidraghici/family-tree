@@ -34,6 +34,12 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, onClick }) =>
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
+        if (persons.length === 0) {
+          canvasUtil.reset()
+          canvasUtil.draw()
+          return
+        }
+
         persons.forEach(({ id, fullName, generation, fatherId, motherId }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
 

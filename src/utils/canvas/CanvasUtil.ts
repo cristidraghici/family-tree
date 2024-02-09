@@ -63,6 +63,10 @@ class CanvasUtil {
   public draw() {
     this.drawUtils.draw()
   }
+
+  public reset() {
+    this.boxManager.reset()
+  }
 }
 
 export default CanvasUtil
