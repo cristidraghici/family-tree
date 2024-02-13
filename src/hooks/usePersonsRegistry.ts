@@ -140,7 +140,14 @@ const usePersonRegistry = ({
   }
 
   const removePerson = (personId: PersonIdType) => {
-    const newPersons = persons.filter((person) => person.id !== personId)
+    const newPersons = persons
+      .filter((person) => person.id !== personId)
+      .map((person) => ({
+        ...person,
+        fatherId: person.fatherId === personId ? '' : person.fatherId,
+        motherId: person.motherId === personId ? '' : person.motherId,
+      }))
+
     const newRelationships = relationships.filter((relationship) =>
       relationship.persons.includes(personId),
     )

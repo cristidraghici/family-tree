@@ -53,6 +53,14 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtil
             canvasUtil.addConnection(fatherId, marriageId, 'spouse')
             canvasUtil.addConnection(motherId, marriageId, 'spouse')
           }
+
+          if ((fatherId || motherId) && (!fatherId || !motherId)) {
+            const parentId = fatherId || motherId
+            // the if block should not be necessary, one always has a value
+            if (parentId) {
+              canvasUtil.addConnection(id, parentId, 'blood')
+            }
+          }
         })
 
         canvasUtil.draw()
