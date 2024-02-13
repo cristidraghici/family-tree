@@ -4,8 +4,7 @@ import BoxManager from '../managers/BoxManager'
 import type { PositionsType, X, Y } from '@/types'
 import type { BoxId, Box, BoxCoordinates } from '../types'
 
-const DEFAULT_SCREEN_WIDTH = 960
-const DEFAULT_SCREEN_HEIGHT = 480
+import { CANVAS_DEFAULT_SCREEN_WIDTH, CANVAS_DEFAULT_SCREEN_HEIGHT } from '@/constants'
 
 export type DrawUtilsInitProps = {
   initialPositions?: PositionsType[]
@@ -27,7 +26,7 @@ class DrawUtils {
     this.canvasManager = canvasManager
     this.boxManager = boxManager
 
-    this.initialPositions = initialPositions || []
+    this.init({ initialPositions })
   }
 
   init({ initialPositions }: DrawUtilsInitProps) {
@@ -84,8 +83,8 @@ class DrawUtils {
     id: BoxId,
     width: number = 1,
     height: number = 1,
-    canvasWidth: number = DEFAULT_SCREEN_WIDTH,
-    canvasHeight: number = DEFAULT_SCREEN_HEIGHT,
+    canvasWidth: number = CANVAS_DEFAULT_SCREEN_WIDTH,
+    canvasHeight: number = CANVAS_DEFAULT_SCREEN_HEIGHT,
   ): BoxCoordinates {
     if (!this.boxCoordinates[id]) {
       const initialPosition = this.initialPositions.find((position) => position.id === id)

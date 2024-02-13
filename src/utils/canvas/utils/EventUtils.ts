@@ -36,9 +36,6 @@ class EventUtils {
     this.boxManager = boxManager
     this.drawUtils = drawUtils
 
-    this.onDblClick = onDblClick
-    this.onCanvasChangePositionEnd = onCanvasChangePositionEnd
-
     // Bind methods
     this.handleResize = debounce(this.handleResize.bind(this), 5)
     this.handleWheel = debounce(this.handleWheel.bind(this), 5)
@@ -48,6 +45,9 @@ class EventUtils {
     this.handleTouchStart = debounce(this.handleTouchStart.bind(this), 5)
     this.handleTouchMove = debounce(this.handleTouchMove.bind(this), 3)
     this.dragEnd = debounce(this.dragEnd.bind(this), 5)
+
+    // Init
+    this.init({ onDblClick, onCanvasChangePositionEnd })
   }
 
   public init({ onDblClick, onCanvasChangePositionEnd }: EventUtilsInitProps) {

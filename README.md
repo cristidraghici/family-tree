@@ -39,6 +39,8 @@ We will use the following convention for the structure:
 - `src/context`: Holds React context providers for managing global state (e.g., authentication, themes);
 - `src/hooks`: Place for the custom hooks our app uses;
 - `src/styles`: Contains CSS styles for your application;
+- `types.ts`: Global types used in the application;
+- `constants.ts`: Constants used in the application;
 - `App.tsx`: The main application component where you assemble your routing and global context providers;
 - `main.tsx`: The entry point of your application.
 
@@ -85,6 +87,8 @@ src/
 | |-- ...
 |-- styles/
 | |-- global.css
+|-- types.ts
+|-- constants.ts
 |-- App.tsx
 |-- main.tsx
 |-- ...

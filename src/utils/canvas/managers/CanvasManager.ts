@@ -1,10 +1,7 @@
 import { X, Y } from '@/types'
 import { Box, Line } from '../types'
 
-const FONT = '14px Arial'
-const FILL_STYLE = '#aaf'
-const STROKE_STYLE = '#000'
-const LINE_WIDTH = 2
+import { CANVAS_FILL_STYLE, CANVAS_FONT, CANVAS_LINE_WIDTH, CANVAS_STROKE_STYLE } from '@/constants'
 
 class CanvasManager {
   private canvas: HTMLCanvasElement
@@ -23,7 +20,7 @@ class CanvasManager {
   }
 
   private initializeCanvas() {
-    this.context.font = FONT
+    this.context.font = CANVAS_FONT
   }
 
   public updateCanvasSize() {
@@ -38,13 +35,13 @@ class CanvasManager {
 
   public drawBox({ x, y, width, height, text }: Box) {
     this.context.globalAlpha = 0.9
-    this.context.fillStyle = FILL_STYLE
+    this.context.fillStyle = CANVAS_FILL_STYLE
     this.context.fillRect(x, y, width, height)
-    this.context.strokeStyle = STROKE_STYLE
-    this.context.lineWidth = LINE_WIDTH
+    this.context.strokeStyle = CANVAS_STROKE_STYLE
+    this.context.lineWidth = CANVAS_LINE_WIDTH
     this.context.strokeRect(x, y, width, height)
-    this.context.font = FONT
-    this.context.fillStyle = STROKE_STYLE
+    this.context.font = CANVAS_FONT
+    this.context.fillStyle = CANVAS_STROKE_STYLE
     this.context.fillText(text, x + 10, y + 25)
     this.context.globalAlpha = 1
   }
@@ -54,7 +51,7 @@ class CanvasManager {
     startY,
     endX,
     endY,
-    lineWidth = LINE_WIDTH,
+    lineWidth = CANVAS_LINE_WIDTH,
   }: Line & { lineWidth?: number }) {
     this.context.lineWidth = lineWidth
     this.context.beginPath()
@@ -68,7 +65,7 @@ class CanvasManager {
     startY,
     endX,
     endY,
-    lineWidth = LINE_WIDTH,
+    lineWidth = CANVAS_LINE_WIDTH,
   }: Line & { lineWidth?: number }) {
     if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
       this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY, lineWidth })
@@ -150,7 +147,7 @@ class CanvasManager {
   }
 
   public textWidth(text: string): number {
-    this.context.font = FONT
+    this.context.font = CANVAS_FONT
     return this.context.measureText(text).width || text.length * 10
   }
 

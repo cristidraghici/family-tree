@@ -24,12 +24,9 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtil
       })
     }
 
-    canvasUtilRef.current?.init({
-      ...canvasUtilInitProps,
-    })
-
     return () => {
       canvasUtilRef.current?.destroy()
+      canvasUtilRef.current = null
     }
   }, [canvasUtilInitProps])
 
