@@ -4,52 +4,59 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import Modal from '@/components/molecules/Modal'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 
-import type { PersonType, ExtendedPersonType, PersonIdType } from '@/types'
+import usePersonContext from '@/hooks/usePersonContext'
 
-const PersonsModal: FunctionComponent<
-  ComponentProps<'form'> & {
-    person: PersonType | { id: PersonIdType }
+import type { PersonType, PersonIdType } from '@/types'
 
-    everybody: ExtendedPersonType[]
-    onSuccess: (data: PersonType) => void
-    onRemove: (id: PersonIdType) => void
-    onCancel: () => void
-  }
-> = ({ person, everybody, onSuccess, onRemove, onCancel }) => {
+const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
+  const { selectedPerson, persons, handleSelectPerson, removePerson, addPerson } =
+    usePersonContext()
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<PersonType>({
-    defaultValues: person,
+    defaultValues: selectedPerson || {},
   })
 
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false)
-  const isEditing = person.id !== 'new'
 
   useEffect(() => {
-    reset(person)
-  }, [person, reset])
+    if (!selectedPerson) {
+      return
+    }
+
+    reset(selectedPerson)
+  }, [selectedPerson, reset])
+
+  if (!selectedPerson) {
+    return <></>
+  }
+
+  const isEditing = selectedPerson.id !== 'new'
 
   const onClose: () => void = () => {
     reset()
-    onCancel()
+    handleSelectPerson('')
   }
 
   const onDelete: (id: PersonIdType) => void = (id) => {
     reset()
-    onRemove(id)
+    removePerson(id)
+    handleSelectPerson('')
   }
 
   const onSubmit: SubmitHandler<PersonType> = (data) => {
+    addPerson(data)
     reset()
-    onSuccess(data)
+    handleSelectPerson('')
   }
 
   return (
     <Modal
-      isOpen={!!person}
+      isOpen={true}
       header={
         <>
           <a
@@ -86,7 +93,7 @@ const PersonsModal: FunctionComponent<
                     href="#"
                     onClick={(e) => {
                       e.preventDefault()
-                      onDelete(person.id)
+                      onDelete(selectedPerson.id)
                     }}
                   >
                     Yes
@@ -163,12 +170,12 @@ const PersonsModal: FunctionComponent<
               aria-invalid={errors.fatherId ? 'true' : undefined}
             >
               <option></option>
-              {everybody
+              {persons
                 .filter(({ id, biologicalGender, ancestors }) => {
                   return (
                     biologicalGender === 'male' &&
-                    id !== person.id &&
-                    !ancestors.includes(person.id)
+                    id !== selectedPerson.id &&
+                    !ancestors.includes(selectedPerson.id)
                   )
                 })
                 .map((person) => (
@@ -187,12 +194,12 @@ const PersonsModal: FunctionComponent<
               aria-invalid={errors.motherId ? 'true' : undefined}
             >
               <option></option>
-              {everybody
+              {persons
                 .filter(
                   ({ id, biologicalGender, ancestors }) =>
                     biologicalGender === 'female' &&
-                    id !== person.id &&
-                    !ancestors.includes(person.id),
+                    id !== selectedPerson.id &&
+                    !ancestors.includes(selectedPerson.id),
                 )
                 .map((person) => (
                   <option key={person.id} value={person.id}>

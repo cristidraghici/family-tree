@@ -1,15 +1,15 @@
 import { FunctionComponent, useEffect, useRef } from 'react'
 import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
-import type { ExtendedPersonType, PersonIdType } from '@/types'
-import { CanvasUtilInitProps } from '@/utils/canvas/CanvasUtil'
-import { DrawUtilsInitProps } from '@/utils/canvas/utils/DrawUtils'
+import usePersonContext from '@/hooks/usePersonContext'
 
-interface FamilyTreeProps extends CanvasUtilInitProps, DrawUtilsInitProps {
-  persons: ExtendedPersonType[]
-}
+import type { PersonIdType } from '@/types'
+import { CanvasChangePositionEndHandler } from '@/utils/canvas/types'
 
-const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtilInitProps }) => {
+const FamilyTree: FunctionComponent = () => {
+  const { filteredPersons, handleSelectPerson, positions, handleUpdatePositions } =
+    usePersonContext()
+
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
 
@@ -18,30 +18,32 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtil
     const canvasUtil = canvasUtilRef.current
 
     if (canvas && !canvasUtil) {
-      canvasUtilRef.current = new CanvasUtil({
-        canvas,
-        ...canvasUtilInitProps,
-      })
+      canvasUtilRef.current = new CanvasUtil({ canvas })
     }
+
+    canvasUtilRef.current?.init({
+      onDblClick: handleSelectPerson,
+      initialPositions: positions,
+      onCanvasChangePositionEnd: handleUpdatePositions as CanvasChangePositionEndHandler, // TODO: check this to ensure it's correct
+    })
 
     return () => {
       canvasUtilRef.current?.destroy()
-      canvasUtilRef.current = null
     }
-  }, [canvasUtilInitProps])
+  }, [positions, handleSelectPerson, handleUpdatePositions])
 
   useEffect(() => {
     const drawFamilyTree = () => {
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
-        if (persons.length === 0) {
+        if (filteredPersons.length === 0) {
           canvasUtil.reset()
           canvasUtil.draw()
           return
         }
 
-        persons.forEach(({ id, fullName, generation, fatherId, motherId }) => {
+        filteredPersons.forEach(({ id, fullName, generation, fatherId, motherId }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
 
           if (fatherId && motherId) {
@@ -68,7 +70,7 @@ const FamilyTree: FunctionComponent<FamilyTreeProps> = ({ persons, ...canvasUtil
     }
 
     drawFamilyTree()
-  }, [persons])
+  }, [filteredPersons])
 
   return <canvas className="Canvas" ref={canvasRef} />
 }

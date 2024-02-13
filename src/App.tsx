@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 import Header from '@/components/molecules/Header'
 
@@ -8,37 +8,13 @@ import FamilyTree from '@/components/organisms/FamilyTree'
 import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
-import useGetRegistryData from '@/hooks/useGetRegistryData'
-import usePersonsRegistry from '@/hooks/usePersonsRegistry'
-
-import debounce from '@/utils/helpers/debounce'
-
-import { PersonType, PositionsType, NewPersonType } from '@/types'
+import usePersonContext from '@/hooks/usePersonContext'
 
 const App = () => {
   const [view, setView] = useState<string>('cards')
-  const [selectedPerson, setSelectedPerson] = useState<PersonType | NewPersonType | null>(null)
+  const { clearAll, error, handleSetSearch, handleSelectPerson } = usePersonContext()
 
   const searchRef = useRef<HTMLInputElement>(null)
-  const [search, setSearch] = useState<string>('')
-
-  const { registryData, error } = useGetRegistryData()
-
-  const {
-    persons,
-    filteredPersons,
-    addPerson,
-    removePerson,
-    positions,
-    updatePositions,
-    clearAll,
-    isDemoData,
-  } = usePersonsRegistry({
-    persons: registryData?.persons || [],
-    relationships: registryData?.relationships || [],
-    positions: registryData?.positions || [],
-    search,
-  })
 
   useEffect(() => {
     if (searchRef.current) {
@@ -46,24 +22,9 @@ const App = () => {
     }
   }, [])
 
-  const handleSelectPerson = useCallback(
-    (personId: string) => {
-      const person = persons.find((person) => person.id === personId)
-      if (person) {
-        setSelectedPerson(person)
-      }
-    },
-    [persons, setSelectedPerson],
-  )
-
-  const handleUpdatePositions = debounce(
-    (data) => updatePositions(data as unknown as PositionsType[]),
-    100,
-  )
-
   return (
     <>
-      <Header onClearAll={clearAll} isDemoData={isDemoData} />
+      <Header />
 
       <div className="Spacer" />
 
@@ -105,19 +66,12 @@ const App = () => {
             ref={searchRef}
             onChange={(e) => {
               e.preventDefault()
-              setSearch(e.target.value)
+              handleSetSearch(e.target.value)
             }}
           />
 
           <fieldset className="Controls_AddButton" role="group">
-            <button
-              type="button"
-              onClick={() =>
-                setSelectedPerson({
-                  id: 'new',
-                })
-              }
-            >
+            <button type="button" onClick={() => handleSelectPerson('new')}>
               Add
             </button>
           </fieldset>
@@ -125,38 +79,10 @@ const App = () => {
 
         <div className="Spacer" />
 
-        <ConditionalElement
-          condition={view === 'cards'}
-          as={CardList}
-          persons={filteredPersons}
-          onClick={handleSelectPerson}
-        />
-        <ConditionalElement
-          condition={view === 'tree'}
-          as={FamilyTree}
-          persons={filteredPersons}
-          onDblClick={handleSelectPerson}
-          initialPositions={positions}
-          onCanvasChangePositionEnd={handleUpdatePositions}
-        />
+        <ConditionalElement condition={view === 'cards'} as={CardList} />
+        <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
 
-        {selectedPerson && (
-          <PersonsModal
-            person={selectedPerson}
-            everybody={persons}
-            onCancel={() => {
-              setSelectedPerson(null)
-            }}
-            onRemove={(id) => {
-              setSelectedPerson(null)
-              removePerson(id)
-            }}
-            onSuccess={(data) => {
-              addPerson(data)
-              setSelectedPerson(null)
-            }}
-          />
-        )}
+        <PersonsModal />
       </ConditionalElement>
     </>
   )

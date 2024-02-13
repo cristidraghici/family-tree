@@ -35,14 +35,15 @@ We will use the following convention for the structure:
   - `templates` play the role of orchestrating UI layouts. They bring together organisms into page sections and may establish designated areas for inserting content. An example is the `<DashboardTemplate />`, which organizes header, sidebar, and body organisms;
   - `Pages` represent distinct app screens or routes. They integrate templates, organisms, and other components to form comprehensive views. Components like `<HomePage />` and `<SettingsPage />` function at the page level;
 
-- `src/utils`: Contains utility functions, such as API calls, validation functions, and other helper functions;
 - `src/context`: Holds React context providers for managing global state (e.g., authentication, themes);
+- `src/data`: Holds demo/initial data;
+- `src/utils`: Contains utility functions, such as API calls, validation functions, and other helper functions;
 - `src/hooks`: Place for the custom hooks our app uses;
 - `src/styles`: Contains CSS styles for your application;
-- `types.ts`: Global types used in the application;
-- `constants.ts`: Constants used in the application;
-- `App.tsx`: The main application component where you assemble your routing and global context providers;
-- `main.tsx`: The entry point of your application.
+- `src/types.ts`: Global types used in the application;
+- `src/constants.ts`: Constants used in the application;
+- `src/App.tsx`: The main application component where you assemble your routing and global context providers;
+- `src/main.tsx`: The entry point of your application.
 
 We will store the styles in a single file, as we intend to minimally customize what [picocss](https://v2.picocss.com/docs) provides.
 
@@ -68,6 +69,12 @@ src/
 | | |-- Home.tsx
 | | |-- UserProfile.tsx
 | | |-- ...
+|-- contexts/
+| |-- PersonContext.tsx
+| |-- ...
+|-- data/
+| |-- registry.json
+| |-- ...
 |-- utils/
 | |-- api/
 | | |-- api.ts

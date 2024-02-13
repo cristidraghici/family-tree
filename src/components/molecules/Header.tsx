@@ -1,12 +1,11 @@
 import Logo from '@/components/atoms/Logo'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 
-interface HeaderProps {
-  isDemoData?: boolean
-  onClearAll?: () => void
-}
+import usePersonContext from '@/hooks/usePersonContext'
 
-const Header = ({ isDemoData, onClearAll }: HeaderProps) => {
+const Header = () => {
+  const { isDemoData, clearAll } = usePersonContext()
+
   return (
     <header>
       <mark className="DataWarning">
@@ -19,7 +18,7 @@ const Header = ({ isDemoData, onClearAll }: HeaderProps) => {
             href="#"
             onClick={(e) => {
               e.preventDefault()
-              !!onClearAll && onClearAll()
+              !!clearAll && clearAll()
             }}
           >
             Clear the data.

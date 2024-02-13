@@ -1,25 +1,23 @@
-import { FunctionComponent, Fragment } from 'react'
-
+import { FunctionComponent } from 'react'
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
-import type { ExtendedPersonType, SelectPersonFunction } from '@/types'
+import usePersonContext from '@/hooks/usePersonContext'
 
-interface CardListProps {
-  persons: ExtendedPersonType[]
-  onClick: SelectPersonFunction
-}
+import type { ExtendedPersonType } from '@/types'
 
-const CardList: FunctionComponent<CardListProps> = ({ persons, onClick }) => {
+const CardList: FunctionComponent = () => {
+  const { filteredPersons, handleSelectPerson } = usePersonContext()
+
   return (
     <>
-      <ConditionalElement as="div" className="CardsGrid" condition={persons.length > 0}>
-        {persons.map((person: ExtendedPersonType) => (
-          <Card key={person.id} person={person} onClick={() => onClick(person.id)} />
+      <ConditionalElement as="div" className="CardsGrid" condition={filteredPersons.length > 0}>
+        {filteredPersons.map((person: ExtendedPersonType) => (
+          <Card key={person.id} person={person} onClick={() => handleSelectPerson(person.id)} />
         ))}
       </ConditionalElement>
-      <ConditionalElement as={Fragment} condition={persons.length === 0}>
-        <article>No persons found.</article>
+      <ConditionalElement as="article" condition={filteredPersons.length === 0}>
+        No persons found.
       </ConditionalElement>
     </>
   )
