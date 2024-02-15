@@ -5,8 +5,10 @@ import Hamburger from '@/components/atoms/Hamburger'
 import usePersonContext from '@/hooks/usePersonContext'
 import useToggle from '@/hooks/useToggle'
 
+import downloadTextAsFile from '@/utils/downloadTextAsFile'
+
 const Header = () => {
-  const { isDemoData, clearAll } = usePersonContext()
+  const { isDemoData, clearAll, registry } = usePersonContext()
   const [isSidebarOpen, toggleSidebar] = useToggle(false)
 
   return (
@@ -24,7 +26,7 @@ const Header = () => {
       </nav>
 
       <ConditionalElement as="div" condition={isSidebarOpen} className="HeaderDetails">
-        <ConditionalElement as="span" condition={!!isDemoData}>
+        <ConditionalElement as="p" condition={!!isDemoData}>
           You are viewing demo data.{' '}
           <a
             href="#"
@@ -36,6 +38,20 @@ const Header = () => {
             Clear the data.
           </a>
         </ConditionalElement>
+
+        <p>
+          You can manually save your current data to a file by{' '}
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault()
+              downloadTextAsFile(JSON.stringify(registry, null, 2), 'family-tree.json')
+            }}
+          >
+            clicking here
+          </a>
+          .
+        </p>
       </ConditionalElement>
     </header>
   )

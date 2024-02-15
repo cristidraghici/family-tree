@@ -170,12 +170,21 @@ const usePersonRegistry = ({
     setTreeStorage({ persons: [], relationships: [], positions: [] })
   }
 
+  const registry = useMemo(() => {
+    return {
+      persons,
+      relationships,
+      positions,
+    }
+  }, [persons, relationships, positions])
+
   return {
     persons: extendedPersons,
     filteredPersons: extendedPersons.filter((person) =>
       person.fullName.toLowerCase().includes(search.toLowerCase()),
     ),
     positions,
+    relationships,
 
     addPerson,
     removePerson,
@@ -186,6 +195,7 @@ const usePersonRegistry = ({
     updatePositions,
 
     isDemoData: isDemoData(persons, relationships),
+    registry,
   }
 }
 

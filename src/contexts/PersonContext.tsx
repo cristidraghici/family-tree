@@ -25,6 +25,8 @@ const initialContextValues: PersonContextType = {
   getNextId: () => '',
   updatePositions: () => {},
   isDemoData: false,
+  relationships: [],
+  registry: { persons: [], relationships: [], positions: [] },
 
   selectedPerson: null,
   handleSelectPerson: () => {},
@@ -49,6 +51,8 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
     clearAll,
     getNextId,
     isDemoData,
+    relationships,
+    registry,
   } = usePersonsRegistry({
     persons: registryData?.persons || [],
     relationships: registryData?.relationships || [],
@@ -99,6 +103,8 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
         getNextId,
         updatePositions,
         isDemoData,
+        relationships,
+        registry,
 
         selectedPerson,
         handleSelectPerson,

@@ -26,6 +26,10 @@
   .HeaderDetails {
     padding: 1rem;
     background-color: var(--pico-form-element-background-color);
+
+    p {
+      margin-bottom: 0.5rem;
+    }
   }
 }
 
