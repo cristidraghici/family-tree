@@ -25,65 +25,64 @@ const App = () => {
   return (
     <>
       <Header />
-
-      <div className="Spacer" />
-
-      <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
-        {error}{' '}
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault()
-            clearAll()
-          }}
-        >
-          Clear the data.
-        </a>
-      </ConditionalElement>
-
-      <ConditionalElement as="main" condition={!error} className="Main container-fluid">
-        <div className="Controls Controls--horizontal">
-          <ToggleButtons
-            className="Controls_ToggleView"
-            role="group"
-            options={[
-              {
-                id: 'cards',
-                label: 'Cards',
-              },
-              {
-                id: 'tree',
-                label: 'Graph',
-              },
-            ]}
-            value={view}
-            setValue={setView}
-          />
-
-          <input
-            className="Search"
-            type="search"
-            ref={searchRef}
-            onChange={(e) => {
+      <main className="Main">
+        <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
+          {error}{' '}
+          <a
+            href="#"
+            onClick={(e) => {
               e.preventDefault()
-              handleSetSearch(e.target.value)
+              clearAll()
             }}
-          />
+          >
+            Clear the data.
+          </a>
+        </ConditionalElement>
 
-          <fieldset className="Controls_AddButton" role="group">
-            <button type="button" onClick={() => handleSelectPerson('new')}>
-              Add
-            </button>
-          </fieldset>
-        </div>
+        <ConditionalElement as="main" condition={!error} className="Main container-fluid">
+          <div className="Controls Controls--horizontal">
+            <ToggleButtons
+              className="Controls_ToggleView"
+              role="group"
+              options={[
+                {
+                  id: 'cards',
+                  label: 'Cards',
+                },
+                {
+                  id: 'tree',
+                  label: 'Graph',
+                },
+              ]}
+              value={view}
+              setValue={setView}
+            />
 
-        <div className="Spacer" />
+            <input
+              className="Search"
+              type="search"
+              ref={searchRef}
+              onChange={(e) => {
+                e.preventDefault()
+                handleSetSearch(e.target.value)
+              }}
+            />
 
-        <ConditionalElement condition={view === 'cards'} as={CardList} />
-        <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
+            <fieldset className="Controls_AddButton" role="group">
+              <button type="button" onClick={() => handleSelectPerson('new')}>
+                Add
+              </button>
+            </fieldset>
+          </div>
 
-        <PersonsModal />
-      </ConditionalElement>
+          <div className="Spacer" />
+
+          <ConditionalElement condition={view === 'cards'} as={CardList} />
+          <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
+
+          <PersonsModal />
+        </ConditionalElement>
+      </main>
     </>
   )
 }

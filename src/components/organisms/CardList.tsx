@@ -11,7 +11,7 @@ const CardList: FunctionComponent = () => {
 
   return (
     <>
-      <ConditionalElement as="div" className="CardsGrid" condition={filteredPersons.length > 0}>
+      <ConditionalElement as="div" className="CardList" condition={filteredPersons.length > 0}>
         {filteredPersons.map((person: ExtendedPersonType) => (
           <Card key={person.id} person={person} onClick={() => handleSelectPerson(person.id)} />
         ))}

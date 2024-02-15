@@ -1,16 +1,31 @@
 @import '@picocss/pico';
 @import './theme.scss';
 
-.DataWarning {
-  display: flex;
-  justify-content: center;
+.Header {
+  .DataWarning {
+    display: flex;
+    justify-content: center;
 
-  small {
-    text-align: center;
+    small {
+      text-align: center;
+    }
+
+    span {
+      margin-right: 0.5rem;
+    }
   }
 
-  span {
-    margin-right: 0.5rem;
+  .Nav {
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .HeaderDetails {
+    padding: 1rem;
+    background-color: var(--pico-form-element-background-color);
   }
 }
 
@@ -24,12 +39,33 @@
   }
 }
 
-.Nav {
-  display: flex;
-  padding: 1rem;
-  gap: 1rem;
-  align-items: center;
-  vertical-align: middle;
+.Hamburger {
+  cursor: pointer;
+  user-select: none;
+
+  & > div {
+    display: block;
+    width: 1.5rem;
+    height: 0.15rem;
+    background-color: var(--pico-primary);
+    margin: 0.3rem 0;
+
+    transform-origin: 0.4rem;
+  }
+
+  &--open > div {
+    height: 0.2rem;
+
+    &:nth-child(1) {
+      transform: rotate(45deg);
+    }
+    &:nth-child(2) {
+      display: none;
+    }
+    &:nth-child(3) {
+      transform: rotate(-45deg);
+    }
+  }
 }
 
 .Spacer {
@@ -43,33 +79,37 @@
   }
 }
 
-.Controls {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+.Main {
+  margin-top: 1rem;
 
-  @media screen and (min-width: 768px) {
-    &_ToggleView {
-      max-width: 18rem;
-    }
-    &_AddButton {
-      max-width: 6rem;
-    }
+  .Controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-    &--horizontal {
-      & > * {
-        margin-left: 1rem;
-        margin-right: 1rem;
-
-        &:first-child {
-          margin-left: 0;
-        }
-        &:last-child {
-          margin-right: 0;
-        }
+    @media screen and (min-width: 768px) {
+      &_ToggleView {
+        max-width: 18rem;
+      }
+      &_AddButton {
+        max-width: 6rem;
       }
 
-      flex-direction: row;
+      &--horizontal {
+        & > * {
+          margin-left: 1rem;
+          margin-right: 1rem;
+
+          &:first-child {
+            margin-left: 0;
+          }
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+
+        flex-direction: row;
+      }
     }
   }
 }
@@ -78,7 +118,7 @@
   cursor: pointer;
 }
 
-.CardsGrid {
+.CardList {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
