@@ -27,6 +27,49 @@
     padding: 1rem;
     background-color: var(--pico-form-element-background-color);
 
+    fieldset {
+      border: 1px solid var(--pico-primary);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      padding-top: 0.3rem;
+
+      & > * {
+        margin-left: 0.5rem;
+      }
+
+      legend {
+        padding: 0 0.5rem;
+        margin-left: 0;
+      }
+
+      input {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .HeaderDetails_Message {
+      margin-bottom: 1rem;
+    }
+
+    .HeaderDetails_SubTitle {
+      position: relative;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      margin: 1rem 0 1rem 0;
+
+      &::before {
+        content: '';
+        border-top: 1px solid var(--pico-primary);
+        display: block;
+        height: 1px;
+        width: 100%;
+      }
+    }
+
     p {
       margin-bottom: 0.5rem;
     }

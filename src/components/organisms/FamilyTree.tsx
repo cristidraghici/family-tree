@@ -3,15 +3,21 @@ import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
-import type { PersonIdType } from '@/types'
+import type { PersonIdType, PositionsType } from '@/types'
 import { CanvasChangePositionEndHandler } from '@/utils/canvas/types'
 
+import debounce from '@/utils/helpers/debounce'
+
 const FamilyTree: FunctionComponent = () => {
-  const { filteredPersons, handleSelectPerson, positions, handleUpdatePositions } =
-    usePersonContext()
+  const { filteredPersons, handleSelectPerson, positions, updatePositions } = usePersonContext()
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
+
+  const handleUpdatePositions = debounce(
+    (data) => updatePositions(data as unknown as PositionsType[]),
+    100,
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current

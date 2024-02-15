@@ -1,69 +1,50 @@
 import { createContext, useState, useCallback, FunctionComponent, PropsWithChildren } from 'react'
 
-import useGetRegistryData from '@/hooks/useGetRegistryData'
-import usePersonsRegistry from '@/hooks/usePersonsRegistry'
+import useGetRegistryData, {
+  initialReturnValue as initialUseGetRegistryData,
+} from '@/hooks/useGetRegistryData'
 
-import debounce from '@/utils/helpers/debounce'
+import usePersonsRegistry, {
+  initialReturnValue as initialUsePersonsRegistry,
+} from '@/hooks/usePersonsRegistry'
 
-import { PersonType, NewPersonType, PositionsType } from '@/types'
+import { PersonType, NewPersonType } from '@/types'
 
-type PersonContextType = ReturnType<typeof usePersonsRegistry> & {
-  selectedPerson: PersonType | NewPersonType | null
-  handleSelectPerson: (personId: string) => void
-  handleSetSearch: (text: string) => void
-  error: string | null
-  handleUpdatePositions: (data: PositionsType[]) => void
-}
+type PersonContextType = ReturnType<typeof useGetRegistryData> &
+  ReturnType<typeof usePersonsRegistry> & {
+    selectedPerson: PersonType | NewPersonType | null
+    handleSelectPerson: (personId: string) => void
+    setSearch: (text: string) => void
+  }
 
 const initialContextValues: PersonContextType = {
-  persons: [],
-  filteredPersons: [],
-  positions: [],
-  addPerson: () => {},
-  removePerson: () => {},
-  clearAll: () => {},
-  getNextId: () => '',
-  updatePositions: () => {},
-  isDemoData: false,
-  relationships: [],
-  registry: { persons: [], relationships: [], positions: [] },
+  ...initialUseGetRegistryData,
+  ...initialUsePersonsRegistry,
 
   selectedPerson: null,
   handleSelectPerson: () => {},
-  handleSetSearch: () => {},
-  error: null,
-  handleUpdatePositions: () => {},
+  setSearch: () => {},
 }
 
 export const PersonContext = createContext<PersonContextType>({ ...initialContextValues })
 
 export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [search, setSearch] = useState<string>('')
-  const { registryData, error } = useGetRegistryData()
 
-  const {
-    persons,
-    filteredPersons,
-    addPerson,
-    removePerson,
-    positions,
-    updatePositions,
-    clearAll,
-    getNextId,
-    isDemoData,
-    relationships,
-    registry,
-  } = usePersonsRegistry({
-    persons: registryData?.persons || [],
-    relationships: registryData?.relationships || [],
-    positions: registryData?.positions || [],
+  const getRegistryData = useGetRegistryData()
+
+  const personsRegistry = usePersonsRegistry({
+    persons: getRegistryData.registryData?.persons || [],
+    relationships: getRegistryData.registryData?.relationships || [],
+    positions: getRegistryData.registryData?.positions || [],
     search,
   })
+
   const [selectedPerson, setSelectedPerson] = useState<PersonType | NewPersonType | null>(null)
 
   const handleSelectPerson = useCallback(
     (personId: string) => {
-      const person = persons.find((person) => person.id === personId)
+      const person = personsRegistry.persons.find((person) => person.id === personId)
 
       if (person) {
         setSelectedPerson(person)
@@ -79,38 +60,18 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
 
       setSelectedPerson(null)
     },
-    [persons, setSelectedPerson],
+    [personsRegistry.persons, setSelectedPerson],
   )
-
-  const handleUpdatePositions = debounce(
-    (data) => updatePositions(data as unknown as PositionsType[]),
-    100,
-  )
-
-  const handleSetSearch = debounce((text) => {
-    setSearch(text)
-  }, 100)
 
   return (
     <PersonContext.Provider
       value={{
-        persons,
-        filteredPersons,
-        positions,
-        addPerson,
-        removePerson,
-        clearAll,
-        getNextId,
-        updatePositions,
-        isDemoData,
-        relationships,
-        registry,
+        ...getRegistryData,
+        ...personsRegistry,
 
         selectedPerson,
         handleSelectPerson,
-        handleSetSearch,
-        error,
-        handleUpdatePositions,
+        setSearch,
       }}
     >
       {children}

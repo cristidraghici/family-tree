@@ -14,6 +14,7 @@ import {
   RelationshipIdType,
   ExtendedPersonType,
   PositionsType,
+  RegistryType,
 } from '@/types'
 
 interface PersonsRegistryProps {
@@ -21,6 +22,28 @@ interface PersonsRegistryProps {
   relationships?: RelationshipType[]
   positions?: PositionsType[]
   search?: string
+}
+
+export const initialReturnValue: ReturnType<typeof usePersonRegistry> = {
+  getNextId: () => '',
+  persons: [],
+  filteredPersons: [],
+  addPerson: () => {},
+  removePerson: () => {},
+  setPersons: () => {},
+  positions: [],
+  setPositions: () => {},
+  updatePositions: () => {},
+  relationships: [],
+  setRelationships: () => {},
+  isDemoData: false,
+  registry: {
+    persons: [],
+    relationships: [],
+    positions: [],
+  },
+  saveAll: () => {},
+  clearAll: () => {},
 }
 
 const usePersonRegistry = ({
@@ -162,6 +185,19 @@ const usePersonRegistry = ({
     setTreeStorage({ persons, relationships, positions: newPositions })
   }
 
+  const registry = useMemo(() => {
+    const registryData = {
+      persons,
+      relationships,
+      positions,
+    }
+    return registryData
+  }, [persons, relationships, positions])
+
+  const saveAll = ({ persons, relationships, positions }: RegistryType) => {
+    setTreeStorage({ persons, relationships, positions })
+  }
+
   const clearAll = () => {
     setPersons([])
     setRelationships([])
@@ -170,32 +206,28 @@ const usePersonRegistry = ({
     setTreeStorage({ persons: [], relationships: [], positions: [] })
   }
 
-  const registry = useMemo(() => {
-    return {
-      persons,
-      relationships,
-      positions,
-    }
-  }, [persons, relationships, positions])
-
   return {
+    getNextId,
+
     persons: extendedPersons,
     filteredPersons: extendedPersons.filter((person) =>
       person.fullName.toLowerCase().includes(search.toLowerCase()),
     ),
-    positions,
-    relationships,
-
     addPerson,
     removePerson,
-    clearAll,
+    setPersons,
 
-    getNextId,
-
+    positions,
+    setPositions,
     updatePositions,
+
+    relationships,
+    setRelationships,
 
     isDemoData: isDemoData(persons, relationships),
     registry,
+    saveAll,
+    clearAll,
   }
 }
 

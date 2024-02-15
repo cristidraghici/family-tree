@@ -1,18 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 
-import Header from '@/components/molecules/Header'
-
 import ConditionalElement from '@/components/atoms/ConditionalElement'
 import ToggleButtons from '@/components/molecules/ToggleButtons'
+
+import Header from '@/components/organisms/Header'
 import FamilyTree from '@/components/organisms/FamilyTree'
 import CardList from '@/components/organisms/CardList'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
+import debounce from '@/utils/helpers/debounce'
+
 const App = () => {
   const [view, setView] = useState<string>('cards')
-  const { clearAll, error, handleSetSearch, handleSelectPerson } = usePersonContext()
+  const { error, handleSelectPerson, setSearch } = usePersonContext()
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -22,21 +24,21 @@ const App = () => {
     }
   }, [])
 
+  const toggleOptions = [
+    { id: 'cards', label: 'Cards' },
+    { id: 'tree', label: 'Graph' },
+  ]
+
+  const handleSetSearch = debounce((text) => {
+    setSearch(text)
+  }, 100)
+
   return (
     <>
       <Header />
       <main className="Main">
         <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
-          {error}{' '}
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault()
-              clearAll()
-            }}
-          >
-            Clear the data.
-          </a>
+          {error}
         </ConditionalElement>
 
         <ConditionalElement as="main" condition={!error} className="Main container-fluid">
@@ -44,16 +46,7 @@ const App = () => {
             <ToggleButtons
               className="Controls_ToggleView"
               role="group"
-              options={[
-                {
-                  id: 'cards',
-                  label: 'Cards',
-                },
-                {
-                  id: 'tree',
-                  label: 'Graph',
-                },
-              ]}
+              options={toggleOptions}
               value={view}
               setValue={setView}
             />
