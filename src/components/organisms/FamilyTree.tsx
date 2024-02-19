@@ -6,7 +6,7 @@ import usePersonContext from '@/hooks/usePersonContext'
 import type { PersonIdType, PositionsType } from '@/types'
 import { CanvasChangePositionEndHandler } from '@/utils/canvas/types'
 
-import debounce from '@/utils/helpers/debounce'
+import debounce from '@/utils/debounce'
 
 const FamilyTree: FunctionComponent = () => {
   const { filteredPersons, handleSelectPerson, positions, updatePositions } = usePersonContext()

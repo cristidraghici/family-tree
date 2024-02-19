@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 
-import { setTreeStorage } from '@/utils/helpers/treeStorageUtil'
+import { setTreeStorage } from '@/utils/treeStorageUtil'
 import getConnections from '@/utils/persons/getConnections'
 import getGenerations from '@/utils/persons/getGenerations'
 

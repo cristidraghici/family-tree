@@ -10,7 +10,7 @@ import PersonsModal from '@/components/organisms/PersonsModal'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
-import debounce from '@/utils/helpers/debounce'
+import debounce from '@/utils/debounce'
 
 const App = () => {
   const [view, setView] = useState<string>('cards')

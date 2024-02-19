@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { registrySchema } from '@/schemas'
-import { hasTreeStorage, getTreeStorage } from '@/utils/helpers/treeStorageUtil'
+import { hasTreeStorage, getTreeStorage } from '@/utils/treeStorageUtil'
 
 import registryJSON from '@/data/registry.json'
 
 import { RegistryType } from '@/types'
 
-import devLog from '@/utils/helpers/devLog'
+import devLog from '@/utils/devLog'
 
 export const initialReturnValue: ReturnType<typeof useGetRegistryData> = {
   registryData: null,

@@ -2,7 +2,7 @@ import CanvasManager from '../managers/CanvasManager'
 import BoxManager from '../managers/BoxManager'
 import DrawUtils from './DrawUtils'
 
-import debounce from '../../helpers/debounce'
+import debounce from '../../debounce'
 
 import type { X, Y } from '@/types'
 import type { BoxClickHandler, CanvasChangePositionEndHandler } from '../types'

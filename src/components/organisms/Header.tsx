@@ -40,6 +40,7 @@ const Header = () => {
       <ConditionalElement as="div" condition={isSidebarOpen} className="HeaderDetails">
         <fieldset>
           <legend>Manage existing data</legend>
+          <p>This application is optimized mainly for usage on larger screens.</p>
           <p>
             <ConditionalElement as="span" condition={!!isDemoData}>
               You are viewing demo data.{' '}

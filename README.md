@@ -23,6 +23,8 @@ Remember, genealogy is a journey, and it often involves uncovering fascinating s
 
 ## Project details
 
+[Considerations on the choices made in the project](https://draghici.net/2024/01/31/family-tree-genealogy-application-with-react/)
+
 ### File structure
 
 We will use the following convention for the structure:
@@ -120,6 +122,15 @@ If you use this editor, you might want to create `./.vscode/settings.json` with 
 ### Quick UUID
 
 To get a quick valid UUID, use the browser's console to run this command: `console.log(crypto.randomUUID())`
+
+### Features to be added
+
+- Enhance and simplify the save functionality;
+- Add better automatic positioning to the elements of the tree;
+- Add print / pdf support;
+- Add language support;
+- Improve the notifications system;
+- Improve the mobile usability.
 
 ## Credits
 

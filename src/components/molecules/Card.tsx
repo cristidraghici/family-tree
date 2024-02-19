@@ -1,5 +1,5 @@
 import { FunctionComponent, ComponentProps } from 'react'
-import ConditionalElement from '../atoms/ConditionalElement'
+import ConditionalElement from '@/components/atoms/ConditionalElement'
 
 import { ExtendedPersonType } from '@/types'
 
