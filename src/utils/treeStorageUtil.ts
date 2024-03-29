@@ -12,7 +12,6 @@ export const getTreeStorage = (): RegistryType | null => {
 }
 
 export const setTreeStorage = (registryData: RegistryType | null): void => {
-  console.log({ registryData })
   if (registryData === null) {
     localStorage.removeItem(LOCAL_STORAGE_KEY)
   } else {

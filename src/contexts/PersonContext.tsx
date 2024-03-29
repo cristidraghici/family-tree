@@ -44,10 +44,8 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
 
   const handleSelectPerson = useCallback(
     (personId: string) => {
-      const person = personsRegistry.persons.find((person) => person.id === personId)
-
-      if (person) {
-        setSelectedPerson(person)
+      if (!personId) {
+        setSelectedPerson(null)
         return
       }
 
@@ -58,9 +56,16 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
         return
       }
 
+      const person = personsRegistry.persons.find((person) => person.id === personId)
+
+      if (person) {
+        setSelectedPerson(person)
+        return
+      }
+
       setSelectedPerson(null)
     },
-    [personsRegistry.persons, setSelectedPerson],
+    [personsRegistry.persons],
   )
 
   return (

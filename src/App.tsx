@@ -24,11 +24,6 @@ const App = () => {
     }
   }, [])
 
-  const toggleOptions = [
-    { id: 'cards', label: 'Cards' },
-    { id: 'tree', label: 'Graph' },
-  ]
-
   const handleSetSearch = debounce((text) => {
     setSearch(text)
   }, 100)
@@ -46,7 +41,10 @@ const App = () => {
             <ToggleButtons
               className="Controls_ToggleView"
               role="group"
-              options={toggleOptions}
+              options={[
+                { id: 'cards', label: 'Cards' },
+                { id: 'tree', label: 'Graph' },
+              ]}
               value={view}
               setValue={setView}
             />

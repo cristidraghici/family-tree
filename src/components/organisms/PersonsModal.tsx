@@ -25,10 +25,15 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
 
   useEffect(() => {
     if (!selectedPerson) {
+      reset({})
       return
     }
 
     reset(selectedPerson)
+
+    return () => {
+      reset({})
+    }
   }, [selectedPerson, reset])
 
   if (!selectedPerson) {
@@ -38,19 +43,19 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
   const isEditing = selectedPerson.id !== 'new'
 
   const onClose: () => void = () => {
-    reset()
+    reset({})
     handleSelectPerson('')
   }
 
   const onDelete: (id: PersonIdType) => void = (id) => {
-    reset()
+    reset({})
     removePerson(id)
     handleSelectPerson('')
   }
 
   const onSubmit: SubmitHandler<PersonType> = (data) => {
     addPerson(data)
-    reset()
+    reset({})
     handleSelectPerson('')
   }
 
