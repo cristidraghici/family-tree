@@ -2,7 +2,7 @@ import { FunctionComponent, ComponentProps, useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Modal from '@/components/molecules/Modal'
-import ConditionalElement from '@/components/atoms/ConditionalElement'
+import Condition from '@/components/atoms/ConditionalElement'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
@@ -74,8 +74,8 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
       footer={
         <footer>
           <div>
-            <ConditionalElement as="div" condition={isEditing} className="DeleteConfirmation">
-              <ConditionalElement condition={!isDeleteConfirmationOpen}>
+            <Condition as="div" condition={isEditing} className="DeleteConfirmation">
+              <Condition condition={!isDeleteConfirmationOpen}>
                 <a
                   href="#"
                   onClick={(e) => {
@@ -85,8 +85,8 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
                 >
                   Delete?
                 </a>
-              </ConditionalElement>
-              <ConditionalElement condition={isDeleteConfirmationOpen}>
+              </Condition>
+              <Condition condition={isDeleteConfirmationOpen}>
                 Are you sure?
                 <div className="DeleteConfirmation_Actions">
                   <a
@@ -108,8 +108,8 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
                     No
                   </a>
                 </div>
-              </ConditionalElement>
-            </ConditionalElement>
+              </Condition>
+            </Condition>
             <div />
 
             <div>

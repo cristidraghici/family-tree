@@ -1,5 +1,5 @@
 import { ReactNode, FunctionComponent, ComponentProps, useRef, useEffect } from 'react'
-import ConditionalElement from '@/components/atoms/ConditionalElement'
+import Condition from '@/components/atoms/ConditionalElement'
 
 const Modal: FunctionComponent<
   ComponentProps<'dialog'> & {
@@ -43,13 +43,13 @@ const Modal: FunctionComponent<
   return (
     <dialog className={`Modal ${className}`} open={isOpen} ref={modalRef}>
       <article {...props}>
-        <ConditionalElement condition={!!header} as="header">
+        <Condition condition={!!header} as="header">
           {header}
-        </ConditionalElement>
+        </Condition>
         {children}
-        <ConditionalElement condition={!!footer} as="footer">
+        <Condition condition={!!footer} as="footer">
           {footer}
-        </ConditionalElement>
+        </Condition>
       </article>
     </dialog>
   )

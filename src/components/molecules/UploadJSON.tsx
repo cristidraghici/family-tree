@@ -1,5 +1,5 @@
 import { FunctionComponent, ChangeEvent, useState, useRef } from 'react'
-import ConditionalElement from '@/components/atoms/ConditionalElement'
+import Condition from '@/components/atoms/ConditionalElement'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
@@ -44,13 +44,9 @@ const FileUploadAndParse: FunctionComponent = () => {
 
   return (
     <form>
-      <ConditionalElement
-        condition={!!error || !!message}
-        as="div"
-        className="HeaderDetails_Message"
-      >
+      <Condition condition={!!error || !!message} as="div" className="HeaderDetails_Message">
         {error || message}
-      </ConditionalElement>
+      </Condition>
       <input ref={fileInputRef} type="file" id="fileInput" accept=".json" onChange={parseFile} />
     </form>
   )

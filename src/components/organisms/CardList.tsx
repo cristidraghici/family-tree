@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react'
-import ConditionalElement from '@/components/atoms/ConditionalElement'
+import Condition from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
 import usePersonContext from '@/hooks/usePersonContext'
@@ -11,14 +11,15 @@ const CardList: FunctionComponent = () => {
 
   return (
     <>
-      <ConditionalElement as="div" className="CardList" condition={filteredPersons.length > 0}>
+      <Condition as="div" className="CardList" condition={filteredPersons.length > 0}>
         {filteredPersons.map((person: ExtendedPersonType) => (
           <Card key={person.id} person={person} onClick={() => handleSelectPerson(person.id)} />
         ))}
-      </ConditionalElement>
-      <ConditionalElement as="article" condition={filteredPersons.length === 0}>
+      </Condition>
+
+      <Condition as="article" condition={filteredPersons.length === 0}>
         No persons found.
-      </ConditionalElement>
+      </Condition>
     </>
   )
 }

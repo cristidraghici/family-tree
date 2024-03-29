@@ -1,5 +1,5 @@
 import Logo from '@/components/atoms/Logo'
-import ConditionalElement from '@/components/atoms/ConditionalElement'
+import Condition from '@/components/atoms/ConditionalElement'
 import Hamburger from '@/components/atoms/Hamburger'
 
 import UploadJSON from '@/components/molecules/UploadJSON'
@@ -37,14 +37,14 @@ const Header = () => {
         <Hamburger isOpen={isSidebarOpen} onClick={() => toggleSidebar()} />
       </nav>
 
-      <ConditionalElement as="div" condition={isSidebarOpen} className="HeaderDetails">
+      <Condition as="div" condition={isSidebarOpen} className="HeaderDetails">
         <fieldset>
           <legend>Manage existing data</legend>
           <p>This application is optimized mainly for usage on larger screens.</p>
           <p>
-            <ConditionalElement as="span" condition={!!isDemoData}>
+            <Condition as="span" condition={!!isDemoData}>
               You are viewing demo data.{' '}
-            </ConditionalElement>
+            </Condition>
             <a href="#" onClick={handleClearData}>
               Clear the current the data.
             </a>
@@ -63,7 +63,7 @@ const Header = () => {
           <legend>Restore from file</legend>
           <UploadJSON />
         </fieldset>
-      </ConditionalElement>
+      </Condition>
     </header>
   )
 }

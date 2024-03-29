@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
-import ConditionalElement from '@/components/atoms/ConditionalElement'
-import ToggleButtons from '@/components/molecules/ToggleButtons'
+import Condition from '@/components/atoms/ConditionalElement'
+import ToggleButtons from '@/components/atoms/ToggleButtons'
 
 import Header from '@/components/organisms/Header'
 import FamilyTree from '@/components/organisms/FamilyTree'
@@ -37,11 +37,11 @@ const App = () => {
     <>
       <Header />
       <main className="Main">
-        <ConditionalElement condition={!!error} as="main" className="Main container-fluid">
+        <Condition condition={!!error} as="main" className="Main container-fluid">
           {error}
-        </ConditionalElement>
+        </Condition>
 
-        <ConditionalElement as="main" condition={!error} className="Main container-fluid">
+        <Condition as="main" condition={!error} className="Main container-fluid">
           <div className="Controls Controls--horizontal">
             <ToggleButtons
               className="Controls_ToggleView"
@@ -70,11 +70,11 @@ const App = () => {
 
           <div className="Spacer" />
 
-          <ConditionalElement condition={view === 'cards'} as={CardList} />
-          <ConditionalElement condition={view === 'tree'} as={FamilyTree} />
+          <Condition condition={view === 'cards'} as={CardList} />
+          <Condition condition={view === 'tree'} as={FamilyTree} />
 
           <PersonsModal />
-        </ConditionalElement>
+        </Condition>
       </main>
     </>
   )
