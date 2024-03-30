@@ -8,6 +8,7 @@ import usePersonContext from '@/hooks/usePersonContext'
 import useToggle from '@/hooks/useToggle'
 
 import downloadTextAsFile from '@/utils/downloadTextAsFile'
+import { setTreeStorage } from '@/utils/treeStorageUtil'
 
 const Header = () => {
   const { isDemoData, clearAll, registry } = usePersonContext()
@@ -16,6 +17,14 @@ const Header = () => {
   const handleClearData = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault()
     !!clearAll && clearAll()
+  }
+
+  const handleResetToDemo = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault()
+    setTreeStorage(null)
+
+    // quick fix to reload the data
+    window.location.reload()
   }
 
   const handleDownloadData = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -47,6 +56,9 @@ const Header = () => {
             </Condition>
             <a href="#" onClick={handleClearData}>
               Clear the current the data.
+            </a>{' '}
+            <a href="#" onClick={handleResetToDemo}>
+              Reset to demo data.
             </a>
           </p>
 
