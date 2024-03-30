@@ -1,8 +1,13 @@
-import { FunctionComponent, ComponentProps, useEffect, useState } from 'react'
+import { FunctionComponent, ComponentProps, useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Modal from '@/components/molecules/Modal'
 import Condition from '@/components/atoms/ConditionalElement'
+
+import FormInput from '@/components/atoms/FormInput'
+import FormSelect from '@/components/atoms/FormSelect'
+import FormTextarea from '@/components/atoms/FormTextarea'
+import TextWithConfirmedAction from '@/components/atoms/TextWithConfirmedAction'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
@@ -20,8 +25,6 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
   } = useForm<PersonType>({
     defaultValues: selectedPerson || {},
   })
-
-  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false)
 
   useEffect(() => {
     if (!selectedPerson) {
@@ -79,42 +82,17 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
       footer={
         <footer>
           <div>
-            <Condition as="div" condition={isEditing} className="DeleteConfirmation">
-              <Condition condition={!isDeleteConfirmationOpen}>
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setIsDeleteConfirmationOpen(true)
-                  }}
-                >
-                  Delete?
-                </a>
-              </Condition>
-              <Condition condition={isDeleteConfirmationOpen}>
-                Are you sure?
-                <div className="DeleteConfirmation_Actions">
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      onDelete(selectedPerson.id)
-                    }}
-                  >
-                    Yes
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setIsDeleteConfirmationOpen(false)
-                    }}
-                  >
-                    No
-                  </a>
-                </div>
-              </Condition>
+            <Condition
+              as={TextWithConfirmedAction}
+              condition={isEditing}
+              className="DeleteConfirmation"
+              onConfirm={() => {
+                onDelete(selectedPerson.id)
+              }}
+            >
+              Delete?
             </Condition>
+
             <div />
 
             <div>
@@ -132,111 +110,78 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="rows">
-          <div>
-            <label htmlFor="firstName">First name</label>
-            <input
-              type="text"
-              id="firstName"
-              {...register('firstName', { required: 'This is required' })}
-              aria-invalid={errors.firstName ? 'true' : undefined}
-            />
-            {errors.firstName && <small>{errors.firstName.message}</small>}
-          </div>
-          <div>
-            <label htmlFor="lastName">Last name</label>
-            <input
-              type="text"
-              id="lastName"
-              {...register('lastName', { required: 'This is required' })}
-              aria-invalid={errors.lastName ? 'true' : undefined}
-            />
-            {errors.lastName && <small>{errors.lastName.message}</small>}
-          </div>
-          <div>
-            <label htmlFor="biologicalGender">Gender</label>
-            <select
-              id="biologicalGender"
-              {...register('biologicalGender', { required: 'This is required' })}
-              aria-invalid={errors.biologicalGender ? 'true' : undefined}
-            >
-              <option></option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            {errors.biologicalGender && <small>{errors.biologicalGender.message}</small>}
-          </div>
+          <FormInput
+            id="firstName"
+            label="First name"
+            error={errors.firstName?.message}
+            register={register}
+          />
+
+          <FormInput
+            id="lastName"
+            label="Last name"
+            error={errors.lastName?.message}
+            register={register}
+          />
+
+          <FormSelect
+            id="biologicalGender"
+            label="Gender"
+            error={errors.biologicalGender?.message}
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+            register={register}
+          />
         </div>
         <div className="rows">
-          <div>
-            <label htmlFor="fatherId">Father</label>
-            <select
-              id="fatherId"
-              {...register('fatherId')}
-              aria-invalid={errors.fatherId ? 'true' : undefined}
-            >
-              <option></option>
-              {persons
-                .filter(({ id, biologicalGender, ancestors }) => {
-                  return (
-                    biologicalGender === 'male' &&
-                    id !== selectedPerson.id &&
-                    !ancestors.includes(selectedPerson.id)
-                  )
-                })
-                .map((person) => (
-                  <option key={person.id} value={person.id}>
-                    {person.fullName}
-                  </option>
-                ))}
-            </select>
-            {errors.fatherId && <small>{errors.fatherId.message}</small>}
-          </div>
-          <div>
-            <label htmlFor="motherId">Mother</label>
-            <select
-              id="motherId"
-              {...register('motherId')}
-              aria-invalid={errors.motherId ? 'true' : undefined}
-            >
-              <option></option>
-              {persons
-                .filter(
-                  ({ id, biologicalGender, ancestors }) =>
-                    biologicalGender === 'female' &&
-                    id !== selectedPerson.id &&
-                    !ancestors.includes(selectedPerson.id),
+          <FormSelect
+            id="fatherId"
+            label="Father"
+            error={errors.fatherId?.message}
+            options={persons
+              .filter(({ id, biologicalGender, ancestors }) => {
+                return (
+                  biologicalGender === 'male' &&
+                  id !== selectedPerson.id &&
+                  !ancestors.includes(selectedPerson.id)
                 )
-                .map((person) => (
-                  <option key={person.id} value={person.id}>
-                    {person.fullName}
-                  </option>
-                ))}
-            </select>
-            {errors.motherId && <small>{errors.motherId.message}</small>}
-          </div>
-        </div>
-        <div>
-          <label htmlFor="biography">Biography</label>
-          <textarea
-            id="biography"
-            {...register('biography')}
-            aria-invalid={errors.biography ? 'true' : undefined}
+              })
+              .map((person) => ({ value: person.id, label: person.fullName }))}
+            register={register}
           />
-          {errors.biography && <small>{errors.biography.message}</small>}
-        </div>
-        <div>
-          <label htmlFor="notes">Notes</label>
-          <textarea
-            id="notes"
-            {...register('notes')}
-            aria-invalid={errors.notes ? 'true' : undefined}
+
+          <FormSelect
+            id="motherId"
+            label="Mother"
+            error={errors.motherId?.message}
+            options={persons
+              .filter(
+                ({ id, biologicalGender, ancestors }) =>
+                  biologicalGender === 'female' &&
+                  id !== selectedPerson.id &&
+                  !ancestors.includes(selectedPerson.id),
+              )
+              .map((person) => ({ value: person.id, label: person.fullName }))}
+            register={register}
           />
-          {errors.notes && <small>{errors.notes.message}</small>}
-          <small>
-            You can include information about other names, the date and place of birth, the date and
-            place of death, marriage, occupation, education, military service, residences etc.
-          </small>
         </div>
+
+        <FormTextarea
+          id="biography"
+          label="Biography"
+          error={errors.biography?.message}
+          register={register}
+        />
+
+        <FormTextarea
+          id="notes"
+          label="Notes"
+          note="You can include information about other names, the date and place of birth, the date and place of death, marriage, occupation, education, military service, residences etc."
+          error={errors.notes?.message}
+          register={register}
+        />
       </form>
     </Modal>
   )

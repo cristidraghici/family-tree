@@ -38,4 +38,6 @@ export type ExtendedPersonType = PersonType & {
   siblingsNames: string
 }
 
+export type ValidPersonProps = keyof PersonType
+
 export type SelectPersonFunction = (person: PersonIdType) => void
