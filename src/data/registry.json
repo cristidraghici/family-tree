@@ -1,18 +1,44 @@
 {
   "persons": [
     {
-      "id": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-      "firstName": "Karl Anton",
-      "lastName": "Hohenzollern Sigmaringen",
-      "biologicalGender": "male",
-      "biography": "Member of the House of Hohenzollern"
-    },
-    {
       "id": "09256fab-15c0-4c8e-baaf-8be631de6897",
       "firstName": "Josephine",
       "lastName": "Baden",
       "biologicalGender": "female",
-      "biography": "Member of the House of Zähringen"
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Princess Josephine Friederike Luise of Baden (21 October 1813 – 19 June 1900) was Princess of Hohenzollern-Sigmaringen from 27 August 1848 to 7 December 1849 during the brief reign of her husband, Prince Karl Anton. \n\nJosephine was the second daughter of Charles, Grand Duke of Baden, and Stéphanie de Beauharnais. She was the mother of the first king of Romania, Carol I. Through her younger daughter Marie, she is the ancestress of the Belgian royal family, the grand ducal family of Luxembourg as well as the last Queen of Italy and her descendants. Through her son, Leopold, she is also ancestress of the Romanian royal family.",
+      "notes": "https://en.wikipedia.org/wiki/Princess_Josephine_of_Baden"
+    },
+    {
+      "id": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+      "firstName": "Karl Anton",
+      "lastName": "Hohenzollern Sigmaringen",
+      "biologicalGender": "male",
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Karl Anton, Prince of Hohenzollern-Sigmaringen (German: Karl Anton Joachim Zephyrinus Friedrich Meinrad Fürst von Hohenzollern-Sigmaringen; 7 September 1811 – 2 June 1885) was the last prince of Hohenzollern-Sigmaringen before the territory was annexed by the Kingdom of Prussia in 1849.\n\nAfterwards he continued to be titular prince of his house and, with the death of the last prince of Hohenzollern-Hechingen in 1869, of the entire House of Hohenzollern. He served as Minister President of Prussia from 1858 to 1862, the only Hohenzollern prince to hold the post. \n\nHis second son, Karl, became king of Romania. The offer of the throne of Spain to his eldest son, Leopold, was one of the causes of the Franco-Prussian War, which led to the unification of Germany and the creation of the German Empire.",
+      "notes": "https://en.wikipedia.org/wiki/Karl_Anton,_Prince_of_Hohenzollern_(born_1811)"
+    },
+    {
+      "id": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
+      "firstName": "Carol I",
+      "lastName": "Hohenzollern Sigmaringen",
+      "biologicalGender": "male",
+      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+      "biography": "Carol I or Charles I of Romania (born Karl Eitel Friedrich Zephyrinus Ludwig von Hohenzollern-Sigmaringen; 20 April 1839 – 10 October [O.S. 27 September] 1914), was the monarch of Romania from 1866 to his death in 1914, ruling as Prince (Domnitor) from 1866 to 1881, and as King from 1881 to 1914. He was elected Prince of the Romanian United Principalities on 20 April 1866 after the overthrow of Alexandru Ioan Cuza by a palace coup d'état. In May 1877, Romania was proclaimed an independent and sovereign nation. The defeat of the Ottoman Empire (1878) in the Russo-Turkish War secured Romanian independence, and he was proclaimed King on 26 March [O.S. 14 March] 1881. He was the first ruler of the Hohenzollern-Sigmaringen dynasty, which ruled the country until the proclamation of a socialist republic in 1947.",
+      "notes": "https://en.wikipedia.org/wiki/Carol_I_of_Romania"
+    },
+    {
+      "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f",
+      "firstName": "Elisabeth",
+      "lastName": "Wied",
+      "biologicalGender": "female",
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Elisabeth of Wied (Pauline Elisabeth Ottilie Luise; 29 December 1843 – 2 March 1916) was the first queen of Romania as the wife of King Carol I from 15 March 1881 to 27 September 1914. She had been the princess consort of Romania since her marriage to then-Prince Carol on 15 November 1869.\n\nElisabeth was born into a German noble family. She was briefly considered as a potential bride for the future British king Edward VII, but Edward rejected her. Elisabeth married Prince Carol of Romania in 1869. Their only child, Princess Maria, died aged four in 1874, and Elisabeth never fully recovered from the loss of her daughter. When Romania became a kingdom in 1881, Elisabeth became queen, and she was crowned together with Carol that same year.\n\nElisabeth was a prolific writer under the name Carmen Sylva.",
+      "notes": "https://en.wikipedia.org/wiki/Elisabeth_of_Wied"
     },
     {
       "id": "9e4b2100-152e-4151-adf0-3802b574c5af",
@@ -21,40 +47,8 @@
       "biologicalGender": "male",
       "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
       "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
-      "biography": "Member of the House of Hohenzollern"
-    },
-    {
-      "id": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
-      "firstName": "Carol I",
-      "lastName": "Hohenzollern Sigmaringen",
-      "biologicalGender": "male",
-      "biography": "The first king of Romania",
-      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897"
-    },
-    {
-      "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f",
-      "firstName": "Elisabeth",
-      "lastName": "Wied",
-      "biography": "The Queen of Romania",
-      "biologicalGender": "female"
-    },
-    {
-      "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
-      "firstName": "Marie",
-      "lastName": "Hohenzollern Sigmaringen",
-      "biologicalGender": "female",
-      "fatherId": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
-      "motherId": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f"
-    },
-    {
-      "id": "ea0983cc-72d2-4f4d-9425-a7203c35d150",
-      "firstName": "Anton",
-      "lastName": "Hohenzollern Sigmaringen",
-      "biologicalGender": "male",
-      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Leopold, Prince of Hohenzollern (German: Leopold Stephan Karl Anton Gustav Eduard Tassilo Fürst von Hohenzollern; 22 September 1835 – 8 June 1905) was the head of the Swabian branch of the House of Hohenzollern, and played a fleeting role in European power politics in connection with the Franco-Prussian War.\n\nHe was born into the dynasty's Sigmaringen branch, which inherited all the dynasty's Swabian lands when the Hohenzollern-Hechingen branch became extinct.",
+      "notes": "https://en.wikipedia.org/wiki/Leopold,_Prince_of_Hohenzollern"
     },
     {
       "id": "0a621c91-2150-44b5-bd8f-2799be424c56",
@@ -63,199 +57,362 @@
       "biologicalGender": "male",
       "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
       "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Prince Frederick of Hohenzollern-Sigmaringen (German: Friedrich Eugen Johann, Prinz von Hohenzollern-Sigmaringen[1]) (25 June 1843, in Schloss Inzigkofen, Inzigkofen, Hohenzollern-Sigmaringen[citation needed] – 2 December 1904, in Munich, Kingdom of Bavaria[citation needed]) was a member of the House of Hohenzollern-Sigmaringen and a Prussian General of the Cavalry. He fought with distinction in the Franco-Prussian War. Frederick was the fifth child and youngest son[citation needed] of Charles Anthony, Prince of Hohenzollern and his wife Princess Josephine of Baden.",
+      "notes": "https://en.wikipedia.org/wiki/Prince_Frederick_of_Hohenzollern-Sigmaringen"
     },
     {
-      "id": "e8310ec6-129b-49f6-bae9-e847b587bde5",
-      "firstName": "Antonia",
-      "lastName": "Braganza",
-      "biologicalGender": "female",
-      "biography": "Member of the Royal House of Romania"
+      "id": "ea0983cc-72d2-4f4d-9425-a7203c35d150",
+      "firstName": "Anton",
+      "lastName": "Hohenzollern Sigmaringen",
+      "biologicalGender": "male",
+      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+      "biography": "Prince Anton of Hohenzollern-Sigmaringen (7 October 1841 – 6 August 1866) was a German prince and soldier. He was a member of the Princely House of Hohenzollern-Sigmaringen. During the Austro-Prussian War, while serving with the First Foot Guards, Prince Anton was mortally wounded at Königgrätz and died 33 days later of his wounds.",
+      "notes": "https://en.wikipedia.org/wiki/Prince_Anton_of_Hohenzollern-Sigmaringen"
     },
     {
       "id": "c24ec368-836f-4323-8e97-9a74cd434dab",
       "firstName": "Ferinand I",
       "lastName": "Hohenzollern Sigmaringen",
       "biologicalGender": "male",
-      "biography": "Second king of Romania",
       "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
-      "motherId": "e8310ec6-129b-49f6-bae9-e847b587bde5"
+      "motherId": "e8310ec6-129b-49f6-bae9-e847b587bde5",
+      "biography": "Ferdinand I (Ferdinand Viktor Albert Meinrad; 24 August 1865 – 20 July 1927), nicknamed Întregitorul (\"the Unifier\"), was King of Romania from 1914 until his death in 1927. Ferdinand was the second son of Leopold, Prince of Hohenzollern, and Infanta Antónia of Portugal, daughter of Ferdinand II of Portugal and Maria II of Portugal. His family was part of the Catholic branch of the Prussian royal family Hohenzollern.",
+      "notes": "https://en.wikipedia.org/wiki/Ferdinand_I_of_Romania"
+    },
+    {
+      "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
+      "firstName": "Marie",
+      "lastName": "Hohenzollern Sigmaringen",
+      "biologicalGender": "female",
+      "fatherId": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
+      "motherId": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f",
+      "biography": "Princess Maria of Romania (Romanian: Prinţesa Maria a României; 8 September 1870 – 9 April 1874) was the only child of Prince (later King) Carol I of Romania and his wife, Elisabeth of Wied.",
+      "notes": "https://en.wikipedia.org/wiki/Princess_Maria_of_Romania_(1870%E2%80%931874)"
     },
     {
       "id": "70300a1f-024d-4c89-be01-32ca4ed81a07",
       "firstName": "Marie Alexandra Victoria",
       "lastName": "Edinburgh",
       "biologicalGender": "female",
-      "biography": "The last queen of Romania as the wife of King Ferdinand I"
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Marie (born Princess Marie Alexandra Victoria of Edinburgh; 29 October 1875 – 18 July 1938)[note 1] was the last queen of Romania as the wife of King Ferdinand I.\n\nMarie was born into the British royal family. Her parents were Prince Alfred, Duke of Edinburgh (later Duke of Saxe-Coburg and Gotha), and Grand Duchess Maria Alexandrovna of Russia. Marie's early years were spent in Kent, Malta and Coburg. After refusing a proposal from her cousin, the future King George V, she was chosen as the future wife of Ferdinand, then crown prince of Romania, in 1892. Marie was crown princess between 1893 and 1914, and became immediately popular with the Romanian people.",
+      "notes": "https://en.wikipedia.org/wiki/Marie_of_Romania"
     },
-
+    {
+      "id": "1ea67585-59e2-4e51-b20d-51a8deba21ce",
+      "firstName": "William",
+      "lastName": "of Hohenzollern",
+      "biologicalGender": "male",
+      "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
+      "motherId": "e8310ec6-129b-49f6-bae9-e847b587bde5",
+      "biography": "William, Prince of Hohenzollern (German: Wilhelm August Karl Joseph Peter Ferdinand Benedikt Fürst von Hohenzollern) (7 March 1864 in Schloss Benrath, near Düsseldorf – 22 October 1927 in Sigmaringen) was the eldest son of Leopold, Prince of Hohenzollern and Infanta Antónia of Portugal.\n\nWilliam was an older brother of Ferdinand of Romania. His first cousins included (among others) Carlos I of Portugal, Albert I of Belgium, Frederick Augustus III of Saxony, and Princess Maria Josepha of Saxony.\n\nBetween 1880 and 1886, William was heir presumptive to the Romanian throne. On 20 December 1886, he renounced his rights to the throne in favor of his brother Ferdinand.",
+      "notes": "https://en.wikipedia.org/wiki/William,_Prince_of_Hohenzollern"
+    },
+    {
+      "id": "e0725723-2db1-4cf8-837c-cde232d3546d",
+      "firstName": "Karl Anton",
+      "lastName": "of Hohenzollern",
+      "biologicalGender": "male",
+      "fatherId": "9e4b2100-152e-4151-adf0-3802b574c5af",
+      "motherId": "e8310ec6-129b-49f6-bae9-e847b587bde5",
+      "biography": "Prince Karl Anton of Hohenzollern-Sigmaringen (German: Karl Anton Friedrich Wilhelm Ludwig Prinz von Hohenzollern-Sigmaringen; 1 September 1868 – 21 February 1919) was a member of the Princely House of Hohenzollern-Sigmaringen. Karl Anton was the third and youngest son of Leopold, Prince of Hohenzollern and his wife Infanta Antónia of Portugal. Karl Anton's elder brothers were William, Prince of Hohenzollern and Ferdinand I of Romania.",
+      "notes": "https://en.wikipedia.org/wiki/Prince_Karl_Anton_of_Hohenzollern_(born_1868)"
+    },
+    {
+      "id": "e8310ec6-129b-49f6-bae9-e847b587bde5",
+      "firstName": "Antonia",
+      "lastName": "of Portugal",
+      "biologicalGender": "female",
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Infanta Antónia of Portugal (or of Braganza; Portuguese pronunciation: [ɐ̃ˈtɔniɐ]; Antónia Maria Fernanda Micaela Gabriela Rafaela Francisca de Assis Ana Gonzaga Silvéria Júlia Augusta de Saxe-Coburgo e Bragança; 17 February 1845 – 27 December 1913) was a Portuguese infanta (princess) of the House of Braganza,[1] daughter of Queen Maria II of Portugal and her King consort Ferdinand II of Portugal. Through her father, she also held the titles of Princess of Saxe-Coburg and Gotha and Duchess of Saxony.",
+      "notes": "https://en.wikipedia.org/wiki/Infanta_Ant%C3%B3nia_of_Portugal"
+    },
+    {
+      "id": "48e3cd6d-b8e7-40b8-9386-916aa5540593",
+      "firstName": "Marie Luise",
+      "lastName": "Hohenzollern-Sigmaringen",
+      "biologicalGender": "female",
+      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+      "biography": "Princess Marie Luise Alexandra Karoline of Hohenzollern-Sigmaringen (17 November 1845 – 26 November 1912), later Countess of Flanders, was a princess of Hohenzollern-Sigmaringen, later simply of Hohenzollern. She married Prince Philippe, Count of Flanders, second son of King Leopold I of Belgium, and she was the mother of King Albert I.",
+      "notes": "https://en.wikipedia.org/wiki/Princess_Marie_of_Hohenzollern-Sigmaringen"
+    },
+    {
+      "id": "0f3ef821-cd18-4f9e-9d2b-c33de2089826",
+      "firstName": "Stephanie",
+      "lastName": "Hohenzollern-Sigmaringen",
+      "biologicalGender": "female",
+      "fatherId": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
+      "motherId": "09256fab-15c0-4c8e-baaf-8be631de6897",
+      "biography": "Stephanie Josepha Friederike Wilhelmine Antonia of Hohenzollern-Sigmaringen (Portuguese: Estefânia; 15 July 1837 – 17 July 1859) was Queen of Portugal from her marriage to King Peter V on 18 May 1858 until her death the following year.",
+      "notes": "https://en.wikipedia.org/wiki/Stephanie_of_Hohenzollern-Sigmaringen"
+    },
     {
       "id": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a",
       "firstName": "Carol II",
       "lastName": "Hohenzollern Sigmaringen",
       "biologicalGender": "male",
-      "biography": "The second king of Romania",
       "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
-      "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07"
+      "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+      "biography": "Carol II (15 October 1893 [O.S. 3 October 1893] – 4 April 1953) was King of Romania from 8 June 1930 until his forced abdication on 6 September 1940. As the eldest son of Ferdinand I, he became crown prince upon the death of his grand-uncle, King Carol I, in 1914. He was the first of the Hohenzollern kings of Romania to be born in the country, as both of his predecessors had been born in Germany and came to Romania only as adults. As such, he was the first member of the Romanian branch of the Hohenzollerns who spoke Romanian as his first language and was also the first member of his royal family to be raised in the Orthodox faith",
+      "notes": "https://en.wikipedia.org/wiki/Carol_II_of_Romania"
+    },
+    {
+      "id": "bde02a51-bfc8-4cce-8ef7-8430c0d4e54b",
+      "firstName": "Zizi ",
+      "lastName": "Lambrino",
+      "biologicalGender": "female",
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Joanna Marie Valentina \"Zizi\" Lambrino (3 October 1898 – 11 March 1953) was the first wife of the later King Carol II of Romania. They had one son, Carol, born in 1920, in Bucharest.",
+      "notes": "https://en.wikipedia.org/wiki/Zizi_Lambrino"
+    },
+    {
+      "id": "9eac0fcc-d1ed-47d6-81d3-708b75ed27a5",
+      "firstName": "Carol ",
+      "lastName": "Lambrino",
+      "biologicalGender": "male",
+      "fatherId": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a",
+      "motherId": "bde02a51-bfc8-4cce-8ef7-8430c0d4e54b",
+      "biography": "Mircea Grigore Carol Hohenzollern (born Mircea Grigore Carol Lambrino; 8 January 1920 – 27 January 2006), also known as Prince Mircea Grigore Carol al României (anglicised as: of Romania) according to his amended Romanian birth certificate[1][2][3] or as Carol Lambrino (Romanian pronunciation: [ˈkarol lambrino][needs stress]),[4] was the elder son of King Carol II of Romania.",
+      "notes": "https://en.wikipedia.org/wiki/Carol_Lambrino"
+    },
+    {
+      "id": "74d4b635-31fc-4222-97d0-bd7f2d6151c3",
+      "firstName": "Helen",
+      "lastName": "of Greece and Denmark",
+      "biologicalGender": "female",
+      "fatherId": "",
+      "motherId": "",
+      "biography": "Helen of Greece and Denmark (Greek: Ελένη, Eleni; Romanian: Elena; 2 May 1896 – 28 November 1982) was the queen mother of Romania during the reign of her son King Michael I (1940–1947). She was noted for her humanitarian efforts to save Romanian Jews during World War II, which led to her being awarded by the State of Israel with the honorific of Righteous Among the Nations in 1993.",
+      "notes": "https://en.wikipedia.org/wiki/Helen_of_Greece_and_Denmark"
+    },
+    {
+      "id": "748c919c-6854-4fd2-8050-92574b3e56b5",
+      "firstName": "Michael I",
+      "lastName": "of Romania",
+      "biologicalGender": "male",
+      "fatherId": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a",
+      "motherId": "74d4b635-31fc-4222-97d0-bd7f2d6151c3",
+      "biography": "Michael I, born Mihai I on October 25, 1921, was the last king of Romania, reigning twice, first from 1927 to 1930 and then from 1940 until his forced abdication in 1947. \n\nHe ascended the throne at the age of five, becoming the youngest crowned head in Europe. His reign was marked by political turbulence, including his father's abdication in his favor, subsequent exile, and his own forced abdication in 1947 amidst political pressure. \n\nDespite exile and loss of citizenship, Michael remained a symbol of resistance against communism, attempting to return to Romania after Nicolae Ceaușescu's regime fell in 1989. Though initially met with resistance, he eventually regained citizenship and property, becoming a beloved figure in Romania. \n\nMichael passed away on December 5, 2017, leaving behind a legacy of courage and resilience in the face of adversity.",
+      "notes": "https://en.wikipedia.org/wiki/Michael_I_of_Romania"
     },
     {
       "id": "d05a1ba6-52c3-4510-bce3-e7f22d51c788",
-      "firstName": "Elisabeta",
-      "lastName": "Hohenzollern Sigmaringen",
+      "firstName": "Elisabeth ",
+      "lastName": "of Romania",
       "biologicalGender": "female",
       "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
       "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Elisabeth Charlotte Josephine Alexandra Victoria of Romania, born on October 12, 1894, was the second child of King Ferdinand I and Queen Marie of Romania. As the Queen of Greece from 1922 to 1924, she navigated political turmoil and aided refugees during the aftermath of the Greco-Turkish War. Despite her efforts, the revolutionary climate took a toll on her health, leading to her departure from Greece with her husband, King George II.\n\nReturning to Romania, her marriage deteriorated, leading to divorce in 1935. Known for her close relationship with her brother, King Carol II, she played a significant role in Romanian politics, even earning the nickname \"Red Aunt\" for her communist affiliations. However, she was eventually expelled from Romania in 1947 with the rise of the Romanian People's Republic.\n\nElisabeth lived in Switzerland and later in Cannes, France, where she formed a romantic relationship with Marc Favrat, whom she adopted before her death in 1956. Throughout her life, she experienced both political upheaval and personal trials, leaving behind a complex legacy.",
+      "notes": "https://en.wikipedia.org/wiki/Elisabeth_of_Romania"
     },
     {
       "id": "58fc754d-380f-4da2-b4f2-964e33ba7ef4",
       "firstName": "Maria",
-      "lastName": "Hohenzollern Sigmaringen",
+      "lastName": "of Yugoslavia",
       "biologicalGender": "female",
       "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
       "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Maria (born Princess Maria of Romania; 6 January 1900 – 22 June 1961), known in Serbian as Marija Karađorđević (Serbian Cyrillic: Марија Карађорђевић), was Queen of the Serbs, Croats and Slovenes from 1922 to 1929 and Queen of Yugoslavia from 1929 to 1934 as the wife of King Alexander I. She was the mother of King Peter II. Her citizenship was revoked, and her property was confiscated by the Yugoslav communist regime in 1947, but she was posthumously rehabilitated in 2014.",
+      "notes": "https://en.wikipedia.org/wiki/Maria_of_Yugoslavia"
     },
     {
       "id": "0ea5ca94-05a2-4070-8cf7-633cf9c2efd9",
-      "firstName": "Nicolae",
-      "lastName": "Hohenzollern Sigmaringen",
+      "firstName": "Nicholas ",
+      "lastName": "of Romania",
       "biologicalGender": "male",
       "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
       "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Prince Nicholas of Romania (Romanian: Principele Nicolae al României; 5 August 1903 – 9 June 1978), later known as Prince Nicholas of Hohenzollern-Sigmaringen, was the fourth child and second son of King Ferdinand I of Romania and his wife Queen Marie.\n\nIn 1927 after the death of his father, Nicholas was appointed as one of the three regents for his minor nephew King Michael I. His position as regent ended in 1930 with the return of his older brother Prince Carol to Romania to take over as King of Romania.\n\nIn later 1930, he was stripped of his titles and privileges and exiled from the Royal Court, due to King Carol II's disapproval of his marriage. On 10 July 1942, after the removal of King Carol II from the throne, during King Michael's second reign, Nicholas was given by the king the title of Nicholas of Hohenzollern — of the house to which he belonged.[2]\n\nHe died in exile on 9 July 1978 in Madrid, Spain.",
+      "notes": "https://en.wikipedia.org/wiki/Prince_Nicholas_of_Romania"
+    },
+    {
+      "id": "fd9e280d-aaf9-4340-a5f2-594263ffb299",
+      "firstName": "Mircea ",
+      "lastName": "of Romania",
+      "biologicalGender": "male",
+      "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
+      "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
+      "biography": "Prince Mircea of Romania (Romanian pronunciation: [ˈmirtʃe̯a]; 3 January 1913 – 2 November 1916) was the third son and youngest child of King Ferdinand of Romania and Marie of Edinburgh and the great-grandson of Queen Victoria through his mother. He died aged 3 in November 1916.",
+      "notes": "https://en.wikipedia.org/wiki/Prince_Mircea_of_Romania"
     },
     {
       "id": "b526252a-9799-4ef4-adbc-eb6d5a2fe633",
       "firstName": "Ileana",
-      "lastName": "Hohenzollern Sigmaringen",
+      "lastName": "of Romania",
       "biologicalGender": "female",
       "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
       "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "biography": "Member of the Royal House of Romania"
-    },
-    {
-      "id": "fd9e280d-aaf9-4340-a5f2-594263ffb299",
-      "firstName": "Mircea",
-      "lastName": "Hohenzollern Sigmaringen",
-      "biologicalGender": "male",
-      "fatherId": "c24ec368-836f-4323-8e97-9a74cd434dab",
-      "motherId": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "biography": "Member of the Royal House of Romania"
+      "biography": "Princess Ileana of Romania, also known as Mother Alexandra (5 January 1909 – 21 January 1991), was the youngest daughter of King Ferdinand I of Romania and his consort, Queen Marie of Romania. She was a great-granddaughter of Emperor Alexander II of Russia, King Ferdinand II, Queen Maria II of Portugal, and Queen Victoria of the United Kingdom. She was born as Her Royal Highness Princess Ileana of Romania, Princess of Hohenzollern-Sigmaringen.",
+      "notes": "https://en.wikipedia.org/wiki/Princess_Ileana_of_Romania"
     }
   ],
   "relationships": [
     {
       "id": "e530e02c-1e75-449a-b235-7c97c5db16b2",
-      "relationshipType": "spouse",
-      "persons": ["c24ec368-836f-4323-8e97-9a74cd434dab", "e8310ec6-129b-49f6-bae9-e847b587bde5"]
+      "persons": ["c24ec368-836f-4323-8e97-9a74cd434dab", "e8310ec6-129b-49f6-bae9-e847b587bde5"],
+      "relationshipType": "spouse"
     }
   ],
   "positions": [
     {
       "id": "09256fab-15c0-4c8e-baaf-8be631de6897",
-      "x": 588.4296487923625,
-      "y": 37.58043405220724
+      "x": 478.1796487923625,
+      "y": 13.080434052207238
     },
     {
       "id": "d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-      "x": 33.240379852808815,
-      "y": 36.4230351173473
+      "x": 8.740379852808815,
+      "y": 10.423035117347297
     },
     {
       "id": "ea0983cc-72d2-4f4d-9425-a7203c35d150",
-      "x": 1376.7339414519868,
-      "y": 145.33925007113282
+      "x": 1265.2339414519868,
+      "y": 112.83925007113282
     },
     {
       "id": "09256fab-15c0-4c8e-baaf-8be631de6897-d9a897dc-ce1c-43cc-ab28-84bc337637e0",
-      "x": 421.26759233401697,
-      "y": 99.16274559179442
+      "x": 390.76759233401697,
+      "y": 63.16274559179442
     },
     {
       "id": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6",
-      "x": 102.05603183544986,
-      "y": 138.87246337591762
+      "x": 8.556031835449858,
+      "y": 112.62246337591762
     },
     {
       "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f",
-      "x": 416.35301633125414,
-      "y": 144.11979657616953
+      "x": 316.85301633125414,
+      "y": 115.11979657616953
     },
     {
       "id": "0a621c91-2150-44b5-bd8f-2799be424c56",
-      "x": 1079.1320021034742,
-      "y": 146.55157788240604
+      "x": 986.6320021034742,
+      "y": 112.30157788240604
+    },
+    {
+      "id": "48e3cd6d-b8e7-40b8-9386-916aa5540593",
+      "x": 1526.3252041885414,
+      "y": 112.80860344154513
+    },
+    {
+      "id": "0f3ef821-cd18-4f9e-9d2b-c33de2089826",
+      "x": 1825.749526609949,
+      "y": 112.74637722704654
     },
     {
       "id": "e8310ec6-129b-49f6-bae9-e847b587bde5",
-      "x": 897.6339462708219,
-      "y": 154.55576075854447
+      "x": 803.883946270822,
+      "y": 113.05576075854447
     },
     {
       "id": "c24ec368-836f-4323-8e97-9a74cd434dab",
-      "x": 750.9116243054393,
-      "y": 242.1553292219075
+      "x": 688.9116243054393,
+      "y": 193.1553292219075
     },
     {
       "id": "9e4b2100-152e-4151-adf0-3802b574c5af-e8310ec6-129b-49f6-bae9-e847b587bde5",
-      "x": 862.7646217279239,
-      "y": 166.31975847661812
+      "x": 749.5146217279239,
+      "y": 168.56975847661812
+    },
+    {
+      "id": "e0725723-2db1-4cf8-837c-cde232d3546d",
+      "x": 1382.2973078001316,
+      "y": 193.11768998609097
     },
     {
       "id": "9e4b2100-152e-4151-adf0-3802b574c5af",
-      "x": 584.8705369389627,
-      "y": 144.6867010873582
+      "x": 481.6205369389627,
+      "y": 115.93670108735819
     },
     {
       "id": "70300a1f-024d-4c89-be01-32ca4ed81a07",
-      "x": 1063.7854131488186,
-      "y": 242.60497213326232
+      "x": 1086.7854131488186,
+      "y": 196.10497213326232
     },
     {
       "id": "f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e",
-      "x": 285.9904914105589,
-      "y": 236.9204838682537
+      "x": 173.9904914105589,
+      "y": 189.1704838682537
     },
     {
       "id": "c0e5d0f5-a20e-4ec1-a95f-0167bdd5adc6-f3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3f",
-      "x": 385.56344008063616,
-      "y": 161.14153910464
+      "x": 286.31344008063616,
+      "y": 132.89153910464
+    },
+    {
+      "id": "1ea67585-59e2-4e51-b20d-51a8deba21ce",
+      "x": 466.7127279436255,
+      "y": 191.97925373903234
     },
     {
       "id": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a",
-      "x": 689.5776130749023,
-      "y": 479.66559711520426
+      "x": 211.82761307490227,
+      "y": 254.41559711520426
     },
     {
       "id": "70300a1f-024d-4c89-be01-32ca4ed81a07-c24ec368-836f-4323-8e97-9a74cd434dab",
-      "x": 1040.909024521921,
-      "y": 289.1946567513977
+      "x": 1025.159024521921,
+      "y": 209.6946567513977
     },
     {
       "id": "d05a1ba6-52c3-4510-bce3-e7f22d51c788",
-      "x": 1221.7100842749237,
-      "y": 405.61479334280557
+      "x": 1211.4600842749237,
+      "y": 251.36479334280557
+    },
+    {
+      "id": "74d4b635-31fc-4222-97d0-bd7f2d6151c3",
+      "x": 517.1326087229488,
+      "y": 310.4473567884212
     },
     {
       "id": "b526252a-9799-4ef4-adbc-eb6d5a2fe633",
-      "x": 1033.9777471169955,
-      "y": 491.2672589506956
+      "x": 1036.2277471169955,
+      "y": 251.51725895069558
     },
     {
       "id": "58fc754d-380f-4da2-b4f2-964e33ba7ef4",
-      "x": 1361.6224429827787,
-      "y": 345.27012137229326
+      "x": 1400.3724429827787,
+      "y": 251.77012137229326
     },
     {
       "id": "fd9e280d-aaf9-4340-a5f2-594263ffb299",
-      "x": 551.5057984830369,
-      "y": 416.7479891559585
+      "x": 849.2557984830369,
+      "y": 250.74798915595852
     },
     {
       "id": "0ea5ca94-05a2-4070-8cf7-633cf9c2efd9",
-      "x": 417.51228321850357,
-      "y": 357.6934645834908
+      "x": 648.0122832185036,
+      "y": 251.94346458349082
+    },
+    {
+      "id": "bde02a51-bfc8-4cce-8ef7-8430c0d4e54b",
+      "x": 10.814875897855813,
+      "y": 299.7968148856608
+    },
+    {
+      "id": "9eac0fcc-d1ed-47d6-81d3-708b75ed27a5",
+      "x": 137.48921373618464,
+      "y": 367.33160673609353
+    },
+    {
+      "id": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a-bde02a51-bfc8-4cce-8ef7-8430c0d4e54b",
+      "x": 203.96291637769377,
+      "y": 325.8171057624663
+    },
+    {
+      "id": "748c919c-6854-4fd2-8050-92574b3e56b5",
+      "x": 364.38954549159655,
+      "y": 371.4758200474662
+    },
+    {
+      "id": "0b51dc7a-d2cd-44d7-975e-9e257aaf5b1a-74d4b635-31fc-4222-97d0-bd7f2d6151c3",
+      "x": 445.59993632298256,
+      "y": 322.2414346733169
     }
   ]
 }
