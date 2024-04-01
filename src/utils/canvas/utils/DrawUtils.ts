@@ -250,7 +250,10 @@ class DrawUtils {
         startY: firstBox.y + firstBox.height / 2,
         endX: secondBox.x + secondBox.width / 2,
         endY: secondBox.y + secondBox.height / 2,
-        ...{ lineWidth: connection.type === 'spouse' ? 4 : undefined },
+        ...{
+          lineWidth: connection.type === 'spouse' ? 4 : undefined,
+          lineDash: connection.type !== 'spouse' ? [2, 2] : [],
+        },
       })
     })
 

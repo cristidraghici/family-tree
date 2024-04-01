@@ -52,7 +52,9 @@ class CanvasManager {
     endX,
     endY,
     lineWidth = CANVAS_LINE_WIDTH,
-  }: Line & { lineWidth?: number }) {
+    lineDash = [],
+  }: Line & { lineWidth?: number; lineDash?: number[] }) {
+    this.context.setLineDash(lineDash)
     this.context.lineWidth = lineWidth
     this.context.beginPath()
     this.context.moveTo(startX, startY)
@@ -66,7 +68,10 @@ class CanvasManager {
     endX,
     endY,
     lineWidth = CANVAS_LINE_WIDTH,
-  }: Line & { lineWidth?: number }) {
+    lineDash = [],
+  }: Line & { lineWidth?: number; lineDash?: number[] }) {
+    this.context.setLineDash(lineDash)
+
     if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
       this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY, lineWidth })
       this.drawLine({ startX: endX, startY: startY, endX: endX, endY: endY, lineWidth })

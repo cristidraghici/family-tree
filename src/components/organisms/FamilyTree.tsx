@@ -51,9 +51,10 @@ const FamilyTree: FunctionComponent = () => {
 
         // canvasUtil.reset()
 
-        filteredPersons.forEach(({ id, fullName, generation, fatherId, motherId }) => {
+        filteredPersons.forEach(({ id, fullName, generation, fatherId, motherId, spouses }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
 
+          // add both parents if they exist
           if (fatherId && motherId) {
             const marriageId = [fatherId, motherId].sort().join('-') as PersonIdType
 
@@ -64,6 +65,7 @@ const FamilyTree: FunctionComponent = () => {
             canvasUtil.addConnection(motherId, marriageId, 'spouse')
           }
 
+          // add parent if only one exists
           if ((fatherId || motherId) && (!fatherId || !motherId)) {
             const parentId = fatherId || motherId
             // the if block should not be necessary, one always has a value
@@ -71,6 +73,11 @@ const FamilyTree: FunctionComponent = () => {
               canvasUtil.addConnection(id, parentId, 'blood')
             }
           }
+
+          // add spouse if they exist
+          spouses.forEach((spouseId) => {
+            canvasUtil.addConnection(id, spouseId, 'spouse')
+          })
         })
 
         canvasUtil.draw()

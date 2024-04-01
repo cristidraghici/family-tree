@@ -1,6 +1,6 @@
 import { PersonIdType, PersonType, RelationshipType } from '@/types'
 
-type ConnectionType = Record<PersonIdType, PersonIdType[]>
+type ConnectionType = Record<PersonIdType, Set<PersonIdType>>
 
 const getConnections = (persons: PersonType[], relationships: RelationshipType[]) => {
   const parents: ConnectionType = {}
@@ -10,50 +10,47 @@ const getConnections = (persons: PersonType[], relationships: RelationshipType[]
   const descendants: ConnectionType = {}
   const ancestors: ConnectionType = {}
 
-  const isPerson = (id: PersonIdType | undefined): id is PersonIdType => id !== undefined
-  const findDescendants = (personId: PersonIdType): PersonIdType[] => {
-    let allDescendants: PersonIdType[] = []
+  const findDescendants = (
+    personId: PersonIdType,
+    descendantsList: Set<PersonIdType> = new Set(),
+  ): Set<PersonIdType> => {
+    const directChildren = children[personId] || new Set()
 
-    const directChildren = children[personId] || []
+    directChildren.forEach((childId) => {
+      descendantsList.add(childId)
+      findDescendants(childId, descendantsList)
+    })
 
-    for (const childId of directChildren) {
-      allDescendants.push(childId)
-
-      // Recursively find descendants of the current child
-      const childDescendants = findDescendants(childId)
-      allDescendants = allDescendants.concat(childDescendants)
-    }
-
-    return allDescendants
+    return descendantsList
   }
 
-  const findAncestors = (personId: PersonIdType): PersonIdType[] => {
-    let allAncestors: PersonIdType[] = []
+  const findAncestors = (
+    personId: PersonIdType,
+    ancestorsList: Set<PersonIdType> = new Set(),
+  ): Set<PersonIdType> => {
+    const directParents = parents[personId] || new Set()
 
-    const directParents = parents[personId] || []
+    directParents.forEach((parentId) => {
+      ancestorsList.add(parentId)
+      findAncestors(parentId, ancestorsList)
+    })
 
-    for (const parentId of directParents) {
-      allAncestors.push(parentId)
-
-      // Recursively find ancestors of the current parent
-      const parentAncestors = findAncestors(parentId)
-      allAncestors = allAncestors.concat(parentAncestors)
-    }
-
-    return allAncestors
+    return ancestorsList
   }
 
-  for (const person of persons) {
-    parents[person.id] = [person.fatherId, person.motherId].filter(isPerson)
-    spouses[person.id] = []
-    children[person.id] = []
-    siblings[person.id] = []
-    descendants[person.id] = []
-    ancestors[person.id] = []
+  const isPerson = (id: PersonIdType | undefined): id is PersonIdType => !!id && id !== undefined
 
-    for (const p of persons) {
+  persons.forEach((person) => {
+    parents[person.id] = new Set([person.fatherId, person.motherId].filter(isPerson))
+    spouses[person.id] = new Set()
+    children[person.id] = new Set()
+    siblings[person.id] = new Set()
+    descendants[person.id] = new Set()
+    ancestors[person.id] = new Set()
+
+    persons.forEach((p) => {
       if ([person.id, ...parents[person.id]].includes(p.id)) {
-        continue
+        return
       }
 
       const hasBothParents = isPerson(p.fatherId) && isPerson(p.motherId)
@@ -61,11 +58,11 @@ const getConnections = (persons: PersonType[], relationships: RelationshipType[]
       const isMother = p.motherId === person.id
 
       if (isFather || isMother) {
-        children[person.id].push(p.id)
+        children[person.id].add(p.id)
 
         if (hasBothParents) {
           const spouseId = isFather ? p.motherId : p.fatherId
-          spouses[person.id].push(spouseId as PersonIdType)
+          spouses[person.id].add(spouseId as PersonIdType)
         }
       }
 
@@ -74,41 +71,51 @@ const getConnections = (persons: PersonType[], relationships: RelationshipType[]
         (isPerson(p.motherId) && p.motherId === person.motherId)
 
       if (isSibling) {
-        siblings[person.id].push(p.id)
+        siblings[person.id].add(p.id)
       }
-    }
+    })
 
-    for (const relationship of relationships) {
+    relationships.forEach((relationship) => {
       const [firstPersonId, secondPersonId] = relationship.persons
 
       if ([firstPersonId, secondPersonId].includes(person.id) === false) {
-        continue
+        return
       }
 
       const otherPersonId = firstPersonId === person.id ? secondPersonId : firstPersonId
 
       // only add spouses
       if (relationship.relationshipType === 'spouse') {
-        spouses[person.id].push(otherPersonId)
+        spouses[person.id].add(otherPersonId)
       }
-    }
+    })
 
-    parents[person.id] = [...new Set(parents[person.id])]
-    spouses[person.id] = [...new Set(spouses[person.id])]
-    children[person.id] = [...new Set(children[person.id])]
-    siblings[person.id] = [...new Set(siblings[person.id])]
-    descendants[person.id] = [...new Set(findDescendants(person.id))]
-    ancestors[person.id] = [...new Set(findAncestors(person.id))]
-  }
+    descendants[person.id] = findDescendants(person.id)
+    ancestors[person.id] = findAncestors(person.id)
+  })
 
-  return {
+  const connections = Object.entries({
     parents,
     spouses,
     children,
     siblings,
     descendants,
     ancestors,
-  }
+  }).reduce(
+    (acc, [key, value]) => {
+      acc[key] = Object.entries(value).reduce(
+        (result, [personId, connection]) => {
+          result[personId] = Array.from(connection)
+          return result
+        },
+        {} as Record<PersonIdType, PersonIdType[]>,
+      )
+      return acc
+    },
+    {} as Record<string, Record<PersonIdType, PersonIdType[]>>,
+  )
+
+  return connections
 }
 
 export default getConnections
