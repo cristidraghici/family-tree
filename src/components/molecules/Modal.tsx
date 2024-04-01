@@ -1,5 +1,8 @@
-import { ReactNode, FunctionComponent, ComponentProps, useRef, useEffect } from 'react'
+import { ReactNode, FunctionComponent, ComponentProps, useRef } from 'react'
 import Condition from '@/components/atoms/ConditionalElement'
+
+import useKeyPress from '@/hooks/useKeyPress'
+import useOutsideClick from '@/hooks/useOutsideClick'
 
 const Modal: FunctionComponent<
   ComponentProps<'dialog'> & {
@@ -14,35 +17,21 @@ const Modal: FunctionComponent<
 > = ({ header, footer, className = '', isOpen, onEscape, children, ...props }) => {
   const modalRef = useRef<HTMLDialogElement>(null)
 
-  useEffect(() => {
-    if (!onEscape) {
-      return
+  useKeyPress(['Escape'], () => {
+    if (onEscape && isOpen) {
+      onEscape()
     }
+  })
 
-    const overlayElement = modalRef.current
-
-    if (!overlayElement) {
-      return
+  useOutsideClick(modalRef, () => {
+    if (onEscape && isOpen) {
+      onEscape()
     }
-
-    const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onEscape()
-      }
-    }
-
-    // Add the event listener when the component mounts
-    window.addEventListener('keydown', handleEscapeKey)
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      window.removeEventListener('keydown', handleEscapeKey)
-    }
-  }, [onEscape])
+  })
 
   return (
-    <dialog className={`Modal ${className}`} open={isOpen} ref={modalRef}>
-      <article {...props}>
+    <dialog className={`Modal ${className}`} open={isOpen}>
+      <article {...props} ref={modalRef}>
         <Condition condition={!!header} as="header">
           {header}
         </Condition>
