@@ -7,7 +7,7 @@ import Condition from '@/components/atoms/ConditionalElement'
 import FormInput from '@/components/atoms/FormInput'
 import FormSelect from '@/components/atoms/FormSelect'
 import FormTextarea from '@/components/atoms/FormTextarea'
-import TextWithConfirmedAction from '@/components/atoms/TextWithConfirmedAction'
+import TextWithConfirmedAction from '@/components/molecules/TextWithConfirmedAction'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
