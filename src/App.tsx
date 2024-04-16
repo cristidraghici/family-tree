@@ -32,11 +32,11 @@ const App = () => {
     <>
       <Header />
       <main className="Main">
-        <Condition condition={!!error} as="main" className="Main container-fluid">
+        <Condition condition={!!error} as="section" className="Main container-fluid">
           {error}
         </Condition>
 
-        <Condition as="main" condition={!error} className="Main container-fluid">
+        <Condition as="section" condition={!error} className="Main container-fluid">
           <div className="Controls Controls--horizontal">
             <ToggleButtons
               className="Controls_ToggleView"
