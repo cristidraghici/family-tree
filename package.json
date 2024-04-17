@@ -18,7 +18,10 @@
     "test": "vitest --watch=false",
     "test:watch": "vitest --watch=true",
     "test:coverage": "vitest --coverage --watch=false",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:test": "start-server-and-test dev http://localhost:5173 'npm run cy:run'"
   },
   "dependencies": {
     "@picocss/pico": "^2.0.0-rc3",
@@ -29,6 +32,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^10.0.1",
     "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
@@ -42,6 +46,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.5.0",
     "@vitest/ui": "^1.5.0",
+    "cypress": "^13.7.3",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -50,6 +55,7 @@
     "jsdom": "^24.0.0",
     "prettier": "^3.2.4",
     "sass": "^1.70.0",
+    "start-server-and-test": "^2.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-svgr": "^4.2.0",

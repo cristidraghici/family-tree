@@ -23,9 +23,9 @@
     /* Custom */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-    },
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src", "vitest.setup.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "include": ["src", "cypress", "cypress.config.ts", "vitest.setup.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
