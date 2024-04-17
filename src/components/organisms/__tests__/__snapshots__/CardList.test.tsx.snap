@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CardList > renders correctly 1`] = `
+<div>
+  <article>
+    No persons found.
+  </article>
+</div>
+`;

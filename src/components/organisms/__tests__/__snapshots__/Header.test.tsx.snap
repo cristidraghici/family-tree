@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Header > renders correctly 1`] = `
+<div>
+  <header
+    class="Header"
+  >
+    <mark
+      class="DataWarning"
+    >
+      <small>
+        <span>
+          Be aware that we currently use your browser's memory to store the data.
+        </span>
+      </small>
+    </mark>
+    <nav
+      class="Nav"
+    >
+      <div
+        class="Logo"
+      >
+        <h1>
+          Family tree
+        </h1>
+        <a
+          href="https://cristidraghici.github.io/family-tree/"
+        >
+          <img
+            alt="Family tree"
+            src="/src/assets/tree.svg"
+            width="44"
+          />
+        </a>
+      </div>
+      <div
+        class="Hamburger Hamburger--closed"
+      >
+        <div />
+        <div />
+        <div />
+      </div>
+    </nav>
+  </header>
+</div>
+`;

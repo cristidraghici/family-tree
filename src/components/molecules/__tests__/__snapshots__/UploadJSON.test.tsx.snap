@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`UploadJSON > renders correctly 1`] = `
+<div>
+  <form>
+    <input
+      accept=".json"
+      id="fileInput"
+      type="file"
+    />
+  </form>
+</div>
+`;
