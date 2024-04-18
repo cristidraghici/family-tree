@@ -1,10 +1,10 @@
-import { FunctionComponent, useEffect, useRef } from 'react'
+import { FunctionComponent, useEffect, useRef, useMemo } from 'react'
 import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
 import type { PersonIdType, PositionsType } from '@/types'
-import { CanvasChangePositionEndHandler } from '@/utils/canvas/types'
+import { CanvasChangePositionEndHandler, ConnectionType } from '@/utils/canvas/types'
 
 import debounce from '@/utils/debounce'
 
@@ -18,6 +18,51 @@ const FamilyTree: FunctionComponent = () => {
     (data) => updatePositions(data as unknown as PositionsType[]),
     100,
   )
+
+  const getMarriageId = (firstId: PersonIdType, secondId: PersonIdType) => {
+    return [firstId, secondId].sort().join('-') as PersonIdType
+  }
+
+  // Marriages are represented as smaller boxes on the canvas, so they can be extracted
+  // separately for easier drawing and connection management
+  const marriages = useMemo(() => {
+    const marriages: Record<string, string[]> = {}
+
+    filteredPersons.forEach(({ id, fatherId, motherId, spouses }) => {
+      if (fatherId && motherId) {
+        marriages[getMarriageId(fatherId, motherId)] = [fatherId, motherId]
+      }
+
+      spouses.forEach((spouseId) => {
+        marriages[[id, spouseId].sort().join('-')] = [id, spouseId]
+      })
+    })
+
+    return marriages
+  }, [filteredPersons])
+
+  const connections = useMemo(() => {
+    const connections: Record<string, [PersonIdType, PersonIdType, ConnectionType]> = {}
+
+    filteredPersons.forEach(({ id, fatherId, motherId, spouses }) => {
+      if (fatherId && motherId) {
+        const marriageId = getMarriageId(fatherId, motherId)
+
+        connections[getMarriageId(id, marriageId)] = [id, marriageId, 'blood']
+
+        connections[getMarriageId(fatherId, marriageId)] = [fatherId, marriageId, 'spouse']
+        connections[getMarriageId(motherId, marriageId)] = [motherId, marriageId, 'spouse']
+      }
+
+      spouses.forEach((spouseId) => {
+        const marriageId = getMarriageId(id, spouseId)
+        connections[getMarriageId(id, marriageId)] = [id, marriageId, 'spouse']
+        connections[getMarriageId(spouseId, marriageId)] = [spouseId, marriageId, 'spouse']
+      })
+    })
+
+    return connections
+  }, [filteredPersons])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -44,39 +89,17 @@ const FamilyTree: FunctionComponent = () => {
 
       if (canvasUtil) {
         // canvasUtil.reset()
-        canvasUtil.draw()
 
-        filteredPersons.forEach(({ id, fullName, generation, fatherId, motherId, spouses }) => {
+        filteredPersons.forEach(({ id, fullName, generation }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
+        })
 
-          // add both parents if they exist
-          if (fatherId && motherId) {
-            const marriageId = [fatherId, motherId].sort().join('-') as PersonIdType
+        Object.keys(marriages).forEach((marriageId) => {
+          canvasUtil.addBox({ id: marriageId, text: '' })
+        })
 
-            canvasUtil.addBox({ id: marriageId, text: '' })
-
-            canvasUtil.addConnection(id, marriageId, 'blood')
-            canvasUtil.addConnection(fatherId, marriageId, 'spouse')
-            canvasUtil.addConnection(motherId, marriageId, 'spouse')
-          }
-
-          // add parent if only one exists
-          if ((fatherId || motherId) && (!fatherId || !motherId)) {
-            const parentId = fatherId || motherId
-            // the if block should not be necessary, one always has a value
-            if (parentId) {
-              canvasUtil.addConnection(id, parentId, 'blood')
-            }
-          }
-
-          // add spouse if they exist
-          spouses.forEach((spouseId) => {
-            const marriageId = [id, spouseId].sort().join('-') as PersonIdType
-            canvasUtil.addBox({ id: marriageId, text: '' })
-
-            canvasUtil.addConnection(id, marriageId, 'spouse')
-            canvasUtil.addConnection(spouseId, marriageId, 'spouse')
-          })
+        Object.entries(connections).forEach(([, [firstId, secondId, type]]) => {
+          canvasUtil.addConnection(firstId, secondId, type)
         })
 
         canvasUtil.draw()
@@ -84,7 +107,7 @@ const FamilyTree: FunctionComponent = () => {
     }
 
     drawFamilyTree()
-  }, [filteredPersons])
+  }, [filteredPersons, marriages, connections])
 
   return <canvas className="Canvas" ref={canvasRef} />
 }
