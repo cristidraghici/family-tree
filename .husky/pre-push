@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Stop here if we are in the pipeline
+[ -n "$CI" ] && exit 0
+
 npm run test
+npm run cy:test
+
 npm run build
