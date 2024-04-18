@@ -60,6 +60,7 @@ class CanvasManager {
     this.context.moveTo(startX, startY)
     this.context.lineTo(endX, endY)
     this.context.stroke()
+    this.context.setLineDash([])
   }
 
   public drawAngledLine({
