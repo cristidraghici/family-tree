@@ -43,13 +43,8 @@ const FamilyTree: FunctionComponent = () => {
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
-        // if (filteredPersons.length === 0) {
-        //   canvasUtil.reset()
-        //   canvasUtil.draw()
-        //   return
-        // }
-
         // canvasUtil.reset()
+        canvasUtil.draw()
 
         filteredPersons.forEach(({ id, fullName, generation, fatherId, motherId, spouses }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
@@ -76,7 +71,11 @@ const FamilyTree: FunctionComponent = () => {
 
           // add spouse if they exist
           spouses.forEach((spouseId) => {
-            canvasUtil.addConnection(id, spouseId, 'spouse')
+            const marriageId = [id, spouseId].sort().join('-') as PersonIdType
+            canvasUtil.addBox({ id: marriageId, text: '' })
+
+            canvasUtil.addConnection(id, marriageId, 'spouse')
+            canvasUtil.addConnection(spouseId, marriageId, 'spouse')
           })
         })
 
