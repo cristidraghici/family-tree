@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { registrySchema } from '@/schemas'
 import { hasTreeStorage, getTreeStorage } from '@/utils/treeStorageUtil'
 
@@ -58,11 +58,14 @@ const useGetRegistryData = () => {
     }
   }, [])
 
-  return {
-    registryData,
-    error,
-    loadRegistryData,
-  }
+  return useMemo(
+    () => ({
+      registryData,
+      error,
+      loadRegistryData,
+    }),
+    [registryData, error],
+  )
 }
 
 export default useGetRegistryData

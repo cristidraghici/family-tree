@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback, FunctionComponent, PropsWithChildren } from 'react'
+import { createContext, useState, useCallback, FunctionComponent, PropsWithChildren, useMemo } from 'react'
 
 import useGetRegistryData, {
   initialReturnValue as initialUseGetRegistryData,
@@ -68,16 +68,21 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
     [personsRegistry.persons],
   )
 
+  const contextValue = useMemo(
+        () => ({
+          ...getRegistryData,
+          ...personsRegistry,
+
+          selectedPerson,
+          handleSelectPerson,
+          setSearch,
+        }),
+        [getRegistryData, personsRegistry, selectedPerson, handleSelectPerson, setSearch],
+      )
+
   return (
     <PersonContext.Provider
-      value={{
-        ...getRegistryData,
-        ...personsRegistry,
-
-        selectedPerson,
-        handleSelectPerson,
-        setSearch,
-      }}
+      value={contextValue}
     >
       {children}
     </PersonContext.Provider>

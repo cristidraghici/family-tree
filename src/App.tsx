@@ -52,6 +52,7 @@ const App = () => {
             <input
               className="Search"
               type="search"
+              aria-label="Search persons"
               ref={searchRef}
               onChange={(e) => {
                 e.preventDefault()

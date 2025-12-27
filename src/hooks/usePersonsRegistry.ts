@@ -64,7 +64,7 @@ const usePersonRegistry = ({
     setPositions(rawPositions || [])
   }, [rawPersons, rawRelationships, rawPositions])
 
-  const getNextId = (): PersonIdType => {
+  const getNextId = useCallback((): PersonIdType => {
     let id: PersonIdType
 
     do {
@@ -72,7 +72,7 @@ const usePersonRegistry = ({
     } while (persons.some((person) => person.id === id))
 
     return id
-  }
+  }, [persons])
 
   const getById = useCallback(
     (id?: PersonIdType): PersonType | undefined => {
@@ -154,36 +154,45 @@ const usePersonRegistry = ({
       )
   }, [persons, generations, connections, getById])
 
-  const addPerson = (person: PersonType) => {
-    const id = person.id === 'new' ? getNextId() : person.id
-    const newPersons = [...persons.filter((p) => p.id !== person.id), { ...person, id }]
+  const addPerson = useCallback(
+    (person: PersonType) => {
+      const id = person.id === 'new' ? getNextId() : person.id
+      const newPersons = [...persons.filter((p) => p.id !== person.id), { ...person, id }]
 
-    setPersons(newPersons)
-    setTreeStorage({ persons: newPersons, relationships, positions })
-  }
+      setPersons(newPersons)
+      setTreeStorage({ persons: newPersons, relationships, positions })
+    },
+    [persons, relationships, positions, getNextId],
+  )
 
-  const removePerson = (personId: PersonIdType) => {
-    const newPersons = persons
-      .filter((person) => person.id !== personId)
-      .map((person) => ({
-        ...person,
-        fatherId: person.fatherId === personId ? '' : person.fatherId,
-        motherId: person.motherId === personId ? '' : person.motherId,
-      }))
+  const removePerson = useCallback(
+    (personId: PersonIdType) => {
+      const newPersons = persons
+        .filter((person) => person.id !== personId)
+        .map((person) => ({
+          ...person,
+          fatherId: person.fatherId === personId ? '' : person.fatherId,
+          motherId: person.motherId === personId ? '' : person.motherId,
+        }))
 
-    const newRelationships = relationships.filter((relationship) =>
-      relationship.persons.includes(personId),
-    )
+      const newRelationships = relationships.filter((relationship) =>
+        relationship.persons.includes(personId),
+      )
 
-    setPersons(newPersons)
-    setRelationships(newRelationships)
-    setTreeStorage({ persons: newPersons, relationships: newRelationships, positions })
-  }
+      setPersons(newPersons)
+      setRelationships(newRelationships)
+      setTreeStorage({ persons: newPersons, relationships: newRelationships, positions })
+    },
+    [persons, relationships, positions],
+  )
 
-  const updatePositions = (newPositions: PositionsType[]) => {
-    setPositions(newPositions)
-    setTreeStorage({ persons, relationships, positions: newPositions })
-  }
+  const updatePositions = useCallback(
+    (newPositions: PositionsType[]) => {
+      setPositions(newPositions)
+      setTreeStorage({ persons, relationships, positions: newPositions })
+    },
+    [persons, relationships],
+  )
 
   const registry = useMemo(() => {
     const registryData = {
@@ -194,41 +203,57 @@ const usePersonRegistry = ({
     return registryData
   }, [persons, relationships, positions])
 
-  const saveAll = ({ persons, relationships, positions }: RegistryType) => {
+  const saveAll = useCallback(({ persons, relationships, positions }: RegistryType) => {
     setTreeStorage({ persons, relationships, positions })
-  }
+  }, [])
 
-  const clearAll = () => {
+  const clearAll = useCallback(() => {
     setPersons([])
     setRelationships([])
     setPositions([])
 
     setTreeStorage({ persons: [], relationships: [], positions: [] })
-  }
+  }, [])
 
-  return {
-    getNextId,
+  return useMemo(
+    () => ({
+      getNextId,
 
-    persons: extendedPersons,
-    filteredPersons: extendedPersons.filter((person) =>
-      person.fullName.toLowerCase().includes(search.toLowerCase()),
-    ),
-    addPerson,
-    removePerson,
-    setPersons,
+      persons: extendedPersons,
+      filteredPersons: extendedPersons.filter((person) =>
+        person.fullName.toLowerCase().includes(search.toLowerCase()),
+      ),
+      addPerson,
+      removePerson,
+      setPersons,
 
-    positions,
-    setPositions,
-    updatePositions,
+      positions,
+      setPositions,
+      updatePositions,
 
-    relationships,
-    setRelationships,
+      relationships,
+      setRelationships,
 
-    isDemoData: isDemoData(persons, relationships),
-    registry,
-    saveAll,
-    clearAll,
-  }
+      isDemoData: isDemoData(persons, relationships),
+      registry,
+      saveAll,
+      clearAll,
+    }),
+    [
+      getNextId,
+      extendedPersons,
+      search,
+      positions,
+      updatePositions,
+      relationships,
+      registry,
+      saveAll,
+      clearAll,
+      persons,
+      addPerson,
+      removePerson,
+    ],
+  )
 }
 
 export default usePersonRegistry
