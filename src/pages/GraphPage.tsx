@@ -115,6 +115,7 @@ const GraphPage: FunctionComponent = () => {
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
+        canvasUtil.reset()
         persons.forEach(({ id, fullName, generation }) => {
           const isHighlighted =
             search.length > 0 && fullName.toLowerCase().includes(search.toLowerCase())

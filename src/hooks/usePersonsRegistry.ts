@@ -185,13 +185,20 @@ const usePersonRegistry = ({
           motherId: person.motherId === personId ? '' : person.motherId,
         }))
 
-      const newRelationships = relationships.filter((relationship) =>
-        relationship.persons.includes(personId),
+      const newRelationships = relationships.filter(
+        (relationship) => !relationship.persons.includes(personId),
       )
+
+      const newPositions = positions.filter((position) => position.id !== personId)
 
       setPersons(newPersons)
       setRelationships(newRelationships)
-      setTreeStorage({ persons: newPersons, relationships: newRelationships, positions })
+      setPositions(newPositions)
+      setTreeStorage({
+        persons: newPersons,
+        relationships: newRelationships,
+        positions: newPositions,
+      })
     },
     [persons, relationships, positions],
   )
