@@ -1,20 +1,30 @@
-import z from 'zod'
+import { z } from 'zod'
 
-export const personIdSchema = z.string().uuid()
+export const personIdSchema = z.union([z.string().uuid(), z.literal('new')])
 
 export const personSchema = z.object({
   id: personIdSchema,
 
-  firstName: z.string().min(2).max(30),
-  lastName: z.string().min(2).max(30),
+  firstName: z
+    .string()
+    .trim()
+    .min(2, 'First name must be at least 2 characters')
+    .max(30, 'First name must be at most 30 characters'),
+  lastName: z
+    .string()
+    .trim()
+    .min(2, 'Last name must be at least 2 characters')
+    .max(30, 'Last name must be at most 30 characters'),
 
-  biologicalGender: z.enum(['male', 'female']),
+  biologicalGender: z.enum(['male', 'female'], {
+    message: 'Please select a gender',
+  }),
 
-  fatherId: z.string().optional(), //z.string().uuid().optional(),
-  motherId: z.string().optional(), //z.string().uuid().optional(),
+  fatherId: z.string().optional(),
+  motherId: z.string().optional(),
 
-  biography: z.string().optional(), //z.string().min(2).max(1000).optional(),
-  notes: z.string().optional(), // z.string().min(2).max(1000).optional(),
+  biography: z.string().max(10000, 'Biography must be at most 10000 characters').optional(),
+  notes: z.string().max(10000, 'Notes must be at most 10000 characters').optional(),
 })
 
 export const relationshipIdSchema = z.string().uuid()

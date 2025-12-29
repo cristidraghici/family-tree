@@ -1,6 +1,9 @@
 import { FunctionComponent, ComponentProps, useEffect } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 
+import { zodResolver } from '@hookform/resolvers/zod'
+import { personSchema } from '@/schemas'
+
 import Modal from '@/components/molecules/Modal'
 import Condition from '@/components/atoms/ConditionalElement'
 
@@ -23,6 +26,7 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
     reset,
     formState: { errors },
   } = useForm<PersonType>({
+    resolver: zodResolver(personSchema),
     defaultValues: selectedPerson || {},
   })
 
@@ -112,21 +116,21 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
         <div className="rows">
           <FormInput
             id="firstName"
-            label="First name"
+            label="First name *"
             error={errors.firstName?.message}
             register={register}
           />
 
           <FormInput
             id="lastName"
-            label="Last name"
+            label="Last name *"
             error={errors.lastName?.message}
             register={register}
           />
 
           <FormSelect
             id="biologicalGender"
-            label="Gender"
+            label="Gender *"
             error={errors.biologicalGender?.message}
             options={[
               { value: 'male', label: 'Male' },

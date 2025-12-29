@@ -24,13 +24,14 @@
     "cy:test": "start-server-and-test dev http://localhost:5173 'npm run cy:run'"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "@picocss/pico": "^2.0.0-rc3",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.69.0",
     "react-router-dom": "^7.11.0",
     "uuid": "^9.0.1",
-    "zod": "^3.22.4"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@testing-library/cypress": "^10.0.1",
