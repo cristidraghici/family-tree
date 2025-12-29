@@ -64,22 +64,48 @@ const GraphPage: FunctionComponent = () => {
     return connections
   }, [filteredPersons])
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const canvas = canvasRef.current
-    const canvasUtil = canvasUtilRef.current
+    if (!canvas) return
 
-    if (canvas && !canvasUtil) {
+    if (!canvasUtilRef.current) {
       canvasUtilRef.current = new CanvasUtil({ canvas })
     }
 
-    canvasUtilRef.current?.init({
+    const canvasUtil = canvasUtilRef.current
+
+    canvasUtil.init({
       onDblClick: handleSelectPerson,
       initialPositions: positions,
-      onCanvasChangePositionEnd: handleUpdatePositions as CanvasChangePositionEndHandler, // TODO: check this to ensure it's correct
+      onCanvasChangePositionEnd: handleUpdatePositions as CanvasChangePositionEndHandler,
     })
 
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        // 1. Update container height to fill viewport
+        const rect = containerRef.current.getBoundingClientRect()
+        const availableHeight = window.innerHeight - rect.top - 20
+        containerRef.current.style.height = `${Math.max(availableHeight, 400)}px`
+        
+        // 2. Sync canvas internal resolution
+        canvasUtil.resize()
+      }
+    }
+
+    // Single observer for any size changes (browser resize, sidebar toggle, etc)
+    const resizeObserver = new ResizeObserver(updateDimensions)
+    resizeObserver.observe(document.body) // Observe body to capture viewport changes logically
+    
+    // Initial sync
+    updateDimensions()
+    document.body.style.overflow = 'hidden'
+
     return () => {
-      canvasUtilRef.current?.destroy()
+      canvasUtil.destroy()
+      resizeObserver.disconnect()
+      document.body.style.overflow = ''
     }
   }, [positions, handleSelectPerson, handleUpdatePositions])
 
@@ -88,8 +114,6 @@ const GraphPage: FunctionComponent = () => {
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
-        // canvasUtil.reset()
-
         filteredPersons.forEach(({ id, fullName, generation }) => {
           canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
         })
@@ -118,7 +142,7 @@ const GraphPage: FunctionComponent = () => {
   }
 
   return (
-    <div className="GraphPage">
+    <div className="GraphPage" ref={containerRef}>
       <div className="GraphPage_Controls">
         <button type="button" onClick={handleAutoLayout} title="Auto Layout">
           Auto Layout

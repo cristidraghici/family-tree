@@ -70,6 +70,11 @@ class CanvasUtil {
     this.drawUtils.autoLayout()
   }
 
+  public resize() {
+    this.canvasManager.updateCanvasSize()
+    this.draw()
+  }
+
   public reset() {
     this.boxManager.reset()
   }
