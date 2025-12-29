@@ -20,7 +20,7 @@ import { PersonType, NewPersonType } from '@/types'
 type PersonContextType = ReturnType<typeof useGetRegistryData> &
   ReturnType<typeof usePersonsRegistry> & {
     selectedPerson: PersonType | NewPersonType | null
-    handleSelectPerson: (personId: string) => void
+    handleSelectPerson: (personId: string, coordinates?: { x: number; y: number }) => void
     setSearch: (text: string) => void
     search: string
   }
@@ -52,7 +52,7 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
   const [selectedPerson, setSelectedPerson] = useState<PersonType | NewPersonType | null>(null)
 
   const handleSelectPerson = useCallback(
-    (personId: string) => {
+    (personId: string, coordinates?: { x: number; y: number }) => {
       if (!personId) {
         setSelectedPerson(null)
         return
@@ -61,6 +61,7 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
       if (personId === 'new') {
         setSelectedPerson({
           id: 'new',
+          ...coordinates,
         })
         return
       }

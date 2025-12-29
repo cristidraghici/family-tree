@@ -14,7 +14,7 @@ import TextWithConfirmedAction from '@/components/molecules/TextWithConfirmedAct
 
 import usePersonContext from '@/hooks/usePersonContext'
 
-import type { PersonType, PersonIdType } from '@/types'
+import type { PersonType, PersonIdType, NewPersonType } from '@/types'
 
 const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
   const { selectedPerson, persons, handleSelectPerson, removePerson, addPerson } =
@@ -27,7 +27,7 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
     formState: { errors },
   } = useForm<PersonType>({
     resolver: zodResolver(personSchema),
-    defaultValues: selectedPerson || {},
+    defaultValues: (selectedPerson as PersonType) || {},
   })
 
   useEffect(() => {
@@ -36,7 +36,7 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
       return
     }
 
-    reset(selectedPerson)
+    reset(selectedPerson as PersonType)
 
     return () => {
       reset({})
@@ -61,7 +61,8 @@ const PersonsModal: FunctionComponent<ComponentProps<'form'>> = () => {
   }
 
   const onSubmit: SubmitHandler<PersonType> = (data) => {
-    addPerson(data)
+    const { x, y } = (selectedPerson as NewPersonType) || {}
+    addPerson(data, x !== undefined && y !== undefined ? { x, y } : undefined)
     reset({})
     handleSelectPerson('')
   }

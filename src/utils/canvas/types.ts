@@ -36,5 +36,5 @@ export type Line = {
 }
 
 // Events
-export type BoxClickHandler = (id: BoxId) => void
+export type BoxClickHandler = (id: BoxId, coordinates?: { x: X; y: Y }) => void
 export type CanvasChangePositionEndHandler = <T>(data: T) => void

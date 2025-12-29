@@ -23,6 +23,8 @@ export type PositionsType = z.infer<typeof positionsSchema>
 
 export type NewPersonType = {
   id: PersonIdType
+  x?: X
+  y?: Y
 }
 
 export type ExtendedPersonType = PersonType & {

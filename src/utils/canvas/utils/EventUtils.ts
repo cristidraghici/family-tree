@@ -111,6 +111,8 @@ class EventUtils {
 
     if (clickedBoxId) {
       this.onDblClick(clickedBoxId)
+    } else {
+      this.onDblClick('new', { x: mouseX, y: mouseY })
     }
   }
 

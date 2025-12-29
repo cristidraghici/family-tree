@@ -15,6 +15,8 @@ import {
   ExtendedPersonType,
   PositionsType,
   RegistryType,
+  X,
+  Y,
 } from '@/types'
 
 interface PersonsRegistryProps {
@@ -155,12 +157,20 @@ const usePersonRegistry = ({
   }, [persons, generations, connections, getById])
 
   const addPerson = useCallback(
-    (person: PersonType) => {
+    (person: PersonType, coordinates?: { x: X; y: Y }) => {
       const id = person.id === 'new' ? getNextId() : person.id
       const newPersons = [...persons.filter((p) => p.id !== person.id), { ...person, id }]
 
+      let newPositions = positions
+      if (coordinates) {
+        newPositions = [...positions.filter((p) => p.id !== id), { id, ...coordinates }]
+      }
+
       setPersons(newPersons)
-      setTreeStorage({ persons: newPersons, relationships, positions })
+      if (coordinates) {
+        setPositions(newPositions)
+      }
+      setTreeStorage({ persons: newPersons, relationships, positions: newPositions })
     },
     [persons, relationships, positions, getNextId],
   )
