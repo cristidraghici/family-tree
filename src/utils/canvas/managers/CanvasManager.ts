@@ -164,18 +164,43 @@ class CanvasManager {
     const wheel = deltaY < 0 ? 1 : -1
     const zoom = Math.exp(wheel * zoomIntensity)
 
+    this.applyZoom(zoom, clientX, clientY)
+  }
+
+  private applyZoom(zoom: number, clientX?: X, clientY?: Y) {
     const newScale = this.scaleFactor * zoom
 
     if (newScale < 0.1 || newScale > 10) return
 
-    const { left, top } = this.canvas.getBoundingClientRect()
-    const mouseX = clientX - left
-    const mouseY = clientY - top
+    let mouseX, mouseY
 
-    // Adjust offset to zoom around mouse position
+    if (clientX !== undefined && clientY !== undefined) {
+      const { left, top } = this.canvas.getBoundingClientRect()
+      mouseX = clientX - left
+      mouseY = clientY - top
+    } else {
+      mouseX = this.canvas.width / 2
+      mouseY = this.canvas.height / 2
+    }
+
+    // Adjust offset to zoom around specified position (default to center)
     this.offsetX = mouseX - (mouseX - this.offsetX) * zoom
     this.offsetY = mouseY - (mouseY - this.offsetY) * zoom
     this.scaleFactor = newScale
+  }
+
+  public zoomIn() {
+    this.applyZoom(Math.exp(0.1))
+  }
+
+  public zoomOut() {
+    this.applyZoom(Math.exp(-0.1))
+  }
+
+  public resetView() {
+    this.scaleFactor = 1
+    this.offsetX = 0
+    this.offsetY = 0
   }
 
   public getMousePosition(event: MouseEvent) {

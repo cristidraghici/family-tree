@@ -75,6 +75,21 @@ class CanvasUtil {
     this.draw()
   }
 
+  public resetView() {
+    this.canvasManager.resetView()
+    this.draw()
+  }
+
+  public zoomIn() {
+    this.canvasManager.zoomIn()
+    this.draw()
+  }
+
+  public zoomOut() {
+    this.canvasManager.zoomOut()
+    this.draw()
+  }
+
   public reset() {
     this.boxManager.reset()
   }

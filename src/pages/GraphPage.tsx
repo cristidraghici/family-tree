@@ -7,6 +7,7 @@ import type { PersonIdType, PositionsType } from '@/types'
 import { CanvasChangePositionEndHandler, ConnectionType } from '@/utils/canvas/types'
 
 import debounce from '@/utils/debounce'
+import { PlusIcon, MinusIcon, ResetIcon, LayoutIcon } from '@/components/atoms/Icons'
 
 const GraphPage: FunctionComponent = () => {
   const { persons, search, handleSelectPerson, positions, updatePositions } = usePersonContext()
@@ -143,11 +144,34 @@ const GraphPage: FunctionComponent = () => {
     }
   }
 
+  const handleZoomIn = () => {
+    canvasUtilRef.current?.zoomIn()
+  }
+
+  const handleZoomOut = () => {
+    canvasUtilRef.current?.zoomOut()
+  }
+
+  const handleResetView = () => {
+    canvasUtilRef.current?.resetView()
+  }
+
   return (
     <div className="GraphPage" ref={containerRef}>
-      <div className="GraphPage_Controls">
+      <div className="GraphPage_Controls GraphPage_Controls--left">
+        <button type="button" onClick={handleZoomIn} title="Zoom In">
+          <PlusIcon />
+        </button>
+        <button type="button" onClick={handleZoomOut} title="Zoom Out">
+          <MinusIcon />
+        </button>
+        <button type="button" onClick={handleResetView} title="Reset View">
+          <ResetIcon size={18} />
+        </button>
+      </div>
+      <div className="GraphPage_Controls GraphPage_Controls--right">
         <button type="button" onClick={handleAutoLayout} title="Auto Layout">
-          Auto Layout
+          <LayoutIcon size={18} />
         </button>
       </div>
       <canvas className="Canvas" ref={canvasRef} />
