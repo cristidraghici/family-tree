@@ -35,10 +35,12 @@
 }
 
 :root {
-  --pico-typography-spacing-vertical: 1.5rem;
-  --pico-form-element-spacing-vertical: 1rem;
-  --pico-form-element-spacing-horizontal: 1.25rem;
+  --pico-typography-spacing-vertical: 1rem;
+  --pico-form-element-spacing-vertical: 0.75rem;
+  --pico-form-element-spacing-horizontal: 1rem;
   --pico-font-family: Arial, Helvetica, sans-serif;
+  --pico-block-spacing-vertical: 1rem;
+  --pico-block-spacing-horizontal: 1rem;
 
   --pico-font-size: 100%;
 }
