@@ -14,7 +14,7 @@ import debounce from '@/utils/debounce'
 import ToggleButtons from './components/atoms/ToggleButtons'
 
 const App = () => {
-  const { error, handleSelectPerson, setSearch } = usePersonContext()
+  const { error, handleSelectPerson, setSearch, search, filteredPersons } = usePersonContext()
 
   const searchRef = useRef<HTMLInputElement>(null)
 
@@ -58,16 +58,26 @@ const App = () => {
               setValue={handleViewChange}
             />
 
-            <input
-              className="Search"
-              type="search"
-              aria-label="Search persons"
-              ref={searchRef}
-              onChange={(e) => {
-                e.preventDefault()
-                handleSetSearch(e.target.value)
-              }}
-            />
+            <div className="SearchContainer">
+              <input
+                className="Search"
+                type="search"
+                aria-label="Search persons"
+                ref={searchRef}
+                onChange={(e) => {
+                  e.preventDefault()
+                  handleSetSearch(e.target.value)
+                }}
+              />
+              {search && (
+                <div className="Search_ResultsCount">
+                  <small>
+                    {filteredPersons.length} result
+                    {filteredPersons.length !== 1 ? 's' : ''} found
+                  </small>
+                </div>
+              )}
+            </div>
 
             <fieldset className="Controls_AddButton" role="group">
               <button type="button" onClick={() => handleSelectPerson('new')}>

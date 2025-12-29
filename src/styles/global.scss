@@ -159,6 +159,36 @@
         flex-direction: row;
       }
     }
+
+    .SearchContainer {
+      width: 100%;
+      position: relative;
+      flex: 1;
+      margin-bottom: var(--pico-spacing);
+
+      @media screen and (min-width: 768px) {
+        margin-bottom: 0;
+      }
+
+      .Search {
+        margin-bottom: 0;
+      }
+
+      .Search_ResultsCount {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        padding-top: 0.1rem;
+        color: var(--pico-muted-color);
+        font-size: 0.75rem;
+        line-height: 1;
+        z-index: 1;
+
+        small {
+          color: inherit;
+        }
+      }
+    }
   }
 }
 
