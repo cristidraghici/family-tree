@@ -6,89 +6,140 @@ import {
   PropsWithChildren,
   useMemo,
 } from 'react'
+import useTreeData from '@/hooks/useTreeData'
+import { getExtendedPersons } from '@/utils/persons/selectors'
+import {
+  PersonType,
+  NewPersonType,
+  PersonIdType,
+  RegistryType,
+  ExtendedPersonType,
+  PositionsType,
+  RelationshipType,
+  X,
+  Y,
+} from '@/types'
 
-import useGetRegistryData, {
-  initialReturnValue as initialUseGetRegistryData,
-} from '@/hooks/useGetRegistryData'
+type PersonContextType = {
+  // Data State
+  persons: ExtendedPersonType[]
+  filteredPersons: ExtendedPersonType[]
+  relationships: RelationshipType[]
+  positions: PositionsType[]
+  registry: RegistryType
 
-import usePersonsRegistry, {
-  initialReturnValue as initialUsePersonsRegistry,
-} from '@/hooks/usePersonsRegistry'
+  // UI State
+  selectedPerson: PersonType | NewPersonType | null
+  search: string
+  error: string | null
+  isDemoData: boolean
 
-import { PersonType, NewPersonType } from '@/types'
-
-type PersonContextType = ReturnType<typeof useGetRegistryData> &
-  ReturnType<typeof usePersonsRegistry> & {
-    selectedPerson: PersonType | NewPersonType | null
-    handleSelectPerson: (personId: string, coordinates?: { x: number; y: number }) => void
-    setSearch: (text: string) => void
-    search: string
-  }
-
-const initialContextValues: PersonContextType = {
-  ...initialUseGetRegistryData,
-  ...initialUsePersonsRegistry,
-
-  selectedPerson: null,
-  handleSelectPerson: () => {},
-  setSearch: () => {},
-  search: '',
+  // Actions
+  setSearch: (text: string) => void
+  handleSelectPerson: (personId: string, coordinates?: { x: X; y: Y }) => void
+  addPerson: (person: PersonType, coordinates?: { x: X; y: Y }) => void
+  removePerson: (personId: PersonIdType) => void
+  updatePositions: (positions: PositionsType[]) => void
+  loadRegistryData: (data: RegistryType) => void
+  saveAll: (data: RegistryType) => void
+  clearAll: () => void
 }
 
-export const PersonContext = createContext<PersonContextType>({ ...initialContextValues })
+const initialContextValues: Partial<PersonContextType> = {
+  persons: [],
+  filteredPersons: [],
+  relationships: [],
+  positions: [],
+  selectedPerson: null,
+  search: '',
+  error: null,
+  isDemoData: false,
+}
+
+export const PersonContext = createContext<PersonContextType>(
+  initialContextValues as PersonContextType,
+)
 
 export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [search, setSearch] = useState<string>('')
+  const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null)
+  const [dragCoordinates, setDragCoordinates] = useState<{ x: X; y: Y } | undefined>()
 
-  const getRegistryData = useGetRegistryData()
+  const {
+    registry,
+    error,
+    addPerson,
+    removePerson,
+    updatePositions,
+    clearAll,
+    isDemoData,
+    loadRegistryData,
+    saveAll,
+  } = useTreeData()
 
-  const personsRegistry = usePersonsRegistry({
-    persons: getRegistryData.registryData?.persons || [],
-    relationships: getRegistryData.registryData?.relationships || [],
-    positions: getRegistryData.registryData?.positions || [],
-    search,
-  })
-
-  const [selectedPerson, setSelectedPerson] = useState<PersonType | NewPersonType | null>(null)
-
-  const handleSelectPerson = useCallback(
-    (personId: string, coordinates?: { x: number; y: number }) => {
-      if (!personId) {
-        setSelectedPerson(null)
-        return
-      }
-
-      if (personId === 'new') {
-        setSelectedPerson({
-          id: 'new',
-          ...coordinates,
-        })
-        return
-      }
-
-      const person = personsRegistry.persons.find((person) => person.id === personId)
-
-      if (person) {
-        setSelectedPerson(person)
-        return
-      }
-
-      setSelectedPerson(null)
-    },
-    [personsRegistry.persons],
+  const extendedPersons = useMemo(
+    () => getExtendedPersons(registry.persons, registry.relationships || [], ''),
+    [registry.persons, registry.relationships],
   )
+
+  const filteredPersons = useMemo(
+    () =>
+      search
+        ? getExtendedPersons(registry.persons, registry.relationships || [], search)
+        : extendedPersons,
+    [registry.persons, registry.relationships, search, extendedPersons],
+  )
+
+  const selectedPerson = useMemo(() => {
+    if (selectedPersonId === 'new') {
+      return { id: 'new', ...dragCoordinates } as NewPersonType
+    }
+    return extendedPersons.find((p) => p.id === selectedPersonId) || null
+  }, [extendedPersons, selectedPersonId, dragCoordinates])
+
+  const handleSelectPerson = useCallback((personId: string, coordinates?: { x: X; y: Y }) => {
+    setSelectedPersonId(personId || null)
+    setDragCoordinates(coordinates)
+  }, [])
 
   const contextValue = useMemo(
     () => ({
-      ...getRegistryData,
-      ...personsRegistry,
+      persons: extendedPersons,
+      filteredPersons,
+      relationships: registry.relationships || [],
+      positions: registry.positions || [],
+      registry,
 
       selectedPerson,
-      handleSelectPerson,
-      setSearch,
       search,
+      error,
+      isDemoData,
+
+      setSearch,
+      handleSelectPerson,
+      addPerson,
+      removePerson,
+      updatePositions,
+      loadRegistryData,
+      saveAll,
+      clearAll,
     }),
-    [getRegistryData, personsRegistry, selectedPerson, handleSelectPerson, setSearch, search],
+    [
+      extendedPersons,
+      filteredPersons,
+      registry,
+      selectedPerson,
+      search,
+      error,
+      isDemoData,
+      handleSelectPerson,
+      addPerson,
+      removePerson,
+      updatePositions,
+      loadRegistryData,
+      saveAll,
+      clearAll,
+    ],
   )
 
   return <PersonContext.Provider value={contextValue}>{children}</PersonContext.Provider>
