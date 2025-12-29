@@ -5,6 +5,7 @@ export type BoxId = PositionIdType
 export type BoxMeta = {
   id: BoxId
   text: string
+  highlight?: boolean
 }
 export type BoxCoordinates = {
   x: X

@@ -15,6 +15,7 @@ type PersonContextType = ReturnType<typeof useGetRegistryData> &
     selectedPerson: PersonType | NewPersonType | null
     handleSelectPerson: (personId: string) => void
     setSearch: (text: string) => void
+    search: string
   }
 
 const initialContextValues: PersonContextType = {
@@ -24,6 +25,7 @@ const initialContextValues: PersonContextType = {
   selectedPerson: null,
   handleSelectPerson: () => {},
   setSearch: () => {},
+  search: '',
 }
 
 export const PersonContext = createContext<PersonContextType>({ ...initialContextValues })
@@ -76,8 +78,9 @@ export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children 
           selectedPerson,
           handleSelectPerson,
           setSearch,
+          search,
         }),
-        [getRegistryData, personsRegistry, selectedPerson, handleSelectPerson, setSearch],
+        [getRegistryData, personsRegistry, selectedPerson, handleSelectPerson, setSearch, search],
       )
 
   return (

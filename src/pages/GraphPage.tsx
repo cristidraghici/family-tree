@@ -9,7 +9,7 @@ import { CanvasChangePositionEndHandler, ConnectionType } from '@/utils/canvas/t
 import debounce from '@/utils/debounce'
 
 const GraphPage: FunctionComponent = () => {
-  const { filteredPersons, handleSelectPerson, positions, updatePositions } = usePersonContext()
+  const { persons, search, handleSelectPerson, positions, updatePositions } = usePersonContext()
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const canvasUtilRef = useRef<CanvasUtil | null>(null)
@@ -28,7 +28,7 @@ const GraphPage: FunctionComponent = () => {
   const marriages = useMemo(() => {
     const marriages: Record<string, string[]> = {}
 
-    filteredPersons.forEach(({ id, fatherId, motherId, spouses }) => {
+    persons.forEach(({ id, fatherId, motherId, spouses }) => {
       if (fatherId && motherId) {
         marriages[getMarriageId(fatherId, motherId)] = [fatherId, motherId]
       }
@@ -39,12 +39,12 @@ const GraphPage: FunctionComponent = () => {
     })
 
     return marriages
-  }, [filteredPersons])
+  }, [persons])
 
   const connections = useMemo(() => {
     const connections: Record<string, [PersonIdType, PersonIdType, ConnectionType]> = {}
 
-    filteredPersons.forEach(({ id, fatherId, motherId, spouses }) => {
+    persons.forEach(({ id, fatherId, motherId, spouses }) => {
       if (fatherId && motherId) {
         const marriageId = getMarriageId(fatherId, motherId)
 
@@ -62,7 +62,7 @@ const GraphPage: FunctionComponent = () => {
     })
 
     return connections
-  }, [filteredPersons])
+  }, [persons])
 
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -114,8 +114,10 @@ const GraphPage: FunctionComponent = () => {
       const canvasUtil = canvasUtilRef.current
 
       if (canvasUtil) {
-        filteredPersons.forEach(({ id, fullName, generation }) => {
-          canvasUtil.addBox({ id, text: `${fullName} (${generation})` })
+        persons.forEach(({ id, fullName, generation }) => {
+          const isHighlighted =
+            search.length > 0 && fullName.toLowerCase().includes(search.toLowerCase())
+          canvasUtil.addBox({ id, text: `${fullName} (${generation})`, highlight: isHighlighted })
         })
 
         Object.keys(marriages).forEach((marriageId) => {
@@ -131,7 +133,7 @@ const GraphPage: FunctionComponent = () => {
     }
 
     drawFamilyTree()
-  }, [filteredPersons, marriages, connections])
+  }, [persons, marriages, connections, search])
 
   const handleAutoLayout = () => {
     if (canvasUtilRef.current) {

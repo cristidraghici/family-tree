@@ -10,6 +10,8 @@ import {
   CANVAS_TEXT_COLOR,
   CANVAS_LINE_COLOR,
   CANVAS_BOX_PADDING,
+  CANVAS_BOX_HIGHLIGHT_FILL_STYLE,
+  CANVAS_BOX_HIGHLIGHT_STROKE_STYLE,
 } from '@/constants'
 
 class CanvasManager {
@@ -56,7 +58,7 @@ class CanvasManager {
     this.context.closePath()
   }
 
-  public drawBox({ x, y, width, height, text }: Box) {
+  public drawBox({ x, y, width, height, text, highlight }: Box) {
     this.context.save()
 
     if (!text) {
@@ -76,12 +78,12 @@ class CanvasManager {
 
     // Box
     this.drawRoundedRect(x, y, width, height, CANVAS_BOX_CORNER_RADIUS)
-    this.context.fillStyle = CANVAS_BOX_FILL_STYLE
+    this.context.fillStyle = highlight ? CANVAS_BOX_HIGHLIGHT_FILL_STYLE : CANVAS_BOX_FILL_STYLE
     this.context.fill()
 
     this.context.shadowColor = 'transparent' // Reset shadow for stroke
-    this.context.strokeStyle = CANVAS_BOX_STROKE_STYLE
-    this.context.lineWidth = CANVAS_LINE_WIDTH
+    this.context.strokeStyle = highlight ? CANVAS_BOX_HIGHLIGHT_STROKE_STYLE : CANVAS_BOX_STROKE_STYLE
+    this.context.lineWidth = highlight ? CANVAS_LINE_WIDTH * 1.5 : CANVAS_LINE_WIDTH
     this.context.stroke()
 
     this.context.font = CANVAS_FONT
@@ -92,7 +94,6 @@ class CanvasManager {
 
     this.context.restore()
   }
-
 
   public drawLine({
     startX,
