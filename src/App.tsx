@@ -8,7 +8,7 @@ import CardsPage from '@/pages/CardsPage'
 import GraphPage from '@/pages/GraphPage'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 
 import debounce from '@/utils/debounce'
 import ToggleButtons from './components/atoms/ToggleButtons'

@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useRef, useMemo } from 'react'
 import CanvasUtil from '@/utils/canvas/CanvasUtil'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 
 import type { PersonIdType, PositionsType } from '@/types'
 import { CanvasChangePositionEndHandler, ConnectionType } from '@/utils/canvas/types'

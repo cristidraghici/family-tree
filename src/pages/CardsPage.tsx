@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react'
 import Condition from '@/components/atoms/ConditionalElement'
 import Card from '@/components/molecules/Card'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 
 import type { ExtendedPersonType } from '@/types'
 

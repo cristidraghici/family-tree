@@ -4,7 +4,7 @@ import Hamburger from '@/components/atoms/Hamburger'
 
 import UploadJSON from '@/components/molecules/UploadJSON'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 import useToggle from '@/hooks/useToggle'
 
 import downloadTextAsFile from '@/utils/downloadTextAsFile'

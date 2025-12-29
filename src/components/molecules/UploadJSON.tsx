@@ -1,7 +1,7 @@
 import { FunctionComponent, ChangeEvent, useState, useRef } from 'react'
 import Condition from '@/components/atoms/ConditionalElement'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 
 const FileUploadAndParse: FunctionComponent = () => {
   const [message, setMessage] = useState<string | null>(null)

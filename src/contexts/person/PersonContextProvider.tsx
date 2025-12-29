@@ -1,66 +1,10 @@
-import {
-  createContext,
-  useState,
-  useCallback,
-  FunctionComponent,
-  PropsWithChildren,
-  useMemo,
-} from 'react'
+import { useState, useCallback, FunctionComponent, PropsWithChildren, useMemo } from 'react'
 import useTreeData from '@/hooks/useTreeData'
 import { getExtendedPersons } from '@/utils/persons/selectors'
-import {
-  PersonType,
-  NewPersonType,
-  PersonIdType,
-  RegistryType,
-  ExtendedPersonType,
-  PositionsType,
-  RelationshipType,
-  X,
-  Y,
-} from '@/types'
+import { NewPersonType, X, Y } from '@/types'
+import { PersonContext } from './personContext'
 
-type PersonContextType = {
-  // Data State
-  persons: ExtendedPersonType[]
-  filteredPersons: ExtendedPersonType[]
-  relationships: RelationshipType[]
-  positions: PositionsType[]
-  registry: RegistryType
-
-  // UI State
-  selectedPerson: PersonType | NewPersonType | null
-  search: string
-  error: string | null
-  isDemoData: boolean
-
-  // Actions
-  setSearch: (text: string) => void
-  handleSelectPerson: (personId: string, coordinates?: { x: X; y: Y }) => void
-  addPerson: (person: PersonType, coordinates?: { x: X; y: Y }) => void
-  removePerson: (personId: PersonIdType) => void
-  updatePositions: (positions: PositionsType[]) => void
-  loadRegistryData: (data: RegistryType) => void
-  saveAll: (data: RegistryType) => void
-  clearAll: () => void
-}
-
-const initialContextValues: Partial<PersonContextType> = {
-  persons: [],
-  filteredPersons: [],
-  relationships: [],
-  positions: [],
-  selectedPerson: null,
-  search: '',
-  error: null,
-  isDemoData: false,
-}
-
-export const PersonContext = createContext<PersonContextType>(
-  initialContextValues as PersonContextType,
-)
-
-export const PersonProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
+export const PersonContextProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const [search, setSearch] = useState<string>('')
   const [selectedPersonId, setSelectedPersonId] = useState<string | null>(null)
   const [dragCoordinates, setDragCoordinates] = useState<{ x: X; y: Y } | undefined>()

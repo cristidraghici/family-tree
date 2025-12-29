@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { PersonContext } from '@/contexts/PersonContext'
+import { PersonContext } from './personContext'
 
 const usePersonContext = () => useContext(PersonContext)
 

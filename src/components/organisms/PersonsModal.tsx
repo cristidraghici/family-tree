@@ -12,7 +12,7 @@ import FormSelect from '@/components/atoms/FormSelect'
 import FormTextarea from '@/components/atoms/FormTextarea'
 import TextWithConfirmedAction from '@/components/molecules/TextWithConfirmedAction'
 
-import usePersonContext from '@/hooks/usePersonContext'
+import usePersonContext from '@/contexts/person/usePersonContext'
 
 import type { PersonType, PersonIdType, NewPersonType } from '@/types'
 
