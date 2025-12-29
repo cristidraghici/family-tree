@@ -66,9 +66,14 @@ class CanvasUtil {
     this.drawUtils.draw()
   }
 
+  public autoLayout() {
+    this.drawUtils.autoLayout()
+  }
+
   public reset() {
     this.boxManager.reset()
   }
 }
+
 
 export default CanvasUtil

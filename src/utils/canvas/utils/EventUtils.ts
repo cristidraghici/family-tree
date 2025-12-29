@@ -25,6 +25,10 @@ class EventUtils {
   private onDblClick?: BoxClickHandler
   private onCanvasChangePositionEnd?: CanvasChangePositionEndHandler
 
+  private dragStartX: X = 0
+  private dragStartY: Y = 0
+  private boxDragOffset = { x: 0, y: 0 }
+
   constructor({
     canvasManager,
     boxManager,
@@ -38,13 +42,13 @@ class EventUtils {
 
     // Bind methods
     this.handleResize = debounce(this.handleResize.bind(this), 5)
-    this.handleWheel = debounce(this.handleWheel.bind(this), 5)
-    this.handleDoubleClick = debounce(this.handleDoubleClick.bind(this), 5)
-    this.handleMouseDown = debounce(this.handleMouseDown.bind(this), 5)
-    this.handleMouseMove = debounce(this.handleMouseMove.bind(this), 3)
-    this.handleTouchStart = debounce(this.handleTouchStart.bind(this), 5)
-    this.handleTouchMove = debounce(this.handleTouchMove.bind(this), 3)
-    this.dragEnd = debounce(this.dragEnd.bind(this), 5)
+    this.handleWheel = this.handleWheel.bind(this) // Don't debounce wheel for smoothness
+    this.handleDoubleClick = this.handleDoubleClick.bind(this)
+    this.handleMouseDown = this.handleMouseDown.bind(this)
+    this.handleMouseMove = this.handleMouseMove.bind(this)
+    this.handleTouchStart = this.handleTouchStart.bind(this)
+    this.handleTouchMove = this.handleTouchMove.bind(this)
+    this.dragEnd = this.dragEnd.bind(this)
 
     // Init
     this.init({ onDblClick, onCanvasChangePositionEnd })
@@ -58,16 +62,16 @@ class EventUtils {
 
     const canvas = this.canvasManager.getCanvas()
 
-    canvas.addEventListener('wheel', this.handleWheel)
+    canvas.addEventListener('wheel', this.handleWheel, { passive: false })
     canvas.addEventListener('dblclick', this.handleDoubleClick)
 
     canvas.addEventListener('mousedown', this.handleMouseDown)
-    canvas.addEventListener('mousemove', this.handleMouseMove)
-    canvas.addEventListener('mouseup', this.dragEnd)
+    window.addEventListener('mousemove', this.handleMouseMove)
+    window.addEventListener('mouseup', this.dragEnd)
 
     canvas.addEventListener('touchstart', this.handleTouchStart, { passive: false })
-    canvas.addEventListener('touchmove', this.handleTouchMove, { passive: false })
-    canvas.addEventListener('touchend', this.dragEnd)
+    window.addEventListener('touchmove', this.handleTouchMove, { passive: false })
+    window.addEventListener('touchend', this.dragEnd)
   }
 
   public destroy() {
@@ -79,30 +83,28 @@ class EventUtils {
     canvas.removeEventListener('dblclick', this.handleDoubleClick)
 
     canvas.removeEventListener('mousedown', this.handleMouseDown)
-    canvas.removeEventListener('mousemove', this.handleMouseMove)
-    canvas.removeEventListener('mouseup', this.dragEnd)
+    window.removeEventListener('mousemove', this.handleMouseMove)
+    window.removeEventListener('mouseup', this.dragEnd)
 
     canvas.removeEventListener('touchstart', this.handleTouchStart)
-    canvas.removeEventListener('touchmove', this.handleTouchMove)
-    canvas.removeEventListener('touchend', this.dragEnd)
+    window.removeEventListener('touchmove', this.handleTouchMove)
+    window.removeEventListener('touchend', this.dragEnd)
   }
 
   private handleResize() {
-    this.canvasManager.updateCanvasSize() // Update the canvas size
-    this.drawUtils.draw() // Redraw the canvas content after resizing
+    this.canvasManager.updateCanvasSize()
+    this.drawUtils.draw()
   }
 
   private handleWheel(event: WheelEvent) {
+    event.preventDefault()
     const { clientX, clientY, deltaY } = event
     this.canvasManager.setScaleFactor({ clientX, clientY, deltaY })
-
     this.drawUtils.draw()
   }
 
   private handleDoubleClick(event: MouseEvent) {
-    if (!this.onDblClick) {
-      return
-    }
+    if (!this.onDblClick) return
 
     const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
     const clickedBoxId = this.drawUtils.findBoxByPosition(mouseX, mouseY)
@@ -112,67 +114,67 @@ class EventUtils {
     }
   }
 
-  private dragStart(x: X, y: Y) {
+  private dragStart(x: X, y: Y, clientX: number, clientY: number) {
     const selectedBoxId = this.drawUtils.findBoxByPosition(x, y)
 
-    // box is selected
     if (selectedBoxId) {
       this.boxManager.setSelectedBoxId(selectedBoxId)
       const coords = this.drawUtils.getBoxCoordinates(selectedBoxId)
-
-      this.canvasManager.setOffset({
+      this.boxDragOffset = {
         x: x - coords.x,
         y: y - coords.y,
-      })
+      }
     } else {
-      // canvas is dragged
       this.canvasManager.setDragging(true)
-      this.canvasManager.setOffset({ x, y })
+      this.dragStartX = clientX
+      this.dragStartY = clientY
     }
   }
 
   private handleMouseDown(event: MouseEvent) {
     const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
-    this.dragStart(mouseX, mouseY)
+    this.dragStart(mouseX, mouseY, event.clientX, event.clientY)
   }
 
   private handleTouchStart(event: TouchEvent) {
     const { x: touchX, y: touchY } = this.canvasManager.getTouchPosition(event)
-    this.dragStart(touchX, touchY)
+    const { clientX, clientY } = event.touches[0]
+    this.dragStart(touchX, touchY, clientX, clientY)
   }
 
-  private dragMove(x: X, y: Y) {
+  private dragMove(x: X, y: Y, clientX: number, clientY: number) {
     const selectedBox = this.boxManager.getSelectedBox()
     const isDragging = this.canvasManager.isDragging()
 
-    if (!selectedBox && !isDragging) {
-      return
-    }
-
-    const { x: dx, y: dy } = this.canvasManager.getMoveTo(x, y)
+    if (!selectedBox && !isDragging) return
 
     if (selectedBox) {
-      this.drawUtils.moveBoxes(dx, dy, selectedBox.id)
+      this.drawUtils.moveBox(selectedBox.id, x - this.boxDragOffset.x, y - this.boxDragOffset.y)
     } else if (isDragging) {
-      this.drawUtils.moveBoxes(dx, dy)
-      this.canvasManager.setOffset({ x, y })
+      const dx = clientX - this.dragStartX
+      const dy = clientY - this.dragStartY
+      this.canvasManager.pan(dx, dy)
+      this.dragStartX = clientX
+      this.dragStartY = clientY
     }
 
     this.drawUtils.draw()
 
-    if (this.onCanvasChangePositionEnd) {
+    if (this.onCanvasChangePositionEnd && selectedBox) {
+      // Only debounced or selective update? For now keep it as is but it might be heavy
       this.onCanvasChangePositionEnd(this.drawUtils.getAllPositions())
     }
   }
 
   private handleMouseMove(event: MouseEvent) {
     const { x: mouseX, y: mouseY } = this.canvasManager.getMousePosition(event)
-    this.dragMove(mouseX, mouseY)
+    this.dragMove(mouseX, mouseY, event.clientX, event.clientY)
   }
 
   private handleTouchMove(event: TouchEvent) {
     const { x: touchX, y: touchY } = this.canvasManager.getTouchPosition(event)
-    this.dragMove(touchX, touchY)
+    const { clientX, clientY } = event.touches[0]
+    this.dragMove(touchX, touchY, clientX, clientY)
   }
 
   private dragEnd() {
@@ -182,3 +184,4 @@ class EventUtils {
 }
 
 export default EventUtils
+

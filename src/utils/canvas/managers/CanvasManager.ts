@@ -1,7 +1,16 @@
 import { X, Y } from '@/types'
 import { Box, Line } from '../types'
 
-import { CANVAS_FILL_STYLE, CANVAS_FONT, CANVAS_LINE_WIDTH, CANVAS_STROKE_STYLE } from '@/constants'
+import {
+  CANVAS_BOX_FILL_STYLE,
+  CANVAS_FONT,
+  CANVAS_LINE_WIDTH,
+  CANVAS_BOX_STROKE_STYLE,
+  CANVAS_BOX_CORNER_RADIUS,
+  CANVAS_TEXT_COLOR,
+  CANVAS_LINE_COLOR,
+  CANVAS_BOX_PADDING,
+} from '@/constants'
 
 class CanvasManager {
   private canvas: HTMLCanvasElement
@@ -33,18 +42,57 @@ class CanvasManager {
     this.context.canvas.height = this.canvas.height
   }
 
-  public drawBox({ x, y, width, height, text }: Box) {
-    this.context.globalAlpha = 0.9
-    this.context.fillStyle = CANVAS_FILL_STYLE
-    this.context.fillRect(x, y, width, height)
-    this.context.strokeStyle = CANVAS_STROKE_STYLE
-    this.context.lineWidth = CANVAS_LINE_WIDTH
-    this.context.strokeRect(x, y, width, height)
-    this.context.font = CANVAS_FONT
-    this.context.fillStyle = CANVAS_STROKE_STYLE
-    this.context.fillText(text, x + 10, y + 25)
-    this.context.globalAlpha = 1
+  private drawRoundedRect(x: number, y: number, width: number, height: number, radius: number) {
+    this.context.beginPath()
+    this.context.moveTo(x + radius, y)
+    this.context.lineTo(x + width - radius, y)
+    this.context.quadraticCurveTo(x + width, y, x + width, y + radius)
+    this.context.lineTo(x + width, y + height - radius)
+    this.context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height)
+    this.context.lineTo(x + radius, y + height)
+    this.context.quadraticCurveTo(x, y + height, x, y + height - radius)
+    this.context.lineTo(x, y + radius)
+    this.context.quadraticCurveTo(x, y, x + radius, y)
+    this.context.closePath()
   }
+
+  public drawBox({ x, y, width, height, text }: Box) {
+    this.context.save()
+
+    if (!text) {
+      // Marriage node - draw as a small circle
+      this.context.beginPath()
+      this.context.arc(x + width / 2, y + height / 2, 6, 0, Math.PI * 2)
+      this.context.fillStyle = CANVAS_BOX_STROKE_STYLE // Use stroke color for fill
+      this.context.fill()
+      this.context.restore()
+      return
+    }
+
+    // Shadow
+    this.context.shadowColor = 'rgba(0, 0, 0, 0.1)'
+    this.context.shadowBlur = 4
+    this.context.shadowOffsetY = 2
+
+    // Box
+    this.drawRoundedRect(x, y, width, height, CANVAS_BOX_CORNER_RADIUS)
+    this.context.fillStyle = CANVAS_BOX_FILL_STYLE
+    this.context.fill()
+
+    this.context.shadowColor = 'transparent' // Reset shadow for stroke
+    this.context.strokeStyle = CANVAS_BOX_STROKE_STYLE
+    this.context.lineWidth = CANVAS_LINE_WIDTH
+    this.context.stroke()
+
+    this.context.font = CANVAS_FONT
+    this.context.fillStyle = CANVAS_TEXT_COLOR
+    this.context.textAlign = 'left'
+    this.context.textBaseline = 'middle'
+    this.context.fillText(text, x + CANVAS_BOX_PADDING, y + height / 2)
+
+    this.context.restore()
+  }
+
 
   public drawLine({
     startX,
@@ -53,14 +101,17 @@ class CanvasManager {
     endY,
     lineWidth = CANVAS_LINE_WIDTH,
     lineDash = [],
-  }: Line & { lineWidth?: number; lineDash?: number[] }) {
+    color = CANVAS_LINE_COLOR,
+  }: Line & { lineWidth?: number; lineDash?: number[]; color?: string }) {
+    this.context.save()
     this.context.setLineDash(lineDash)
     this.context.lineWidth = lineWidth
+    this.context.strokeStyle = color
     this.context.beginPath()
     this.context.moveTo(startX, startY)
     this.context.lineTo(endX, endY)
     this.context.stroke()
-    this.context.setLineDash([])
+    this.context.restore()
   }
 
   public drawAngledLine({
@@ -68,26 +119,31 @@ class CanvasManager {
     startY,
     endX,
     endY,
+    midY,
     lineWidth = CANVAS_LINE_WIDTH,
     lineDash = [],
-  }: Line & { lineWidth?: number; lineDash?: number[] }) {
+    color = CANVAS_LINE_COLOR,
+  }: Line & { midY?: number; lineWidth?: number; lineDash?: number[]; color?: string }) {
+    this.context.save()
     this.context.setLineDash(lineDash)
+    this.context.lineWidth = lineWidth
+    this.context.strokeStyle = color
+    this.context.beginPath()
+    this.context.moveTo(startX, startY)
 
-    if (Math.abs(startX - endX) > Math.abs(startY - endY)) {
-      this.drawLine({ startX: startX, startY: startY, endX: endX, endY: startY, lineWidth })
-      this.drawLine({ startX: endX, startY: startY, endX: endX, endY: endY, lineWidth })
-    } else {
-      this.drawLine({ startX: startX, startY: startY, endX: startX, endY: endY, lineWidth })
-      this.drawLine({ startX: startX, startY: endY, endX: endX, endY: endY, lineWidth })
-    }
+    const finalMidY = midY ?? startY + (endY - startY) / 2
+    this.context.lineTo(startX, finalMidY)
+    this.context.lineTo(endX, finalMidY)
+    this.context.lineTo(endX, endY)
+
+    this.context.stroke()
+    this.context.restore()
   }
 
   public initDraw() {
-    this.context.canvas.width = this.canvas.width
-    this.context.canvas.height = this.canvas.height
-
+    this.context.setTransform(1, 0, 0, 1, 0, 0)
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, 0, 0)
+    this.context.setTransform(this.scaleFactor, 0, 0, this.scaleFactor, this.offsetX, this.offsetY)
   }
 
   public getCanvas() {
@@ -103,48 +159,47 @@ class CanvasManager {
   }
 
   public setScaleFactor({ clientX, clientY, deltaY }: { clientX: X; clientY: Y; deltaY: number }) {
-    const newScaleFactor = this.scaleFactor + (deltaY > 0 ? -0.2 : 0.2)
+    const zoomIntensity = 0.1
+    const wheel = deltaY < 0 ? 1 : -1
+    const zoom = Math.exp(wheel * zoomIntensity)
 
-    if (newScaleFactor < 0.2 || newScaleFactor > 5) {
-      return
-    }
+    const newScale = this.scaleFactor * zoom
 
-    const scaleFactorChange = newScaleFactor - this.scaleFactor
+    if (newScale < 0.1 || newScale > 10) return
 
-    this.scaleFactor = newScaleFactor
-
-    const { x: mouseX, y: mouseY } = this.getPosition(clientX, clientY)
-    this.offsetX -= mouseX * scaleFactorChange
-    this.offsetY -= mouseY * scaleFactorChange
-  }
-
-  private getPosition(x: X, y: Y) {
-    const { scaleFactor } = this
     const { left, top } = this.canvas.getBoundingClientRect()
+    const mouseX = clientX - left
+    const mouseY = clientY - top
 
-    return {
-      x: (x - left) / scaleFactor,
-      y: (y - top) / scaleFactor,
-    }
+    // Adjust offset to zoom around mouse position
+    this.offsetX = mouseX - (mouseX - this.offsetX) * zoom
+    this.offsetY = mouseY - (mouseY - this.offsetY) * zoom
+    this.scaleFactor = newScale
   }
 
   public getMousePosition(event: MouseEvent) {
     const { clientX, clientY } = event
-    return this.getPosition(clientX, clientY)
+    const { left, top } = this.canvas.getBoundingClientRect()
+
+    return {
+      x: (clientX - left - this.offsetX) / this.scaleFactor,
+      y: (clientY - top - this.offsetY) / this.scaleFactor,
+    }
   }
 
   public getTouchPosition(event: TouchEvent) {
     const { clientX, clientY } = event.touches[0]
-    return this.getPosition(clientX, clientY)
-  }
-
-  public getMoveTo(x: X, y: Y) {
-    const { offsetX, offsetY } = this
+    const { left, top } = this.canvas.getBoundingClientRect()
 
     return {
-      x: x - offsetX,
-      y: y - offsetY,
+      x: (clientX - left - this.offsetX) / this.scaleFactor,
+      y: (clientY - top - this.offsetY) / this.scaleFactor,
     }
+  }
+
+  public pan(dx: number, dy: number) {
+    this.offsetX += dx
+    this.offsetY += dy
   }
 
   public setOffset({ x, y }: { x: X; y: Y }) {
@@ -154,7 +209,7 @@ class CanvasManager {
 
   public textWidth(text: string): number {
     this.context.font = CANVAS_FONT
-    return this.context.measureText(text).width || text.length * 10
+    return this.context.measureText(text).width || text.length * 8
   }
 
   public setDragging(isDragging: boolean) {

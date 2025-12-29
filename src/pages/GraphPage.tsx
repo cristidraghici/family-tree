@@ -109,7 +109,25 @@ const GraphPage: FunctionComponent = () => {
     drawFamilyTree()
   }, [filteredPersons, marriages, connections])
 
-  return <canvas className="Canvas" ref={canvasRef} />
+  const handleAutoLayout = () => {
+    if (canvasUtilRef.current) {
+      canvasUtilRef.current.autoLayout()
+      canvasUtilRef.current.draw()
+      handleUpdatePositions(canvasUtilRef.current['drawUtils'].getAllPositions())
+    }
+  }
+
+  return (
+    <div className="GraphPage">
+      <div className="GraphPage_Controls">
+        <button type="button" onClick={handleAutoLayout} title="Auto Layout">
+          Auto Layout
+        </button>
+      </div>
+      <canvas className="Canvas" ref={canvasRef} />
+    </div>
+  )
 }
 
 export default GraphPage
+
