@@ -6,7 +6,7 @@ import usePersonContext from '@/hooks/usePersonContext'
 
 import type { ExtendedPersonType } from '@/types'
 
-const CardList: FunctionComponent = () => {
+const CardsPage: FunctionComponent = () => {
   const { filteredPersons, handleSelectPerson } = usePersonContext()
 
   return (
@@ -23,4 +23,4 @@ const CardList: FunctionComponent = () => {
     </>
   )
 }
-export default CardList
+export default CardsPage

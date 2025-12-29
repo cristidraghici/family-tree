@@ -1,19 +1,19 @@
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 
 import Condition from '@/components/atoms/ConditionalElement'
-import ToggleButtons from '@/components/atoms/ToggleButtons'
 
 import Header from '@/components/organisms/Header'
-import FamilyTree from '@/components/organisms/FamilyTree'
-import CardList from '@/components/organisms/CardList'
+import CardsPage from '@/pages/CardsPage'
+import GraphPage from '@/pages/GraphPage'
 import PersonsModal from '@/components/organisms/PersonsModal'
 
 import usePersonContext from '@/hooks/usePersonContext'
 
 import debounce from '@/utils/debounce'
+import ToggleButtons from './components/atoms/ToggleButtons'
 
 const App = () => {
-  const [view, setView] = useState<string>('cards')
   const { error, handleSelectPerson, setSearch } = usePersonContext()
 
   const searchRef = useRef<HTMLInputElement>(null)
@@ -27,6 +27,15 @@ const App = () => {
   const handleSetSearch = debounce((text) => {
     setSearch(text)
   }, 100)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const currentPage = location.pathname === '/graph' ? 'tree' : 'cards'
+
+  const handleViewChange = (view: string) => {
+    navigate(view === 'tree' ? '/graph' : '/')
+  }
 
   return (
     <>
@@ -45,8 +54,8 @@ const App = () => {
                 { id: 'cards', label: 'Cards' },
                 { id: 'tree', label: 'Graph' },
               ]}
-              value={view}
-              setValue={setView}
+              value={currentPage}
+              setValue={handleViewChange}
             />
 
             <input
@@ -69,8 +78,10 @@ const App = () => {
 
           <div className="Spacer" />
 
-          <Condition condition={view === 'cards'} as={CardList} />
-          <Condition condition={view === 'tree'} as={FamilyTree} />
+          <Routes>
+            <Route path="/" element={<CardsPage />} />
+            <Route path="/graph" element={<GraphPage />} />
+          </Routes>
 
           <PersonsModal />
         </Condition>

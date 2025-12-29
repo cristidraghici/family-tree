@@ -8,7 +8,7 @@ import { CanvasChangePositionEndHandler, ConnectionType } from '@/utils/canvas/t
 
 import debounce from '@/utils/debounce'
 
-const FamilyTree: FunctionComponent = () => {
+const GraphPage: FunctionComponent = () => {
   const { filteredPersons, handleSelectPerson, positions, updatePositions } = usePersonContext()
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -112,4 +112,4 @@ const FamilyTree: FunctionComponent = () => {
   return <canvas className="Canvas" ref={canvasRef} />
 }
 
-export default FamilyTree
+export default GraphPage
