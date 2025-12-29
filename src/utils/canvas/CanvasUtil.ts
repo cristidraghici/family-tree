@@ -95,5 +95,4 @@ class CanvasUtil {
   }
 }
 
-
 export default CanvasUtil

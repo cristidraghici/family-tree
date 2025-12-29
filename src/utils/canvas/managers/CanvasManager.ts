@@ -82,7 +82,9 @@ class CanvasManager {
     this.context.fill()
 
     this.context.shadowColor = 'transparent' // Reset shadow for stroke
-    this.context.strokeStyle = highlight ? CANVAS_BOX_HIGHLIGHT_STROKE_STYLE : CANVAS_BOX_STROKE_STYLE
+    this.context.strokeStyle = highlight
+      ? CANVAS_BOX_HIGHLIGHT_STROKE_STYLE
+      : CANVAS_BOX_STROKE_STYLE
     this.context.lineWidth = highlight ? CANVAS_LINE_WIDTH * 1.5 : CANVAS_LINE_WIDTH
     this.context.stroke()
 

@@ -89,7 +89,7 @@ const GraphPage: FunctionComponent = () => {
         const rect = containerRef.current.getBoundingClientRect()
         const availableHeight = window.innerHeight - rect.top - 20
         containerRef.current.style.height = `${Math.max(availableHeight, 400)}px`
-        
+
         // 2. Sync canvas internal resolution
         canvasUtil.resize()
       }
@@ -98,7 +98,7 @@ const GraphPage: FunctionComponent = () => {
     // Single observer for any size changes (browser resize, sidebar toggle, etc)
     const resizeObserver = new ResizeObserver(updateDimensions)
     resizeObserver.observe(document.body) // Observe body to capture viewport changes logically
-    
+
     // Initial sync
     updateDimensions()
     document.body.style.overflow = 'hidden'
@@ -180,4 +180,3 @@ const GraphPage: FunctionComponent = () => {
 }
 
 export default GraphPage
-

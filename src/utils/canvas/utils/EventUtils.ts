@@ -184,4 +184,3 @@ class EventUtils {
 }
 
 export default EventUtils
-
