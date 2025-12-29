@@ -1,9 +1,6 @@
 import { z } from 'zod'
 
-// A more relaxed regex for UUID-like strings to allow manually crafted IDs
-const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
-
-export const personIdSchema = z.union([z.string().regex(uuidRegex), z.literal('new')])
+export const personIdSchema = z.union([z.string(), z.literal('new')])
 
 export const personSchema = z.object({
   id: personIdSchema,
@@ -30,7 +27,7 @@ export const personSchema = z.object({
   notes: z.string().max(10000, 'Notes must be at most 10000 characters').optional(),
 })
 
-export const relationshipIdSchema = z.string().regex(uuidRegex)
+export const relationshipIdSchema = z.string()
 
 export const relationshipSchema = z.object({
   id: relationshipIdSchema,
