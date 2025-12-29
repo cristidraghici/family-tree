@@ -180,6 +180,7 @@ class EventUtils {
   private dragEnd() {
     this.boxManager.setSelectedBoxId(null)
     this.canvasManager.setDragging(false)
+    this.drawUtils.draw()
   }
 }
 

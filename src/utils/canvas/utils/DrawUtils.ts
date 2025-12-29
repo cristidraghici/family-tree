@@ -8,6 +8,7 @@ import {
   CANVAS_DEFAULT_SCREEN_WIDTH,
   CANVAS_DEFAULT_SCREEN_HEIGHT,
   CANVAS_LINE_COLOR,
+  CANVAS_GRID_SIZE,
 } from '@/constants'
 
 export type DrawUtilsInitProps = {
@@ -176,11 +177,14 @@ class DrawUtils {
 
       orderedIds.forEach((id, index) => {
         const box = personBoxes.find((b) => b.id === id)!
-        const width = this.canvasManager.textWidth(box.text) + 30
+        // Snap width to 2x grid size to ensure center also aligns to grid
+        const minWidth = this.canvasManager.textWidth(box.text) + 30
+        const width = Math.ceil(minWidth / (CANVAS_GRID_SIZE * 2)) * (CANVAS_GRID_SIZE * 2)
+
         boxWidths[id] = width
         this.boxCoordinates[id] = {
           x: currentX,
-          y: rowIndex * genHeight + 100,
+          y: Math.round((rowIndex * genHeight + 100) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE,
           width,
           height: 40,
         }
@@ -188,16 +192,31 @@ class DrawUtils {
         // Use a smaller gap if the next person is a spouse
         const nextId = orderedIds[index + 1]
         const isSpouseNext = nextId && spousesOf(id).includes(nextId)
-        currentX += width + (isSpouseNext ? 40 : horizontalGap)
+        currentX +=
+          width +
+          (isSpouseNext
+            ? CANVAS_GRID_SIZE * 2
+            : Math.round(horizontalGap / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE)
       })
 
-      // Center the whole generation row
-      const totalWidth = currentX - horizontalGap
+      // Center the whole generation row and snap to grid
+      const totalWidth =
+        currentX -
+        (orderedIds.length > 0
+          ? spousesOf(orderedIds[orderedIds.length - 1]).includes(orderedIds[orderedIds.length - 2])
+            ? CANVAS_GRID_SIZE * 2
+            : Math.round(horizontalGap / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE
+          : 0)
       const canvasWidth = this.canvasManager.getWidth() || CANVAS_DEFAULT_SCREEN_WIDTH
-      const offset = (canvasWidth - totalWidth) / 2
+      const offset =
+        Math.round((canvasWidth - totalWidth) / 2 / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE
 
       orderedIds.forEach((id) => {
-        this.boxCoordinates[id].x += offset
+        const coords = this.boxCoordinates[id]
+        // Snap center to grid
+        const centerX =
+          Math.round((coords.x + offset + coords.width / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE
+        this.boxCoordinates[id].x = centerX - coords.width / 2
       })
     })
 
@@ -219,11 +238,16 @@ class DrawUtils {
         const p1 = this.boxCoordinates[p1Id]
         const p2 = this.boxCoordinates[p2Id]
         if (p1 && p2) {
+          const avgX = (p1.x + p1.width / 2 + p2.x + p2.width / 2) / 2
+          const targetY = p1.y + p1.height + 40
+          const width = 10
+          const height = 10
+
           this.boxCoordinates[mBox.id] = {
-            x: (p1.x + p1.width / 2 + p2.x + p2.width / 2) / 2 - 5,
-            y: p1.y + p1.height + 40, // Middle of the generation gap
-            width: 10,
-            height: 10,
+            x: Math.round(avgX / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - width / 2,
+            y: Math.round(targetY / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - height / 2,
+            width,
+            height,
           }
         }
       } else if (spouseConns.length === 1) {
@@ -234,11 +258,16 @@ class DrawUtils {
             : spouseConns[0].firstBoxId
         const p = this.boxCoordinates[pId]
         if (p) {
+          const targetX = p.x + p.width / 2
+          const targetY = p.y + p.height + 40
+          const width = 10
+          const height = 10
+
           this.boxCoordinates[mBox.id] = {
-            x: p.x + p.width / 2 - 5,
-            y: p.y + p.height + 40,
-            width: 10,
-            height: 10,
+            x: Math.round(targetX / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - width / 2,
+            y: Math.round(targetY / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - height / 2,
+            width,
+            height,
           }
         }
       }
@@ -260,8 +289,8 @@ class DrawUtils {
         : this.generateRandomPosition(canvasWidth, canvasHeight)
 
       this.boxCoordinates[id] = {
-        x,
-        y,
+        x: Math.round((x + width / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - width / 2,
+        y: Math.round((y + height / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - height / 2,
         width,
         height,
       }
@@ -288,20 +317,33 @@ class DrawUtils {
   }
 
   public moveBox(id: BoxId, x: number, y: number): void {
-    if (this.boxCoordinates[id]) {
-      this.boxCoordinates[id].x = x
-      this.boxCoordinates[id].y = y
+    const coords = this.boxCoordinates[id]
+    if (coords) {
+      // Snap node center to grid
+      this.boxCoordinates[id].x =
+        Math.round((x + coords.width / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE - coords.width / 2
+      this.boxCoordinates[id].y =
+        Math.round((y + coords.height / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE -
+        coords.height / 2
     }
   }
 
   public draw() {
     this.canvasManager.initDraw()
 
+    if (this.boxManager.getSelectedBox()) {
+      this.canvasManager.drawGrid()
+    }
+
     const boxes: Box[] = this.boxManager.getBoxes().map((box) => {
       const isMarriage = box.text === ''
       const [width, height] = isMarriage
         ? [10, 10]
-        : [this.canvasManager.textWidth(box.text) + 30, 40]
+        : [
+            Math.ceil((this.canvasManager.textWidth(box.text) + 30) / (CANVAS_GRID_SIZE * 2)) *
+              (CANVAS_GRID_SIZE * 2),
+            40,
+          ]
 
       const coordinates = this.getBoxCoordinates(
         box.id,
@@ -335,7 +377,9 @@ class DrawUtils {
         startY,
         endX,
         endY,
-        midY: isSpouse ? endY : undefined, // Dot at the middle of the "U" shape
+        midY: isSpouse
+          ? endY
+          : Math.round((startY + (endY - startY) / 2) / CANVAS_GRID_SIZE) * CANVAS_GRID_SIZE, // Snap horizontal line to grid
         color: CANVAS_LINE_COLOR,
         lineWidth: isSpouse ? 4 : undefined,
         lineDash: isSpouse ? [] : [2, 2],

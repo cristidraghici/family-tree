@@ -13,3 +13,6 @@ export const CANVAS_DEFAULT_SCREEN_HEIGHT = 480
 
 export const CANVAS_BOX_HIGHLIGHT_FILL_STYLE = '#ffeb3b'
 export const CANVAS_BOX_HIGHLIGHT_STROKE_STYLE = '#f57f17'
+
+export const CANVAS_GRID_SIZE = 10
+export const CANVAS_GRID_COLOR = '#e0e0e0'

@@ -12,6 +12,8 @@ import {
   CANVAS_BOX_PADDING,
   CANVAS_BOX_HIGHLIGHT_FILL_STYLE,
   CANVAS_BOX_HIGHLIGHT_STROKE_STYLE,
+  CANVAS_GRID_SIZE,
+  CANVAS_GRID_COLOR,
 } from '@/constants'
 
 class CanvasManager {
@@ -138,6 +140,39 @@ class CanvasManager {
     this.context.lineTo(startX, finalMidY)
     this.context.lineTo(endX, finalMidY)
     this.context.lineTo(endX, endY)
+
+    this.context.stroke()
+    this.context.restore()
+  }
+
+  public drawGrid() {
+    const gridSize = CANVAS_GRID_SIZE
+    const width = this.canvas.width / this.scaleFactor
+    const height = this.canvas.height / this.scaleFactor
+
+    // Calculate view bounds in world coordinates
+    const left = -this.offsetX / this.scaleFactor
+    const top = -this.offsetY / this.scaleFactor
+    const right = left + width
+    const bottom = top + height
+
+    this.context.save()
+    this.context.strokeStyle = CANVAS_GRID_COLOR
+    this.context.lineWidth = 0.5
+
+    this.context.beginPath()
+
+    // Draw vertical lines
+    for (let x = Math.floor(left / gridSize) * gridSize; x <= right; x += gridSize) {
+      this.context.moveTo(x, top)
+      this.context.lineTo(x, bottom)
+    }
+
+    // Draw horizontal lines
+    for (let y = Math.floor(top / gridSize) * gridSize; y <= bottom; y += gridSize) {
+      this.context.moveTo(left, y)
+      this.context.lineTo(right, y)
+    }
 
     this.context.stroke()
     this.context.restore()
