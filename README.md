@@ -75,6 +75,15 @@ To get a quick valid UUID for manual data editing, run in browser console: `cryp
 - [ ] Support for uploading profile pictures.
 - [ ] Improved mobile touch interactions.
 
+## GitHub Pages Routing
+ 
+Since GitHub Pages handles single-page applications (SPAs) by returning a 404 for unknown routes (like `/graph`), we use a workaround to maintain clean URLs with `BrowserRouter` instead of `HashRouter`.
+ 
+1.  **`public/404.html`**: Catches the 404 error and redirects to the index page with the original path as a query parameter (e.g., `/?p=/graph`).
+2.  **`src/utils/GitHubPages.ts`**: Runs on app initialization to detect this query parameter and restores the correct path using `history.replaceState`.
+ 
+This ensures that refreshing on deep links works correctly while hosted on `github.io`.
+ 
 ## Credits
 
 - [Romanian Royal Family](https://en.wikipedia.org/wiki/Romanian_royal_family) (Demo data)

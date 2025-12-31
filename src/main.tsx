@@ -6,6 +6,9 @@ import { PersonContextProvider } from './contexts/person/PersonContextProvider'
 
 import './styles/global.scss'
 import { BrowserRouter } from 'react-router-dom'
+import GitHubPages from '@/utils/GitHubPages'
+
+GitHubPages.restore()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
